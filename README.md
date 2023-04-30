@@ -2,6 +2,8 @@
 
 ---
 
+**unless otherwise indicated, homework is due the first XXX after it is released**
+
 |week|slides|hw|
 |-:|:-:|-|
 |00| fri, sep 08 |[hw00](https://github.com/james-bern/CS136/wiki/hw00) (due monday)|
