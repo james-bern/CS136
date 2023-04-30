@@ -6,7 +6,7 @@
 
 |week|slides|hw|
 |-:|:-:|-|
-|00| fri, sep 08 |[hw00](https://github.com/james-bern/CS136/wiki/hw00) (due monday)|
+|00| fri, sep 08 |[hw00](https://github.com/james-bern/CS136/wiki/hw00)|
 |01|  mon, sep 11 | |
 | |  wed, sep 13 | |
 | |  fri, sep 15 | |
