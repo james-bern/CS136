@@ -2,11 +2,11 @@
 
 ---
 
-**Note:** Unless otherwise indicated, homework is due at XXX pm on the first XXX after it is released.
+**Note:** Unless otherwise indicated, each homework is due at XXX pm on the first XXX after it is released.
 
-|week|slides|hw|
-|-:|:-:|-|
-|00| fri, sep 08 |[hw00](https://github.com/james-bern/CS136/wiki/hw00)|
-|01|  mon, sep 11 | |
-| |  wed, sep 13 | |
-| |  fri, sep 15 | |
+|Week|Slides|Homework|
+|-:|-|-|
+|00| [Friday, September 08]() |[hw00](https://github.com/james-bern/CS136/wiki/hw00)|
+|01|  [Monday, September 11]() | |
+| |  [Wednesday, September 13]() | |
+| |  [Friday, September 15]() | |
