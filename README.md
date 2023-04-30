@@ -1,4 +1,8 @@
-### [Docs](https://github.com/james-bern/CS136/wiki) | [Gradescope](https://www.gradescope.com/) | [Help Hours](https://docs.google.com/spreadsheets/d/1RMnAX-a_dZqIZU0KUKtYfLQkDUp_5aErHFWLoeoXJ4Y/edit?usp=sharing) | [Lecture Videos](https://glow.williams.edu/) | [Syllabus](https://github.com/james-bern/CS136/wiki/Syllabus)
+### [Docs](https://github.com/james-bern/CS136/wiki) | [Gradescope](https://www.gradescope.com/) | [Help Hours](https://docs.google.com/spreadsheets/d/1RMnAX-a_dZqIZU0KUKtYfLQkDUp_5aErHFWLoeoXJ4Y/edit?usp=sharing) | [Lecture Videos](https://glow.williams.edu/) | [Sublime Text](https://www.sublimetext.com/) | [Syllabus](https://github.com/james-bern/CS136/wiki/Syllabus)
+
+---
+
+To build the code on 
 
 ---
 
