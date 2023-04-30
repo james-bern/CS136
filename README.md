@@ -2,9 +2,8 @@
 
 ---
 
-### Schedule, Slides, and Homework
-|week|slides|homework|
-|-|:-:|-|
+|week|slides|hw|
+|-:|:-:|-|
 |0| fri, sep 08 |[hw00]()|
 |1|  mon, sep 11 | |
 | |  wed, sep 13 | |
