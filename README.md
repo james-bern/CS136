@@ -2,9 +2,7 @@
 
 ---
 
-```diff
-@@ unless otherwise indicated, homework is due at XXX pm on the first XXX after it is released @@
-```
+**Note:** Unless otherwise indicated, homework is due at XXX pm on the first XXX after it is released.
 
 |week|slides|hw|
 |-:|:-:|-|
