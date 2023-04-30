@@ -1,3 +1,2 @@
-[Documentation](https://github.com/james-bern/CS136/wiki)
-
-[slides](https://github.com/james-bern/CS136/wiki/Slides)
+* [Documentation](https://github.com/james-bern/CS136/wiki)
+* [Slides](https://github.com/james-bern/CS136/wiki/Slides)
