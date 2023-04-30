@@ -2,10 +2,6 @@
 
 ---
 
-To build the code on 
-
----
-
 **Note:** Unless otherwise indicated, each homework is due at XXX pm on the first XXX after it is released.
 
 |Week|Slides|Homework|
