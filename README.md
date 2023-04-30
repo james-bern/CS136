@@ -2,7 +2,7 @@
 
 ---
 
-**unless otherwise indicated, homework is due the first XXX after it is released**
+**note:** unless otherwise indicated, homework is due the first XXX after it is released
 
 |week|slides|hw|
 |-:|:-:|-|
