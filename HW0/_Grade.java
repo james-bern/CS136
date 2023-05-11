@@ -21,27 +21,23 @@ class Grade {
 
     public static void main(String[] args) {
         {
+            int[] curr            = { 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0 };
+            int[] solutionNext126 = { 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0 };
+
             boolean pass = false;
-
-            int[] array = { 0, 1, 1, 0, 0, 1, 1, 1 };
-
             try {
-                int tmp[] = Main.getNextUsingRule126(array);
+                int next[] = Main.getNextUsingRule126(curr);
                 boolean allMatch = true;
-                for (int i = 0; i < array.length; ++i) {
-                    if (array[i] != tmp[i]) {
-                        allMatch = false;
-                        break;
-                    }
+                for (int i = 0; i < solutionNext126.length; ++i) {
+                    if (solutionNext126[i] != next[i]) { allMatch = false; break; }
                 }
                 pass = allMatch;
             } catch (Exception exception) { }
-
-            GRADE_ASSERT(pass);
+            GRADE_ASSERT(95, pass);
         }
 
         {
-            GRADE_ASSERT(5, true);
+            GRADE_ASSERT(5, false);
         }
 
         PRINT_GRADE();
