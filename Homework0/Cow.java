@@ -15,6 +15,4 @@ class Cow {
         }
         System.out.println("}");
     }
-
-
 }

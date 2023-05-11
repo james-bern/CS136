@@ -27,23 +27,12 @@ class Main {
         System.out.print("after removing element with value 3: ");
         System.out.println(vector);
         vector.removeElementAt(0);
-        System.out.print("after removing 0-th element: ");
         System.out.println(vector);
 
-HashMap<String, Integer> map = new HashMap<String, Integer>();
-map.put("Ekans", 23);
-map.put("Arbok", 24);
-map.put("Jigglypuff", -1);
-map.put("Jigglypuff", 39);
-
-System.out.println(map.get("Jigglypuff")); // 39
-
-System.out.println(map.get("Ash Ketchum")); // null
-
-System.out.print("{ ");
-for (String key : map.keySet()) {
-    System.out.print("(" + key + ", " + map.get(key) + "), ");
-}
-System.out.println("}");
+        HashMap<String, Integer> map = new HashMap<String, Integer>();
+        map.put("Ekans", 23);
+        map.put("Arbok", 24);
+        map.put("Jigglypuff", -1);
+        map.put("Jigglypuff", 39);
     }
 }
