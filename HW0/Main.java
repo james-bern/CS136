@@ -8,6 +8,8 @@ class Main {
 
     static int[] getNextUsingRule126(int[] curr) {
         int[] next = new int[curr.length];
+        next[0] = curr[0];
+        next[curr.length - 1] = curr[curr.length - 1];
         for (int i = 1; i < curr.length - 1; ++i) { // NOTE: don't update boundary
             int count = curr[i - 1] + curr[i] + curr[i + 1];
             if (count == 1 || count == 2) {
