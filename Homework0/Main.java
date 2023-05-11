@@ -1,38 +1,30 @@
-import java.util.*;
-
 class Main {
-    public static void main(String[] args) {
-        int[] array = { 1, 2, 3, 4, 5 };
-        System.out.print("before being reversed: ");
-        Cow.print(array);
-        for (int i = 0; i < array.length / 2; ++i) {
-            int j = (array.length - 1) - i;
-            int tmp = array[i];
-            array[i] = array[j];
-            array[j] = tmp;
+    static void print(int[] array) {
+        for (int i = 0; i < array.length; ++i) {
+            System.out.print((array[i] != 0) ? "X" : " ");
         }
-        System.out.print(" after being reversed: ");
-        Cow.print(array);
+        System.out.println();
+    }
 
-        String string = "lorem ipsum dolor";
-        System.out.println(string);
+    static int[] getNextUsingRule126(int[] curr) {
+        int[] next = new int[curr.length];
+        for (int i = 1; i < curr.length - 1; ++i) { // NOTE: don't update boundary
+            int count = curr[i - 1] + curr[i] + curr[i + 1];
+            if (count == 1 || count == 2) {
+                next[i] = 1;
+            }
+        }
+        return next;
+    }
 
-        Vector<Integer> vector = new Vector<Integer>();
-        vector.add(3);
-        vector.add(9);
-        vector.add(81);
-        System.out.print("initial contents of vector:");
-        System.out.println(vector);
-        vector.removeElement(3);
-        System.out.print("after removing element with value 3: ");
-        System.out.println(vector);
-        vector.removeElementAt(0);
-        System.out.println(vector);
+    public static void main(String[] args) {
+        int[] array = new int[79];
+        array[array.length / 2] = 1;
+        print(array);
 
-        HashMap<String, Integer> map = new HashMap<String, Integer>();
-        map.put("Ekans", 23);
-        map.put("Arbok", 24);
-        map.put("Jigglypuff", -1);
-        map.put("Jigglypuff", 39);
+        for (int i = 0; i < 64; ++i) {
+            array = getNextUsingRule126(array);
+            print(array);
+        }
     }
 }
