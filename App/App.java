@@ -133,7 +133,7 @@ abstract class App extends JPanel {
     }
 
     // TODO: pixelsPer...
-    void startGameLoop() { this.startGameLoop(0, 0, 16, 0, 0, Color.BLACK); }
+    void startGameLoop() { this.startGameLoop(1000, 500, 1, 0, 0, Color.BLACK); }
     void startGameLoop(double initialWindowWidth, double initialWindowHeight, int initialPixelsPerWorldUnit, double xCenter, double yCenter, Color color) {
 
         this.setBackground(color);
