@@ -1,1 +1,1 @@
-((clear && javac *.java && java Tetris && rm *.class) || (cls && javac *.java && java Tetris && del *.class)) 
+((clear && javac *.java && java $1 && rm *.class) || (cls && javac *.java && java %1 && del *.class)) 
