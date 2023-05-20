@@ -11,5 +11,5 @@
 | [Week 1](https://github.com/james-bern/CS136/wiki/Week-1) | arrays |
 | [Week 2](https://github.com/james-bern/CS136/wiki/Week-2) | objects | 
 | [Week 3](https://github.com/james-bern/CS136/wiki/Week-3) | array list |
-| [Week 3](https://github.com/james-bern/CS136/wiki/Week-4) | stacks and queues |
+| [Week 4](https://github.com/james-bern/CS136/wiki/Week-4) | stacks and queues |
 
