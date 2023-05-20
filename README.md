@@ -7,9 +7,9 @@
 
 | | |
 | --: | :---------- |
-| [Week 0](https://github.com/james-bern/CS136/wiki/Week-0) | primitives|
-| [Week 1](https://github.com/james-bern/CS136/wiki/Week-1) | arrays |
-| [Week 2](https://github.com/james-bern/CS136/wiki/Week-2) | objects | 
-| [Week 3](https://github.com/james-bern/CS136/wiki/Week-3) | array list |
-| [Week 4](https://github.com/james-bern/CS136/wiki/Week-4) | stacks and queues |
+| [week 0](https://github.com/james-bern/CS136/wiki/Week-0) | primitives|
+| [week 1](https://github.com/james-bern/CS136/wiki/Week-1) | arrays |
+| [week 2](https://github.com/james-bern/CS136/wiki/Week-2) | objects | 
+| [week 3](https://github.com/james-bern/CS136/wiki/Week-3) | array list |
+| [week 4](https://github.com/james-bern/CS136/wiki/Week-4) | stacks and queues |
 
