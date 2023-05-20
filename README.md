@@ -5,7 +5,7 @@
 ### Readings and Homework
 **Note:** Unless otherwise indicated, each homework is due at XXX pm on the first XXX after it is released.
 
-* [Week 0](https://github.com/james-bern/CS136/wiki/Homework-3:-ArrayList)
-* [Week 1](https://github.com/james-bern/CS136/wiki/Homework-3:-ArrayList)
-* [Week 2](https://github.com/james-bern/CS136/wiki/Homework-3:-ArrayList)
-* [Week 3](https://github.com/james-bern/CS136/wiki/Homework-3:-ArrayList)
+* [Week 0](https://github.com/james-bern/CS136/wiki/Week-0)
+* [Week 1](https://github.com/james-bern/CS136/wiki/Week-1)
+* [Week 2](https://github.com/james-bern/CS136/wiki/Week-2)
+* [Week 3](https://github.com/james-bern/CS136/wiki/Week-3)
