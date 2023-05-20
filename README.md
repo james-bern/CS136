@@ -2,11 +2,7 @@
 
 ---
 
+### Readings and Homework
 **Note:** Unless otherwise indicated, each homework is due at XXX pm on the first XXX after it is released.
 
-|Week|Slides|Homework|
-|-:|-|-|
-|00| [Friday, September 08]() |[hw00](https://github.com/james-bern/CS136/wiki/hw00)|
-|01|  [Monday, September 11]() | |
-| |  [Wednesday, September 13]() |[Homework 3 - ArrayList](https://github.com/james-bern/CS136/wiki/Homework-3:-ArrayList)|
-| |  [Friday, September 15]() | |
+[Week 3](https://github.com/james-bern/CS136/wiki/Homework-3:-ArrayList)
