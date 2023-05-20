@@ -8,5 +8,5 @@
 |-:|-|-|
 |00| [Friday, September 08]() |[hw00](https://github.com/james-bern/CS136/wiki/hw00)|
 |01|  [Monday, September 11]() | |
-| |  [Wednesday, September 13]() | |
+| |  [Wednesday, September 13]() |[HomeworkX - ArrayList](https://github.com/james-bern/CS136/wiki/ArrayList)|
 | |  [Friday, September 15]() | |
