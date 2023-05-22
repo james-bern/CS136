@@ -9,40 +9,8 @@ import java.lang.Math;
 
 
 
-class Vector2 {
-    double x;
-    double y;
-    Vector2() {} // NOTE: x and y automatically initialized to zero
-    Vector2(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
-    Vector2(Vector2 p) {
-        this.x = p.x;
-        this.y = p.y;
-    }
-    public String toString() {
-        return "(" + this.x + ", " + this.y + ")";
-    }
-    // NOTE: These are nice
-    // TODO: pythagorean theorem question
-    Vector2 plus(Vector2 other) { return new Vector2(this.x + other.x, this.y + other.y); }
-    Vector2 minus(Vector2 other) { return new Vector2(this.x - other.x, this.y - other.y); }
-    Vector2 times(double scalar) { return new Vector2(scalar * this.x, scalar * this.y); }
-    Vector2 dividedBy(double scalar) { return this.times(1.0 / scalar); }
-    double squaredNorm() {
-        return this.x * this.x + this.y + this.y;
-    }
-    double norm() {
-        return Math.sqrt(this.squaredNorm());
-    }
-    Vector2 normalized() {
-        return this.dividedBy(this.norm());
-    }
-    // HW: static Vector2 distance
-}
 
-abstract class App extends JPanel {
+class App extends JPanel {
     // TODO: non-pixel coordinate system with reasonable center
 
     // NOTE: these are set automatically at the beginning of each frame
@@ -153,7 +121,7 @@ abstract class App extends JPanel {
         System.exit(0);
     }
     
-    abstract void doFrame();
+    void updateAndDraw() {}
     Graphics graphics;
     @Override public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
@@ -162,12 +130,16 @@ abstract class App extends JPanel {
             _windowHeightInPixels = rectangle.height;
             _windowWidthInPixels = rectangle.width;
         }
-        doFrame();
+        updateAndDraw();
 
         { // end of jFrame
             _key_pressed.clear();
             _key_released.clear();
         }
+    }
+
+    public static void main(String[] args) {
+        new App().startGameLoop();
     }
 }
 

@@ -36,7 +36,7 @@ class HelicopterGame extends App {
     ArrayList<Helicopter> helicopters;
     Helicopter player;
 
-    @Override public void doFrame() {
+    @Override public void updateAndDraw() {
         if (key_pressed('R') || !initialized) {
             initialized = true;
             frame = 0;

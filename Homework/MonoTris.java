@@ -2,7 +2,7 @@ import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 
-class Tetris extends App {
+class MonoTris extends App {
 
     // TODO: arrow keys
     boolean initialized;
@@ -15,7 +15,6 @@ class Tetris extends App {
     boolean bufferedKeyPressA;
     boolean bufferedKeyPressD;
 
-
     public static void main(String[] args) {
         System.out.println("A move left");
         System.out.println("D move right");
@@ -23,15 +22,15 @@ class Tetris extends App {
         System.out.println("W move down infinitely fast");
         new Tetris().startGameLoop(10.0, 20.0, 8, 0.0, 0.0, Color.GRAY);
     }
-    void doFrame() {
+
+    void updateAndDraw() {
         if (!initialized || key_pressed('R')) {
             initialized = true;
             frame = 0;
 
             grid = new boolean[gridNumX][gridNumY];
 
-            xCurr = gridNumX / 2;
-            yCurr = gridNumY;
+            resetCurr();
             bufferedKeyPressA = false;
             bufferedKeyPressD = false;
         }
@@ -65,13 +64,13 @@ class Tetris extends App {
             if ((yCurr != 0) && !grid[xCurr][yCurr - 1]) {
                 --yCurr;
             } else {
-                if (yCurr == gridNumY) {
+                if (yCurr == gridNumY) { // game over
                     initialized = false;
                     return;
                 }
                 grid[xCurr][yCurr] = true;
 
-                {
+                { // clear line
                     boolean anyMissing = false;
                     for (int x = 0; x < gridNumX; ++x) {
                         if (!grid[x][yCurr]) {
@@ -88,15 +87,10 @@ class Tetris extends App {
                         }
                     }
                 }
-
-                // FORNOW repetition
-                xCurr = gridNumX / 2;
-                yCurr = gridNumY;
+                resetCurr();
                 break;
             }
         }
-
-        // Monokai.RED
 
         { // draw
             drawCornerRectangle(xCurr, yCurr, xCurr + 1, yCurr + 1, Color.GREEN);
@@ -112,4 +106,8 @@ class Tetris extends App {
         ++frame;
     }
 
+    void resetCurr() {
+        xCurr = gridNumX / 2;
+        yCurr = gridNumY;
+    }
 }

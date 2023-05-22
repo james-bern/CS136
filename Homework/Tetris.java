@@ -2,7 +2,7 @@ import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 
-class MonoTris extends App {
+class Tetris extends App {
 
     // TODO: arrow keys
     boolean initialized;
@@ -15,6 +15,7 @@ class MonoTris extends App {
     boolean bufferedKeyPressA;
     boolean bufferedKeyPressD;
 
+
     public static void main(String[] args) {
         System.out.println("A move left");
         System.out.println("D move right");
@@ -22,15 +23,15 @@ class MonoTris extends App {
         System.out.println("W move down infinitely fast");
         new Tetris().startGameLoop(10.0, 20.0, 8, 0.0, 0.0, Color.GRAY);
     }
-
-    void doFrame() {
+    void updateAndDraw() {
         if (!initialized || key_pressed('R')) {
             initialized = true;
             frame = 0;
 
             grid = new boolean[gridNumX][gridNumY];
 
-            resetCurr();
+            xCurr = gridNumX / 2;
+            yCurr = gridNumY;
             bufferedKeyPressA = false;
             bufferedKeyPressD = false;
         }
@@ -64,13 +65,13 @@ class MonoTris extends App {
             if ((yCurr != 0) && !grid[xCurr][yCurr - 1]) {
                 --yCurr;
             } else {
-                if (yCurr == gridNumY) { // game over
+                if (yCurr == gridNumY) {
                     initialized = false;
                     return;
                 }
                 grid[xCurr][yCurr] = true;
 
-                { // clear line
+                {
                     boolean anyMissing = false;
                     for (int x = 0; x < gridNumX; ++x) {
                         if (!grid[x][yCurr]) {
@@ -87,10 +88,15 @@ class MonoTris extends App {
                         }
                     }
                 }
-                resetCurr();
+
+                // FORNOW repetition
+                xCurr = gridNumX / 2;
+                yCurr = gridNumY;
                 break;
             }
         }
+
+        // Monokai.RED
 
         { // draw
             drawCornerRectangle(xCurr, yCurr, xCurr + 1, yCurr + 1, Color.GREEN);
@@ -106,8 +112,4 @@ class MonoTris extends App {
         ++frame;
     }
 
-    void resetCurr() {
-        xCurr = gridNumX / 2;
-        yCurr = gridNumY;
-    }
 }
