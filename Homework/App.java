@@ -176,6 +176,7 @@ class App extends JPanel {
 
         _graphics.drawPolyline(xPoints, yPoints, nPoints);
     }
+
     // // corner rectangle
     // void drawCornerRectangle(double xCornerA, double yCornerA, double xCornerB, double yCornerB, Vector3 color) {
     //     _graphicsSetColor(color);
@@ -224,9 +225,8 @@ class App extends JPanel {
 
     App() {
         super();
+
         {
-
-
             this.addMouseListener( new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
