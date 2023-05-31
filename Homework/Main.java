@@ -55,69 +55,11 @@
 //  - member function
 //  - String
 //  - generics
-class Vector2 {
-    double x;
-    double y;
-    Vector2() {} // NOTE: x and y automatically initialized to zero
-    Vector2(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
-    Vector2(Vector2 p) {
-        this.x = p.x;
-        this.y = p.y;
-    }
-    public String toString() {
-        return "(" + this.x + ", " + this.y + ")";
-    }
-    // NOTE: These are nice
-    // TODO: pythagorean theorem question
-    Vector2 plus(Vector2 other) { return new Vector2(this.x + other.x, this.y + other.y); }
-    Vector2 minus(Vector2 other) { return new Vector2(this.x - other.x, this.y - other.y); }
-    Vector2 times(double scalar) { return new Vector2(scalar * this.x, scalar * this.y); }
-    Vector2 dividedBy(double scalar) { return this.times(1.0 / scalar); }
-    double squaredNorm() { return this.x * this.x + this.y + this.y; }
-    double norm() { return Math.sqrt(this.squaredNorm()); }
-    Vector2 normalized() { return this.dividedBy(this.norm()); }
-
-    static double distance(Vector2 a, Vector2 b) { return (a.minus(b)).norm(); }
-    // HW: static Vector2 distance
-}
 
 //
 //  3 array-list (CowArrayList, ???)
 //
-class CowArrayList<ElementType> {
-    int length; // number elements stored in internal array
-    int capacity; // total number of slots in internal array
-    ElementType[] array;
 
-    @SuppressWarnings("unchecked")
-    CowArrayList() {
-        this.length = 0;
-        this.capacity = 16;
-        // NOTE: Java doesn't allow new ElementType[this.capacity]
-        //       so we use this workaround
-        this.array = (ElementType[]) new Object[this.capacity];
-    }
-
-    void add() {
-        // TODO:
-    }
-    
-    ElementType get(int i) {
-        return this.array[i];
-    }
-
-
-    public String toString() {
-        return Cow.arrayToString(this.array);
-    }
-
-    public static void main(String[] args) {
-        CowArrayList<Vector2> list = new CowArrayList<Vector2>();
-    }
-}
 
 
 
@@ -262,57 +204,6 @@ class Automaton {
         }
     }
 }
-
-
-
-
-class _1Warmup {
-
-}
-
-class Vector136 {
-
-}
-
-
-
-
-class LinkedList136 {
-
-}
-
-class Mario {
-
-}
-
-
-
-
-class Stack136 {
-
-}
-
-class PostScript {
-
-}
-
-
-
-
-class Queue136 {
-
-}
-
-
-class Hashtable136 {
-}
-
-
-
-class Tree136 {
-}
-
-
 
 /*
  * FUNdaMENTALs
