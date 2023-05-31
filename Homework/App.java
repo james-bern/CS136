@@ -127,12 +127,18 @@ class App extends JPanel {
     // window
     int _windowHeightInPixels;
     int _windowWidthInPixels;
+    // TODO Vector2?
     double windowWidthInWorldUnits;
     double windowHeightInWorldUnits;
+    double windowCenterXInWorldUnits;
+    double windowCenterYInWorldUnits;
     double _getWindowAspectRatio() { return ((double) _windowHeightInPixels) / _windowHeightInPixels; }
     double getWindowWidthInWorldUnits() { return _getWindowAspectRatio() * windowHeightInWorldUnits; }
     Vector2 getWindowSizeInWorldUnits() { return new Vector2(windowHeightInWorldUnits, getWindowWidthInWorldUnits()); }
 
+
+    // TODO: windowCenter
+    // TODO: formalize transforms (DRY)
 
     // // _graphics library
     // set color
@@ -150,7 +156,7 @@ class App extends JPanel {
 
         // ScreenFromWorld
         for (int i = 0; i < nPoints; ++i) {
-            xPoints[i] = (int) (scale * points[i].x);
+            xPoints[i] = (int) (scale * (points[i].x));
             yPoints[i] = (int) (scale * (windowHeightInWorldUnits - points[i].y));
         }
 
@@ -187,22 +193,14 @@ class App extends JPanel {
 
 
 
-    // TODO: port this
-    void drawCenteredSquare(Vector3 color, Vector2 s, Vector2 size) {
-        _graphicsSetColor(color);
-        _graphics.fillRect((int) (s.x - size.x / 2), (int) (_windowHeightInPixels - s.y - size.y / 2.0), (int) size.x, (int) size.y);
-    }
-
-
-
 
     JFrame jFrame;
     boolean mousePressed = false;
     boolean mouseHeld = false;
     boolean mouseReleased = false;
-    HashMap<Integer, Boolean> _keyPressed = new HashMap<>();;
-    HashMap<Integer, Boolean> _keyHeld = new HashMap<>();;
-    HashMap<Integer, Boolean> _keyReleased = new HashMap<>();;
+    HashMap<Integer, Boolean> _keyPressed = new HashMap<>();
+    HashMap<Integer, Boolean> _keyHeld = new HashMap<>();
+    HashMap<Integer, Boolean> _keyReleased = new HashMap<>();
     boolean keyHeld(int key) { return _keyHeld.getOrDefault(key, false); }
     boolean keyPressed(int key) {
         return _keyPressed.getOrDefault(key, false);
@@ -215,18 +213,18 @@ class App extends JPanel {
         {
 
 
-            this.addMouseListener(
-                    new MouseAdapter() {
-                        @Override public void mousePressed(MouseEvent e) {
-                        mousePressed = true;
-                        mouseHeld = true;
-                        }
+            this.addMouseListener( new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    mousePressed = true;
+                    mouseHeld = true;
+                }
 
-                        @Override public void mouseReleased(MouseEvent e) {
-                        mouseHeld = false;
-                        mouseReleased = true;
-                        }
-                    });
+                @Override public void mouseReleased(MouseEvent e) {
+                mouseHeld = false;
+                mouseReleased = true;
+                }
+            });
 
             KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(event -> {
                 synchronized (App.class) {
@@ -256,14 +254,16 @@ class App extends JPanel {
     }
 
     // TODO: pixelsPer...
-    void startGameLoop() { this.startGameLoop(1, 1, 512); }
-    void startGameLoop(double windowWidthInWorldUnits, double windowHeightInWorldUnits, int pixelsPerWorldUnit) {
+    void startGameLoop() { this.startGameLoop(2, 2, 0, 0, 512); }
+    void startGameLoop(double windowWidthInWorldUnits, double windowHeightInWorldUnits, double windowCenterXInWorldUnits,double windowCenterYInWorldUnits, int windowHeightInPixels) {
 
         this.setBackground(Color.GRAY);
 
         this.windowWidthInWorldUnits = windowWidthInWorldUnits;
         this.windowHeightInWorldUnits = windowHeightInWorldUnits;
-        this.jFrame.setSize((int) (pixelsPerWorldUnit * windowWidthInWorldUnits), (int) (pixelsPerWorldUnit * windowHeightInWorldUnits));
+        this.windowCenterXInWorldUnits = windowCenterXInWorldUnits;
+        this.windowCenterYInWorldUnits = windowCenterYInWorldUnits;
+        this.jFrame.setSize((int) (windowWidthInWorldUnits / windowHeightInWorldUnits * windowHeightInPixels), (int) (windowHeightInPixels));
         jFrame.setVisible(true);
 
 

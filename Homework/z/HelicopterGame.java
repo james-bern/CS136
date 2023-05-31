@@ -26,6 +26,14 @@ class Jim {
 
 
 class HelicopterGame extends App {
+    // TODO: port this
+    void drawCenteredSquare(Vector3 color, Vector2 s, Vector2 size) {
+        _graphicsSetColor(color);
+        _graphics.fillRect((int) (s.x - size.x / 2), (int) (_windowHeightInPixels - s.y - size.y / 2.0), (int) size.x, (int) size.y);
+    }
+
+
+
     public static void main(String[] args) { new HelicopterGame().startGameLoop(); }
 
     boolean initialized;
