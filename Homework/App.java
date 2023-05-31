@@ -45,25 +45,7 @@ class Vector2 {
     // HW: static Vector2 distance
 }
 
-
-class Test {
-    public static void main(String[] args) {
-        ToyArrayList<Vector2> points = new ToyArrayList<Vector2>();
-        points.add(new Vector2(1.0, 1.0));
-        points.add(new Vector2(1.0, 1.0));
-        points.add(new Vector2(1.0, 1.0));
-        points.add(new Vector2(1.0, 1.0));
-        points.add(new Vector2(1.0, 1.0));
-        points.add(new Vector2(1.0, 1.0));
-        points.add(new Vector2(1.0, 1.0));
-        points.add(new Vector2(1.0, 1.0));
-    }
-}
-
-
 // TODO: get mouse position
-
-
 // TODO EasyApp
 
 class BootlegPaint extends App {
@@ -74,16 +56,20 @@ class BootlegPaint extends App {
     boolean initialized;
     ArrayList<Vector2> list;
     Vector2[] array = { new Vector2(0.1, 0.1), new Vector2(0.8, 0.8) };
+    ToyArrayList<Vector2> toyList;
 
     void updateAndDraw() {
         if (!initialized || key_pressed('R')) {
             initialized = true;
             list = new ArrayList<Vector2>();
+            toyList = new ToyArrayList<Vector2>();
         }
 
         list.add(this.mousePosition);
+        toyList.add(new Vector2(this.mousePosition.y, this.mousePosition.x));
         drawLineStrip(list, new Color(0.5f, 0.9f, 0.2f));
         drawLineStrip(array, Color.RED);
+        drawLineStrip(toyList, Color.ORANGE);
     }
 
 }
@@ -91,19 +77,15 @@ class BootlegPaint extends App {
 class App extends JPanel {
     // TODO: Only expose world coordinates to the user.
     // TODO: Only have Vector2 versions of draw functions.
-
     // TODO: non-pixel coordinate system with reasonable center
 
 
-
-    // read only app state
+    // // read only app state
+    // mouse
     Vector2 mousePosition;
-
-
-
-    int _windowHeightInPixels; // NOTE: these are set automatically at the beginning of each frame
-    int _windowWidthInPixels;  // NOTE: these are set automatically at the beginning of each frame
-
+    // window
+    int _windowHeightInPixels;
+    int _windowWidthInPixels;
     double windowWidthInWorldUnits;
     double windowHeightInWorldUnits;
     double _getWindowAspectRatio() { return ((double) _windowHeightInPixels) / _windowHeightInPixels; }
@@ -111,6 +93,7 @@ class App extends JPanel {
     Vector2 getWindowSizeInWorldUnits() { return new Vector2(windowHeightInWorldUnits, getWindowWidthInWorldUnits()); }
 
 
+    // // graphics library
     void drawLineStrip(Vector2[] points, Color color) {
         graphics.setColor(color);
         double scale = _windowHeightInPixels / windowHeightInWorldUnits;
@@ -123,12 +106,12 @@ class App extends JPanel {
         }
         graphics.drawPolyline(xPoints, yPoints, nPoints);
     }
-    void drawLineStrip(List<Vector2> points, Color color) {
+    void drawLineStrip(Collection<Vector2> points, Color color) {
         drawLineStrip(points.toArray(new Vector2[0]), color);
     }
-
-
-
+    void drawLineStrip(ToyArrayList<Vector2> points, Color color) {
+        drawLineStrip(points.toArray(new Vector2[0]), color);
+    }
 
 
     void drawCornerRectangle(double xCornerA, double yCornerA, double xCornerB, double yCornerB, Color color) {

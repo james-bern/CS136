@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.nio.CharBuffer;
+import java.util.Collection;
 
 class Cow {
     private Cow() {}
@@ -59,6 +60,22 @@ class ToyArrayList<ElementType> {
         }
         this.internalArray[this.length++] = element;
     }
+
+
+
+    // FORNOW
+    public <T> T[] toArray(T[] array) {
+        if (array.length < this.length) {
+            array = (T[])java.lang.reflect.Array.newInstance(array.getClass().getComponentType(), this.length);
+        }
+        System.arraycopy(internalArray, 0, array, 0, this.length);
+        if (array.length > this.length) {
+            array[this.length] = null;
+        }
+        return array;
+    }
+
+
 
     public static void main(String[] args) {
         ToyArrayList<String> arrayList = new ToyArrayList<String>();
