@@ -1,9 +1,16 @@
 import java.util.Arrays;
 import java.nio.CharBuffer;
 import java.util.Collection;
+import java.util.Random;
 
 class Cow {
     private Cow() {}
+
+    static Random random = new Random(0);
+    static double randomDouble() {
+        return random.nextDouble();
+    }
+
 
     static void printArray(int[] array) { printArray(Arrays.stream(array).boxed().toArray(Integer[]::new)); }
     static void printArray(long[] array) { printArray(Arrays.stream(array).boxed().toArray(Long[]::new)); }

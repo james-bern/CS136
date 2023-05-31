@@ -37,7 +37,7 @@ class HelicopterGame extends App {
     Helicopter player;
 
     @Override public void updateAndDraw() {
-        if (key_pressed('R') || !initialized) {
+        if (keyPressed('R') || !initialized) {
             initialized = true;
             frame = 0;
             time = 0.0;
@@ -63,12 +63,12 @@ class HelicopterGame extends App {
             { // player
                 ++player._FORNOW_jFramesSinceFlippedFacing;
                 player.acceleration = new Vector2();
-                if (key_held('S')) { player.acceleration.y -= 1; }
-                if (key_held('W')) { player.acceleration.y += 1; }
+                if (keyHeld('S')) { player.acceleration.y -= 1; }
+                if (keyHeld('W')) { player.acceleration.y += 1; }
                 {
                     int tmp = player.facing;
-                    if (key_held('A')) { player.acceleration.x -= 1; player.facing = -1; }
-                    if (key_held('D')) { player.acceleration.x += 1; player.facing =  1; }
+                    if (keyHeld('A')) { player.acceleration.x -= 1; player.facing = -1; }
+                    if (keyHeld('D')) { player.acceleration.x += 1; player.facing =  1; }
                     if (tmp != player.facing) {
                         player._FORNOW_jFramesSinceFlippedFacing = 0;
                     }
@@ -96,10 +96,10 @@ class HelicopterGame extends App {
 
                 player.velocity = scalarMultiply(.99, player.velocity);
 
-                if (key_pressed('J')) { 
+                if (keyPressed('J')) { 
                     player.fire(this, null, 2.0);
                 }
-                if (key_pressed('K')) { 
+                if (keyPressed('K')) { 
                     ArrayList<Bullet> dead_bullets = new ArrayList<Bullet>();
                     for (Bullet bullet : bullets) {
                         if (bullet.helicopter != player) {
@@ -189,13 +189,13 @@ class HelicopterGame extends App {
             }
             { // draw
                 for (Bullet bullet : bullets) {
-                    bullet.draw(graphics);
+                    bullet.draw(_graphics);
                 }
                 for (Explosion explosion : explosions) {
-                    explosion.draw(graphics);
+                    explosion.draw(_graphics);
                 }
                 for (Helicopter helicopter : helicopters) {
-                    helicopter.draw(graphics);
+                    helicopter.draw(_graphics);
                 }
             }
         }
@@ -224,7 +224,7 @@ class HelicopterGame extends App {
         Vector2 position;
         int age;
         Color color;
-        void draw(Graphics graphics) {
+        void draw(Graphics _graphics) {
             double size = 24.0 + 6.0 * this.age;
             Color color = Color.WHITE;
             if (this.age > 6) {
@@ -240,7 +240,7 @@ class HelicopterGame extends App {
         int age;
         double size;
         Helicopter helicopter;
-        void draw(Graphics graphics) {
+        void draw(Graphics _graphics) {
             drawCenteredSquare(helicopter.color, this.position, new Vector2(this.size, this.size));
         }
     }
@@ -255,7 +255,7 @@ class HelicopterGame extends App {
         boolean _FORNOW_dead_flag;
         Color color;
         static Vector2 size = new Vector2(32.0, 16.0);
-        void draw(Graphics graphics) {
+        void draw(Graphics _graphics) {
             drawCenteredSquare(color, this.position, Helicopter.size);
             drawCenteredSquare(color, this.position.plus(new Vector2(0.0, 12.0)), new Vector2(50.0 * Math.sin(15 * facing * time), 2.0));
 

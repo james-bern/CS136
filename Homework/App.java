@@ -45,31 +45,71 @@ class Vector2 {
     // HW: static Vector2 distance
 }
 
+class Vector3 {
+    double x;
+    double y;
+    double z;
+    Vector3() { }
+    Vector3(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+    Vector3(Vector3 p) {
+        this.x = p.x;
+        this.y = p.y;
+        this.z = p.z;
+    }
+    public String toString() {
+        return "(" + this.x + ", " + this.y + ", " + this.z + ")";
+    }
+}
+
 // TODO: get mouse position
 // TODO EasyApp
 
-class BootlegPaint extends App {
-    public static void main(String[] args) {
-        new BootlegPaint().startGameLoop();
+
+// TODO: mouse clicked
+// TODO: mouse released
+
+class Paint extends App {
+    public static void main(String[] args) { new Paint().startGameLoop(); }
+
+    ArrayList<ArrayList<Vector2>> strokes;
+    ArrayList<Vector3> colors;
+
+    @Override
+    void initalizeOrReset() {
+        strokes = new ArrayList<ArrayList<Vector2>>();
+        colors = new ArrayList<Vector3>();
     }
 
-    boolean initialized;
-    ArrayList<Vector2> list;
-    Vector2[] array = { new Vector2(0.1, 0.1), new Vector2(0.8, 0.8) };
-    ToyArrayList<Vector2> toyList;
-
+    @Override
     void updateAndDraw() {
-        if (!initialized || key_pressed('R')) {
-            initialized = true;
-            list = new ArrayList<Vector2>();
-            toyList = new ToyArrayList<Vector2>();
+        if (mousePressed) {
+            strokes.add(new ArrayList<Vector2>());
+            colors.add(new Vector3(Cow.randomDouble(), Cow.randomDouble(), Cow.randomDouble()));
+        }
+        if (mouseHeld) { strokes.get(strokes.size() - 1).add(mousePosition); }
+
+        // TODO choose windowCenterInWorldUnits
+
+        if (keyPressed('X')) {
+            for (int i = 0; i < strokes.size(); ++i) {
+                for (int j = 0; j < strokes.get(i).size(); ++j) {
+                    strokes.get(i).get(j).x *= -1;
+                }
+            }
         }
 
-        list.add(this.mousePosition);
-        toyList.add(new Vector2(this.mousePosition.y, this.mousePosition.x));
-        drawLineStrip(list, new Color(0.5f, 0.9f, 0.2f));
-        drawLineStrip(array, Color.RED);
-        drawLineStrip(toyList, Color.ORANGE);
+        for (int i = 0; i < strokes.size(); ++i) {
+            drawLineStrip(strokes.get(i), colors.get(i));
+        }
+
+        {
+            Vector2[] array = { new Vector2(0.1, 0.1), new Vector2(0.8, 0.8) };
+            drawLineStrip(array, new Vector3(1.0, 0.0, 0.0));
+        }
     }
 
 }
@@ -77,6 +117,7 @@ class BootlegPaint extends App {
 class App extends JPanel {
     // TODO: Only expose world coordinates to the user.
     // TODO: Only have Vector2 versions of draw functions.
+
     // TODO: non-pixel coordinate system with reasonable center
 
 
@@ -93,31 +134,33 @@ class App extends JPanel {
     Vector2 getWindowSizeInWorldUnits() { return new Vector2(windowHeightInWorldUnits, getWindowWidthInWorldUnits()); }
 
 
-    // // graphics library
-    void drawLineStrip(Vector2[] points, Color color) {
-        graphics.setColor(color);
+    // // _graphics library
+    // set color
+    void _graphicsSetColor(Vector3 color) {
+        _graphics.setColor(new Color((float) color.x, (float) color.y, (float) color.z));
+    }
+    // line strip
+    void drawLineStrip(Collection<Vector2> points, Vector3 color) { drawLineStrip(points.toArray(new Vector2[0]), color); }
+    void drawLineStrip(Vector2[] points, Vector3 color) {
+        _graphicsSetColor(color);
         double scale = _windowHeightInPixels / windowHeightInWorldUnits;
         int nPoints = points.length;
         int[] xPoints = new int[nPoints];
         int[] yPoints = new int[nPoints];
+
+        // ScreenFromWorld
         for (int i = 0; i < nPoints; ++i) {
             xPoints[i] = (int) (scale * points[i].x);
             yPoints[i] = (int) (scale * (windowHeightInWorldUnits - points[i].y));
         }
-        graphics.drawPolyline(xPoints, yPoints, nPoints);
-    }
-    void drawLineStrip(Collection<Vector2> points, Color color) {
-        drawLineStrip(points.toArray(new Vector2[0]), color);
-    }
-    void drawLineStrip(ToyArrayList<Vector2> points, Color color) {
-        drawLineStrip(points.toArray(new Vector2[0]), color);
-    }
 
+        _graphics.drawPolyline(xPoints, yPoints, nPoints);
+    }
+    // corner rectangle
+    void drawCornerRectangle(double xCornerA, double yCornerA, double xCornerB, double yCornerB, Vector3 color) {
+        _graphicsSetColor(color);
 
-    void drawCornerRectangle(double xCornerA, double yCornerA, double xCornerB, double yCornerB, Color color) {
-        graphics.setColor(color);
-
-        // change of coordinates
+        // ScreenFromWorld
         yCornerA = windowHeightInWorldUnits - yCornerA;
         yCornerB = windowHeightInWorldUnits - yCornerB;
         double scale = _windowHeightInPixels / windowHeightInWorldUnits;
@@ -126,59 +169,77 @@ class App extends JPanel {
         xCornerB *= scale;
         yCornerB *= scale;
 
-        // swap if necessary to make A lower-left and B upper-right
-        if (xCornerA > xCornerB) { double tmp = xCornerA; xCornerA = xCornerB; xCornerB = tmp; }
-        if (yCornerA > yCornerB) { double tmp = yCornerA; yCornerA = yCornerB; yCornerB = tmp; }
+        {
+            // swap if necessary to make A lower-left and B upper-right
+            if (xCornerA > xCornerB) { double tmp = xCornerA; xCornerA = xCornerB; xCornerB = tmp; }
+            if (yCornerA > yCornerB) { double tmp = yCornerA; yCornerA = yCornerB; yCornerB = tmp; }
 
-        graphics.fillRect(
-                (int) (xCornerA),
-                (int) (yCornerA),
-                (int) (xCornerB - xCornerA),
-                (int) (yCornerB - yCornerA));
+            _graphics.fillRect(
+                    (int) (xCornerA),
+                    (int) (yCornerA),
+                    (int) (xCornerB - xCornerA),
+                    (int) (yCornerB - yCornerA));
+        }
     }
-    void drawCornerRectangle(Vector2 cornerA, Vector2 cornerB, Color color) {
+    void drawCornerRectangle(Vector2 cornerA, Vector2 cornerB, Vector3 color) {
         drawCornerRectangle(cornerA.x, cornerA.y, cornerB.x, cornerB.y, color);
     }
 
 
 
     // TODO: port this
-    void drawCenteredSquare(Color color, Vector2 s, Vector2 size) {
-        graphics.setColor(color);
-        graphics.fillRect((int) (s.x - size.x / 2), (int) (_windowHeightInPixels - s.y - size.y / 2.0), (int) size.x, (int) size.y);
+    void drawCenteredSquare(Vector3 color, Vector2 s, Vector2 size) {
+        _graphicsSetColor(color);
+        _graphics.fillRect((int) (s.x - size.x / 2), (int) (_windowHeightInPixels - s.y - size.y / 2.0), (int) size.x, (int) size.y);
     }
 
 
 
 
     JFrame jFrame;
-    HashMap<Integer, Boolean> _key_held;
-    HashMap<Integer, Boolean> _key_pressed;
-    HashMap<Integer, Boolean> _key_released;
-    boolean key_held(int key) { return _key_held.getOrDefault(key, false); }
-    boolean key_pressed(int key) {
-        return _key_pressed.getOrDefault(key, false);
+    boolean mousePressed = false;
+    boolean mouseHeld = false;
+    boolean mouseReleased = false;
+    HashMap<Integer, Boolean> _keyPressed = new HashMap<>();;
+    HashMap<Integer, Boolean> _keyHeld = new HashMap<>();;
+    HashMap<Integer, Boolean> _keyReleased = new HashMap<>();;
+    boolean keyHeld(int key) { return _keyHeld.getOrDefault(key, false); }
+    boolean keyPressed(int key) {
+        return _keyPressed.getOrDefault(key, false);
     }
-    boolean key_released(int key) { return _key_released.getOrDefault(key, false); }
+    boolean keyReleased(int key) { return _keyReleased.getOrDefault(key, false); }
+
 
     App() {
         super();
         {
-            _key_held = new HashMap<>();
-            _key_pressed = new HashMap<>();
-            _key_released = new HashMap<>();
+
+
+            this.addMouseListener(
+                    new MouseAdapter() {
+                        @Override public void mousePressed(MouseEvent e) {
+                        mousePressed = true;
+                        mouseHeld = true;
+                        }
+
+                        @Override public void mouseReleased(MouseEvent e) {
+                        mouseHeld = false;
+                        mouseReleased = true;
+                        }
+                    });
+
             KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(event -> {
                 synchronized (App.class) {
                     int key = event.getKeyCode();
                     if (event.getID() == KeyEvent.KEY_PRESSED) {
-                        if (!key_held(key)) {
-                            _key_pressed.put(key, true);
+                        if (!keyHeld(key)) {
+                            _keyPressed.put(key, true);
                         }
-                        _key_held.put(key, true);
+                        _keyHeld.put(key, true);
                     }
                     if (event.getID() == KeyEvent.KEY_RELEASED) {
-                        _key_released.put(key, true);
-                        _key_held.put(key, false);
+                        _keyReleased.put(key, true);
+                        _keyHeld.put(key, false);
                     }
                     return false;
                 }
@@ -196,28 +257,35 @@ class App extends JPanel {
 
     // TODO: pixelsPer...
     void startGameLoop() { this.startGameLoop(1, 1, 512); }
-    void startGameLoop(double initialWindowWidthInWorldUnits, double initialWindowHeightInWorldUnits, int initialPixelsPerWorldUnit) {
+    void startGameLoop(double windowWidthInWorldUnits, double windowHeightInWorldUnits, int pixelsPerWorldUnit) {
 
         this.setBackground(Color.GRAY);
 
-        this.windowWidthInWorldUnits = initialWindowWidthInWorldUnits;
-        this.windowHeightInWorldUnits = initialWindowHeightInWorldUnits;
-        this.jFrame.setSize((int) (initialPixelsPerWorldUnit * initialWindowWidthInWorldUnits), (int) (initialPixelsPerWorldUnit * initialWindowHeightInWorldUnits));
+        this.windowWidthInWorldUnits = windowWidthInWorldUnits;
+        this.windowHeightInWorldUnits = windowHeightInWorldUnits;
+        this.jFrame.setSize((int) (pixelsPerWorldUnit * windowWidthInWorldUnits), (int) (pixelsPerWorldUnit * windowHeightInWorldUnits));
         jFrame.setVisible(true);
 
 
-        while (!key_held('Q')) {
+        while (!keyHeld('Q')) {
             this.repaint();
             try { Thread.sleep(1000 / 60); } catch (Exception e) { }
         }
         System.exit(0);
     }
-    
+
+    boolean _initialized = false;
+    void initalizeOrReset() { }
+
     void updateAndDraw() {}
-    Graphics graphics;
-    @Override public void paintComponent(Graphics graphics) {
-        super.paintComponent(graphics);
-        this.graphics = graphics; {
+    Graphics _graphics;
+
+    @Override 
+    public void paintComponent(Graphics _graphics) {
+
+
+        super.paintComponent(_graphics);
+        this._graphics = _graphics; {
             Rectangle rectangle = jFrame.getBounds();
             _windowHeightInPixels = rectangle.height;
             _windowWidthInPixels = rectangle.width;
@@ -231,11 +299,25 @@ class App extends JPanel {
             this.mousePosition = new Vector2(scale * point.x, windowHeightInWorldUnits - (scale * point.y));
         }
 
+        if (!_initialized || keyPressed('R')) {
+            _initialized = true;
+            initalizeOrReset();
+
+            mousePressed = false;
+            mouseHeld = false;
+            mouseReleased = false;
+            _keyPressed.clear();
+            _keyHeld.clear();
+            _keyReleased.clear();
+        }
+
         updateAndDraw();
 
         { // end of jFrame
-            _key_pressed.clear();
-            _key_released.clear();
+            mousePressed = false;
+            mouseReleased = false;
+            _keyPressed.clear();
+            _keyReleased.clear();
         }
     }
 

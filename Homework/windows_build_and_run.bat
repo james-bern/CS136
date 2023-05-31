@@ -1,0 +1,1 @@
+buildAndRun.bat Paint

@@ -23,7 +23,7 @@ class MonoTris extends App {
     }
 
     void updateAndDraw() {
-        if (!initialized || key_pressed('R')) {
+        if (!initialized || keyPressed('R')) {
             initialized = true;
             frame = 0;
 
@@ -34,28 +34,28 @@ class MonoTris extends App {
             bufferedKeyPressD = false;
         }
 
-        if (key_pressed('A')) { bufferedKeyPressA = true; }
-        if (key_pressed('D')) { bufferedKeyPressD = true; }
+        if (keyPressed('A')) { bufferedKeyPressA = true; }
+        if (keyPressed('D')) { bufferedKeyPressD = true; }
 
         boolean moveClockTic = ((frame % 4) == 0);
         boolean subMoveClockTic = ((frame % 2) == 0);
 
         if (moveClockTic) {
-            if (bufferedKeyPressA || key_held('A')) {
+            if (bufferedKeyPressA || keyHeld('A')) {
                 bufferedKeyPressA = false;
                 if ((xCurr != 0) && ((yCurr >= gridNumY) || !grid[xCurr - 1][yCurr])) { --xCurr; }
             }
-            if (bufferedKeyPressD || key_held('D')) {
+            if (bufferedKeyPressD || keyHeld('D')) {
                 bufferedKeyPressD = false;
                 if ((xCurr != (gridNumX - 1)) && ((yCurr >= gridNumY) || !grid[xCurr + 1][yCurr])) { ++xCurr; }
             }
         }
 
         int numSteps = 0;
-        if (moveClockTic || (key_held('S') && subMoveClockTic)) {
+        if (moveClockTic || (keyHeld('S') && subMoveClockTic)) {
             numSteps = 1;
         }
-        if (key_pressed('W')) {
+        if (keyPressed('W')) {
             numSteps = gridNumY;
         }
 
