@@ -72,6 +72,7 @@ class Vector3 {
 // TODO: mouse clicked
 // TODO: mouse released
 
+// TODO: bare bones Paint starter (just one stroke forever)
 class Paint extends App {
     public static void main(String[] args) { new Paint().startGameLoop(); }
 
@@ -111,7 +112,6 @@ class Paint extends App {
             drawLineStrip(array, new Vector3(1.0, 0.0, 0.0));
         }
     }
-
 }
 
 class App extends JPanel {
@@ -123,18 +123,33 @@ class App extends JPanel {
 
     // // read only app state
     // mouse
-    Vector2 mousePosition;
+    Vector2 mousePosition; // world coordinates
     // window
     int _windowHeightInPixels;
     int _windowWidthInPixels;
     // TODO Vector2?
-    double windowWidthInWorldUnits;
-    double windowHeightInWorldUnits;
-    double windowCenterXInWorldUnits;
-    double windowCenterYInWorldUnits;
-    double _getWindowAspectRatio() { return ((double) _windowHeightInPixels) / _windowHeightInPixels; }
-    double getWindowWidthInWorldUnits() { return _getWindowAspectRatio() * windowHeightInWorldUnits; }
-    Vector2 getWindowSizeInWorldUnits() { return new Vector2(windowHeightInWorldUnits, getWindowWidthInWorldUnits()); }
+    double _windowWidthInWorldUnits;
+    double _windowHeightInWorldUnits;
+    double _windowCenterXInWorldUnits;
+    double _windowCenterYInWorldUnits;
+    double _windowAspectRatio() { return ((double) _windowHeightInPixels) / _windowHeightInPixels; }
+    double _windowWidthInWorldUnits() { return _windowAspectRatio() * _windowHeightInWorldUnits; }
+    double _windowPixelsPerWorldUnits() { return _windowHeightInPixels / _windowHeightInWorldUnits; }
+    Vector2 _windowSizeInWorldUnits() { return new Vector2(_windowHeightInWorldUnits, _windowWidthInWorldUnits()); }
+    Vector2 _windowPixelFromWorld(Vector2 pWorld) {
+        Vector2 pPixel = new Vector2();
+        double scale = _windowPixelsPerWorldUnits();
+        pPixel.x = (int) (scale *                             ((pWorld.x - (_windowCenterXInWorldUnits - .5 *  _windowWidthInWorldUnits))));
+        pPixel.y = (int) (scale * (_windowHeightInWorldUnits - (pWorld.y - (_windowCenterYInWorldUnits - .5 * _windowHeightInWorldUnits))));
+        return pPixel;
+    }
+    Vector2 _windowWorldFromPixel(Vector2 pPixel) {
+        Vector2 pWorld = new Vector2();
+        double scale = _windowPixelsPerWorldUnits();
+        pWorld.x =                             (pPixel.x / scale) + (_windowCenterXInWorldUnits - .5 *  _windowWidthInWorldUnits);
+        pWorld.y = _windowHeightInWorldUnits - (pPixel.y / scale) + (_windowCenterYInWorldUnits - .5 * _windowHeightInWorldUnits);
+        return pWorld;
+    }
 
 
     // TODO: windowCenter
@@ -149,47 +164,46 @@ class App extends JPanel {
     void drawLineStrip(Collection<Vector2> points, Vector3 color) { drawLineStrip(points.toArray(new Vector2[0]), color); }
     void drawLineStrip(Vector2[] points, Vector3 color) {
         _graphicsSetColor(color);
-        double scale = _windowHeightInPixels / windowHeightInWorldUnits;
         int nPoints = points.length;
         int[] xPoints = new int[nPoints];
         int[] yPoints = new int[nPoints];
 
-        // ScreenFromWorld
         for (int i = 0; i < nPoints; ++i) {
-            xPoints[i] = (int) (scale * (points[i].x));
-            yPoints[i] = (int) (scale * (windowHeightInWorldUnits - points[i].y));
+            Vector2 tmp = _windowPixelFromWorld(points[i]);
+            xPoints[i] = (int) tmp.x;
+            yPoints[i] = (int) tmp.y;
         }
 
         _graphics.drawPolyline(xPoints, yPoints, nPoints);
     }
-    // corner rectangle
-    void drawCornerRectangle(double xCornerA, double yCornerA, double xCornerB, double yCornerB, Vector3 color) {
-        _graphicsSetColor(color);
+    // // corner rectangle
+    // void drawCornerRectangle(double xCornerA, double yCornerA, double xCornerB, double yCornerB, Vector3 color) {
+    //     _graphicsSetColor(color);
 
-        // ScreenFromWorld
-        yCornerA = windowHeightInWorldUnits - yCornerA;
-        yCornerB = windowHeightInWorldUnits - yCornerB;
-        double scale = _windowHeightInPixels / windowHeightInWorldUnits;
-        xCornerA *= scale;
-        yCornerA *= scale;
-        xCornerB *= scale;
-        yCornerB *= scale;
+    //     // PixelFromWorld
+    //     yCornerA = _windowHeightInWorldUnits - yCornerA;
+    //     yCornerB = _windowHeightInWorldUnits - yCornerB;
+    //     double scale = _windowHeightInPixels / _windowHeightInWorldUnits;
+    //     xCornerA *= scale;
+    //     yCornerA *= scale;
+    //     xCornerB *= scale;
+    //     yCornerB *= scale;
 
-        {
-            // swap if necessary to make A lower-left and B upper-right
-            if (xCornerA > xCornerB) { double tmp = xCornerA; xCornerA = xCornerB; xCornerB = tmp; }
-            if (yCornerA > yCornerB) { double tmp = yCornerA; yCornerA = yCornerB; yCornerB = tmp; }
+    //     {
+    //         // swap if necessary to make A lower-left and B upper-right
+    //         if (xCornerA > xCornerB) { double tmp = xCornerA; xCornerA = xCornerB; xCornerB = tmp; }
+    //         if (yCornerA > yCornerB) { double tmp = yCornerA; yCornerA = yCornerB; yCornerB = tmp; }
 
-            _graphics.fillRect(
-                    (int) (xCornerA),
-                    (int) (yCornerA),
-                    (int) (xCornerB - xCornerA),
-                    (int) (yCornerB - yCornerA));
-        }
-    }
-    void drawCornerRectangle(Vector2 cornerA, Vector2 cornerB, Vector3 color) {
-        drawCornerRectangle(cornerA.x, cornerA.y, cornerB.x, cornerB.y, color);
-    }
+    //         _graphics.fillRect(
+    //                 (int) (xCornerA),
+    //                 (int) (yCornerA),
+    //                 (int) (xCornerB - xCornerA),
+    //                 (int) (yCornerB - yCornerA));
+    //     }
+    // }
+    // void drawCornerRectangle(Vector2 cornerA, Vector2 cornerB, Vector3 color) {
+    //     drawCornerRectangle(cornerA.x, cornerA.y, cornerB.x, cornerB.y, color);
+    // }
 
 
 
@@ -255,15 +269,15 @@ class App extends JPanel {
 
     // TODO: pixelsPer...
     void startGameLoop() { this.startGameLoop(2, 2, 0, 0, 512); }
-    void startGameLoop(double windowWidthInWorldUnits, double windowHeightInWorldUnits, double windowCenterXInWorldUnits,double windowCenterYInWorldUnits, int windowHeightInPixels) {
+    void startGameLoop(double _windowWidthInWorldUnits, double _windowHeightInWorldUnits, double _windowCenterXInWorldUnits,double _windowCenterYInWorldUnits, int windowHeightInPixels) {
 
-        this.setBackground(Color.GRAY);
+        this.setBackground(Color.BLACK);
 
-        this.windowWidthInWorldUnits = windowWidthInWorldUnits;
-        this.windowHeightInWorldUnits = windowHeightInWorldUnits;
-        this.windowCenterXInWorldUnits = windowCenterXInWorldUnits;
-        this.windowCenterYInWorldUnits = windowCenterYInWorldUnits;
-        this.jFrame.setSize((int) (windowWidthInWorldUnits / windowHeightInWorldUnits * windowHeightInPixels), (int) (windowHeightInPixels));
+        this._windowWidthInWorldUnits = _windowWidthInWorldUnits;
+        this._windowHeightInWorldUnits = _windowHeightInWorldUnits;
+        this._windowCenterXInWorldUnits = _windowCenterXInWorldUnits;
+        this._windowCenterYInWorldUnits = _windowCenterYInWorldUnits;
+        this.jFrame.setSize((int) (_windowWidthInWorldUnits / _windowHeightInWorldUnits * windowHeightInPixels), (int) (windowHeightInPixels));
         jFrame.setVisible(true);
 
 
@@ -292,11 +306,12 @@ class App extends JPanel {
         }
 
         {
-            Point point = MouseInfo.getPointerInfo().getLocation();
-            SwingUtilities.convertPointFromScreen(point, this);
-
-            double scale = windowHeightInWorldUnits / _windowHeightInPixels ;
-            this.mousePosition = new Vector2(scale * point.x, windowHeightInWorldUnits - (scale * point.y));
+            Point point;
+            {
+                point = MouseInfo.getPointerInfo().getLocation();
+                SwingUtilities.convertPointFromScreen(point, this);
+            }
+            this.mousePosition = _windowWorldFromPixel(new Vector2(point.x, point.y));
         }
 
         if (!_initialized || keyPressed('R')) {
