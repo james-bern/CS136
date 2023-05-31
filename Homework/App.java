@@ -9,8 +9,22 @@ import java.lang.Math;
 
 
 
+// TODO: get mouse position
+class BootlegPaint extends App {
+    public static void main(String[] args) {
+        System.out.println("Hello!");
+        new BootlegPaint().startGameLoop();
+    }
+    void updateAndDraw() {
+        System.out.println(this.mousePosition);
+    }
+
+}
 
 class App extends JPanel {
+    // TODO: Only expose world coordinates to the user.
+    // TODO: Only have Vector2 versions of draw functions.
+
     // TODO: non-pixel coordinate system with reasonable center
 
     // NOTE: these are set automatically at the beginning of each frame
@@ -22,12 +36,25 @@ class App extends JPanel {
     double _getWindowAspectRatio() { return ((double) _windowHeightInPixels) / _windowHeightInPixels; }
     double getWindowWidth() { return _getWindowAspectRatio() * windowHeight; }
     Vector2 getWindowSize() { return new Vector2(windowHeight, getWindowWidth()); }
-    Vector2 windowCenter = new Vector2();
+
+
+
+
+    Vector2 mousePosition;
 
     // TODO: test app (constructor, mouse controls for camera, etc.)
     void drawCenteredSquare(Color color, Vector2 s, Vector2 size) {
         this.graphics.setColor(color);
         this.graphics.fillRect((int) (s.x - size.x / 2), (int) (_windowHeightInPixels - s.y - size.y / 2.0), (int) size.x, (int) size.y);
+    }
+
+    void drawLineStrip(Vector2[] points) {
+        int[] xPoints = new int[points.length];
+        int[] yPoints = new int[points.length];
+        for (int i = 0; i < points.length; ++i) {
+        }
+
+        this.graphics.drawPolyline(xPoints, yPoints, points.length);
     }
 
     void drawCornerRectangle(double xCornerA, double yCornerA, double xCornerB, double yCornerB, Color color) {
@@ -101,18 +128,16 @@ class App extends JPanel {
     }
 
     // TODO: pixelsPer...
-    void startGameLoop() { this.startGameLoop(1000, 500, 1, 0, 0, Color.BLACK); }
-    void startGameLoop(double initialWindowWidth, double initialWindowHeight, int initialPixelsPerWorldUnit, double xCenter, double yCenter, Color color) {
+    void startGameLoop() { this.startGameLoop(512, 512, 1); }
+    void startGameLoop(double initialWindowWidthInWorldUnits, double initialWindowHeightInWorldUnits, int initialPixelsPerWorldUnit) {
 
-        this.setBackground(color);
+        this.setBackground(Color.GRAY);
 
-        this.windowWidth = initialWindowWidth;
-        this.windowHeight = initialWindowHeight;
-        this.jFrame.setSize((int) (initialPixelsPerWorldUnit * initialWindowWidth), (int) (initialPixelsPerWorldUnit * initialWindowHeight));
+        this.windowWidth = initialWindowWidthInWorldUnits;
+        this.windowHeight = initialWindowHeightInWorldUnits;
+        this.jFrame.setSize((int) (initialPixelsPerWorldUnit * initialWindowWidthInWorldUnits), (int) (initialPixelsPerWorldUnit * initialWindowHeightInWorldUnits));
         jFrame.setVisible(true);
 
-        this.windowCenter.x = xCenter;
-        this.windowCenter.y = yCenter;
 
         while (!key_held('Q')) {
             this.repaint();
@@ -130,6 +155,15 @@ class App extends JPanel {
             _windowHeightInPixels = rectangle.height;
             _windowWidthInPixels = rectangle.width;
         }
+
+        {
+            Point point = MouseInfo.getPointerInfo().getLocation();
+            SwingUtilities.convertPointFromScreen(point, this);
+
+            double scale = _windowHeightInPixels / windowHeight;
+            this.mousePosition = new Vector2(scale * point.x, scale * (windowHeight - point.y));
+        }
+
         updateAndDraw();
 
         { // end of jFrame

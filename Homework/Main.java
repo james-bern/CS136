@@ -119,16 +119,6 @@ class CowArrayList<ElementType> {
     }
 }
 
-// TODO: get mouse position
-class Paint extends App {
-    void updateAndDraw() {
-
-    }
-
-    public static void main(String[] args) {
-        new Paint().startGameLoop();
-    }
-}
 
 
 

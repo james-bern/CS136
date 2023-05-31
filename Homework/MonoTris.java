@@ -3,7 +3,6 @@ import java.util.*;
 import javax.swing.*;
 
 class MonoTris extends App {
-
     // TODO: arrow keys
     boolean initialized;
     int frame;
@@ -20,7 +19,7 @@ class MonoTris extends App {
         System.out.println("D move right");
         System.out.println("S move down fast");
         System.out.println("W move down infinitely fast");
-        new Tetris().startGameLoop(10.0, 20.0, 8, 0.0, 0.0, Color.GRAY);
+        new MonoTris().startGameLoop(10.0, 20.0, 8);
     }
 
     void updateAndDraw() {
