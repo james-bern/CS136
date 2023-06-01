@@ -91,7 +91,7 @@ class Paint extends App {
             strokes.add(new ArrayList<Vector2>());
             colors.add(new Vector3(Cow.randomDouble(), Cow.randomDouble(), Cow.randomDouble()));
         }
-        if (mouseHeld) { strokes.get(strokes.size() - 2).add(mousePosition); }
+        if (mouseHeld) { strokes.get(strokes.size() - 1).add(mousePosition); }
 
         // TODO choose windowCenterInWorldUnits
 
