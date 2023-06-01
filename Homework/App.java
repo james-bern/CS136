@@ -91,7 +91,7 @@ class Paint extends App {
             strokes.add(new ArrayList<Vector2>());
             colors.add(new Vector3(Cow.randomDouble(), Cow.randomDouble(), Cow.randomDouble()));
         }
-        if (mouseHeld) { strokes.get(strokes.size() - 1).add(mousePosition); }
+        if (mouseHeld) { strokes.get(strokes.size() - 2).add(mousePosition); }
 
         // TODO choose windowCenterInWorldUnits
 
@@ -296,43 +296,47 @@ class App extends JPanel {
 
     @Override 
     public void paintComponent(Graphics _graphics) {
-
-
-        super.paintComponent(_graphics);
-        this._graphics = _graphics; {
-            Rectangle rectangle = jFrame.getBounds();
-            _windowHeightInPixels = rectangle.height;
-            _windowWidthInPixels = rectangle.width;
-        }
-
-        {
-            Point point;
-            {
-                point = MouseInfo.getPointerInfo().getLocation();
-                SwingUtilities.convertPointFromScreen(point, this);
+        // NOTE: try-catch to actually kill the app on an error
+        try {
+            super.paintComponent(_graphics);
+            this._graphics = _graphics; {
+                Rectangle rectangle = jFrame.getBounds();
+                _windowHeightInPixels = rectangle.height;
+                _windowWidthInPixels = rectangle.width;
             }
-            this.mousePosition = _windowWorldFromPixel(new Vector2(point.x, point.y));
-        }
 
-        if (!_initialized || keyPressed('R')) {
-            _initialized = true;
-            initalizeOrReset();
+            {
+                Point point;
+                {
+                    point = MouseInfo.getPointerInfo().getLocation();
+                    SwingUtilities.convertPointFromScreen(point, this);
+                }
+                this.mousePosition = _windowWorldFromPixel(new Vector2(point.x, point.y));
+            }
 
-            mousePressed = false;
-            mouseHeld = false;
-            mouseReleased = false;
-            _keyPressed.clear();
-            _keyHeld.clear();
-            _keyReleased.clear();
-        }
+            if (!_initialized || keyPressed('R')) {
+                _initialized = true;
+                initalizeOrReset();
 
-        updateAndDraw();
+                mousePressed = false;
+                mouseHeld = false;
+                mouseReleased = false;
+                _keyPressed.clear();
+                _keyHeld.clear();
+                _keyReleased.clear();
+            }
 
-        { // end of jFrame
-            mousePressed = false;
-            mouseReleased = false;
-            _keyPressed.clear();
-            _keyReleased.clear();
+            updateAndDraw();
+
+            { // end of jFrame
+                mousePressed = false;
+                mouseReleased = false;
+                _keyPressed.clear();
+                _keyReleased.clear();
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace(System.out);
+            System.exit(1);
         }
     }
 
