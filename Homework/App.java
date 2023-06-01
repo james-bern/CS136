@@ -136,19 +136,19 @@ class App extends JPanel {
     double _windowWidthInWorldUnits() { return _windowAspectRatio() * _windowHeightInWorldUnits; }
     double _windowPixelsPerWorldUnits() { return _windowHeightInPixels / _windowHeightInWorldUnits; }
     Vector2 _windowSizeInWorldUnits() { return new Vector2(_windowHeightInWorldUnits, _windowWidthInWorldUnits()); }
-    Vector2 _windowPixelFromWorld(Vector2 pWorld) {
-        Vector2 pPixel = new Vector2();
+    Vector2 _windowPixelFromWorld(Vector2 sWorld) {
+        Vector2 sPixel = new Vector2();
         double scale = _windowPixelsPerWorldUnits();
-        pPixel.x = (int) (scale *                             ((pWorld.x - (_windowCenterXInWorldUnits - .5 *  _windowWidthInWorldUnits))));
-        pPixel.y = (int) (scale * (_windowHeightInWorldUnits - (pWorld.y - (_windowCenterYInWorldUnits - .5 * _windowHeightInWorldUnits))));
-        return pPixel;
+        sPixel.x = (int) (scale *                             ((sWorld.x - (_windowCenterXInWorldUnits - .5 *  _windowWidthInWorldUnits))));
+        sPixel.y = (int) (scale * (_windowHeightInWorldUnits - (sWorld.y - (_windowCenterYInWorldUnits - .5 * _windowHeightInWorldUnits))));
+        return sPixel;
     }
-    Vector2 _windowWorldFromPixel(Vector2 pPixel) {
-        Vector2 pWorld = new Vector2();
+    Vector2 _windowWorldFromPixel(Vector2 sPixel) {
+        Vector2 sWorld = new Vector2();
         double scale = _windowPixelsPerWorldUnits();
-        pWorld.x =                             (pPixel.x / scale) + (_windowCenterXInWorldUnits - .5 *  _windowWidthInWorldUnits);
-        pWorld.y = _windowHeightInWorldUnits - (pPixel.y / scale) + (_windowCenterYInWorldUnits - .5 * _windowHeightInWorldUnits);
-        return pWorld;
+        sWorld.x =                             (sPixel.x / scale) + (_windowCenterXInWorldUnits - .5 *  _windowWidthInWorldUnits);
+        sWorld.y = _windowHeightInWorldUnits - (sPixel.y / scale) + (_windowCenterYInWorldUnits - .5 * _windowHeightInWorldUnits);
+        return sWorld;
     }
 
 
