@@ -334,7 +334,7 @@ class App extends JPanel {
             });
         }
         {
-            jFrame = new JFrame("");
+            jFrame = new JFrame("CS136");
             jFrame.setSize(1000, 500);
             jFrame.setLocation(256, 64); // TODO: expose
             jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -344,7 +344,7 @@ class App extends JPanel {
     }
 
     // TODO: pixelsPer...
-    void run() { this.run(2, 2, 0, 0, 512); }
+    void run() { this.run(2, 2, 0, 0, 256); }
     void run(double _windowWidthInWorldUnits, double _windowHeightInWorldUnits, double _windowCenterXInWorldUnits,double _windowCenterYInWorldUnits, int windowHeightInPixels) {
 
         this.setBackground(Color.BLACK);
