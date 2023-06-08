@@ -6,21 +6,16 @@ import java.util.Scanner;
 import java.io.File;
 
 class Cow {
-    private Cow() {}
-
     static Random random = new Random(0);
     static double randomDouble() {
         return random.nextDouble();
     }
 
     static Scanner fileScanner(String filename) {
-        try {
-            return new Scanner(new File(filename));
-        } catch (Exception exception) {
-        }
+        try { return new Scanner(new File(filename)); } catch (Exception exception) { }
+        ASSERT(false);
         return null;
     }
-
 
     static void printArray(int[] array) { printArray(Arrays.stream(array).boxed().toArray(Integer[]::new)); }
     static void printArray(long[] array) { printArray(Arrays.stream(array).boxed().toArray(Long[]::new)); }

@@ -151,6 +151,21 @@ class Foo {
 class Paint extends App {
     public static void main(String[] arguments) { new Paint().run(); }
 
+    void setup() {
+        System.out.println("Press Q to quit.");
+        System.out.println("Press R to rerun setup().");
+    }
+
+    void loop() {
+        if (mousePressed) { System.out.println("Mouse Pressed"); }
+        if (mouseHeld) { System.out.println("Mouse Held"); }
+        drawLine(new Vector2(0.0, 0.0), mousePosition, new Vector3(1.0, 1.0, 1.0));
+    }
+}
+
+class SolPaint extends App {
+    public static void main(String[] arguments) { new SolPaint().run(); }
+
     ToyArrayList<ToyArrayList<Vector2>> strokes;
     ToyArrayList<Vector3> colors;
 
