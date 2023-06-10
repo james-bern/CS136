@@ -166,33 +166,48 @@ class Paint extends App {
 class SolPaint extends App {
     public static void main(String[] arguments) { new SolPaint().run(); }
 
-    ToyArrayList<ToyArrayList<Vector2>> strokes;
-    ToyArrayList<Vector3> colors;
+    ToyArrayList<ToyArrayList<ToyArrayList<Vector2>>> sketches;
+    int frame;
+    int subframe;
 
     void setup() {
-        strokes = new ToyArrayList<>();
-        colors = new ToyArrayList<>();
+        sketches = new ToyArrayList<>();
+        sketches.add(new ToyArrayList<>());
+        frame = 0;
+        subframe = 0;
     }
 
     void loop() {
-        if (mousePressed) {
-            strokes.add(new ToyArrayList<Vector2>());
-            colors.add(new Vector3(Cow.randomDouble(), Cow.randomDouble(), Cow.randomDouble()));
+        if (!mouseHeld) {
+            if (keyPressed('S')) { sketches.add(new ToyArrayList<>()); }
         }
-        if (mouseHeld) { strokes.get(strokes.length - 1).add(mousePosition); }
 
-        if (keyPressed('x') || keyPressed('y')) {
-            for (int i = 0; i < strokes.length; ++i) {
-                for (int j = 0; j < strokes.get(i).length; ++j) {
-                    if (keyPressed('x')) { strokes.get(i).get(j).x *= -1; }
-                    if (keyPressed('y')) { strokes.get(i).get(j).y *= -1; }
-                }
+        if (keyHeld('P')) {
+            ++subframe;
+            if ((subframe % 5) == 0) {
+                frame = (frame + 1) % sketches.length;
+            }
+        } else {
+            frame = sketches.length - 1;
+
+            if (mousePressed) {
+                ToyArrayList<ToyArrayList<Vector2>> sketch = sketches.get(frame);
+                sketch.add(new ToyArrayList<Vector2>());
+            }
+
+            if (mouseHeld) {
+                ToyArrayList<ToyArrayList<Vector2>> sketch = sketches.get(frame);
+                ToyArrayList<Vector2> stroke = sketch.get(sketch.length - 1);
+                stroke.add(mousePosition);
             }
         }
 
-        for (int i = 0; i < strokes.length; ++i) {
-            for (int j = 0; j < strokes.get(i).length - 1; ++j) {
-                drawLine(strokes.get(i).get(j), strokes.get(i).get(j + 1), colors.get(i));
+        {
+            ToyArrayList<ToyArrayList<Vector2>> sketch = sketches.get(frame);
+            for (int i = 0; i < sketch.length; ++i) {
+                for (int j = 0; j < sketch.get(i).length - 1; ++j) {
+                    drawLine(sketch.get(i).get(j), sketch.get(i).get(j + 1), new Vector3(1.0, 1.0, 1.0));
+                }
             }
         }
     }
