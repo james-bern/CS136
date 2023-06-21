@@ -6,7 +6,14 @@ import java.util.Scanner;
 import java.io.File;
 
 class Cow {
-    static Random random = new Random(0);
+    static void tic() {
+
+    }
+    static double toc() {
+        return 0.0;
+    }
+
+    private static Random random = new Random(0);
     static double randomDouble() {
         return random.nextDouble();
     }
