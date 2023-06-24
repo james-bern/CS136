@@ -41,7 +41,7 @@ import java.util.*;
 // W - Application
 // F - Kahoot 
 //
-//  0 primitives (isPrime)
+//  1 primitives (isPrime)
 //  - boolean
 //  -- true
 //  -- false
@@ -62,7 +62,7 @@ import java.util.*;
 //      this is when we want to give the students feedback
 //      still, it would be way better if they were autograded
 
-//  1 arrays (1D Automaton, 2D Game of Life)
+//  2 arrays (1D Automaton, 2D Game of Life)
 //  - NOTE: arrays are fast
 //  - NOTE: arrays are fixed size
 //  - for loop
@@ -72,7 +72,7 @@ import java.util.*;
 //
 //
 //
-//  2 objects (Vector2, some sort of game -- creative)
+//  3 objects (Vector2, some sort of game -- creative)
 //  - memory model
 //  - class
 //  - new
@@ -87,24 +87,25 @@ import java.util.*;
 //
 //  TODO (Jim): How do we grade this homework for correctness?--It could be done by video or actually by still image. Students should pregrade their own stuff, with a rubric.
 //
+//
+//
+//  4 array-list
+//  - STRUCTURE:    ToyArrayList
+//  - MINI-PROJECT: 
+//  - PROJECT:      Paint
+//
 //  Paint
 //  - Is your ToyArrayList implementation correct?
 //  - Did you implement 
 //  - Does pressing 'X' on the keyboard flip the drawing in X?
 //  - (Bonus) 
 //
-//
-//  3 array-list
-//  - STRUCTURE:    ToyArrayList
-//  - MINI-PROJECT: 
-//  - PROJECT:      Paint
-//
-//  4 stacks and queues
+//  5 stacks and queues
 //  - STRUCTURE: ToyStack, ToyQueue
 //  - PROJECT:   ? PostScript
 //
 //  > TODO (Jim): Implement this homework next
-//  5 hash tables
+//  6 hash tables
 //  - STRUCTURE: ToyHashtable
 //  - PROJECT:   WordGen
 
@@ -118,14 +119,14 @@ class TextGenerator {
 
 }
 
-//  6 linked-list 
+//  7 linked-list 
 //  - STRUCTURE: SinglyLinkedList
 //  - 
 
 
-//  7 trees (CowTree, recursive DFS, iterative DFS, iterative BFS)
+//  8 trees (CowTree, recursive DFS, iterative DFS, iterative BFS)
 //
-//  8 heaps (CowMaxBinaryHeap, slow heap sort)
+//  9 heaps (CowMaxBinaryHeap, slow heap sort)
 //
 // 10 JAVA JAVA JAVA JAVA iterators, object orientation, programming paradigms
 
