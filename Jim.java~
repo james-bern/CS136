@@ -1,0 +1,11 @@
+class Main {
+  public static void main(String[] arguments) {
+    int a = 0;
+    int b = 1;
+    int c = a + b;
+    int d = a + b + c;
+    System.out.println(d);
+    d *= d;
+    System.out.println(d);
+  }
+}
