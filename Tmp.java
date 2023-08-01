@@ -65,6 +65,8 @@ class Helpers {
         ESTIMATE_GRADE();
     }
     
+    // Feel free to ignore everything below this comment. //////////////////////
+
     static private int problemIndex = 0;
     static private boolean problemPassingPerfectly;
     static private int numProblemsPassedPerfectly;
