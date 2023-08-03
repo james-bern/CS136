@@ -19,13 +19,14 @@ import java.util.*;
 
 class Main {
     // returns the length of the hypotenuse of right triangle with legs of lengths a and b
+    // NOTE: please assume a and b are positive
     static double pythagoreanTheorem(double a, double b) {
         return 0.0;
     }
     
     // returns whether n is prime
+    // NOTE: please assume n is positive and greater than or equal to 2
     static boolean isPrime(int n) {
-        if (n == 7) n /= 0;
         for (int i = 2; i <= Math.sqrt(n); ++i) {
             if (n % i == 0) {
                 return false;
@@ -48,23 +49,42 @@ class Main {
     //       - digit (character) in range ['0', '9']
     //       - digit (character) in range ['A', 'F']
     //       - (Optional) any other digit -- print an error and return -1
+    // NOTE: please assume hex is a valid hex number, e.g. "A7" or "33333"
     static int hexDigitSum(String hex) {
         return 0;
     }
     
     public static void main(String[] arguments) {
+        Examples.printStringOneCharacterAtATimeForNoReason("Hello World");
+        System.out.println(Examples.numDigits(123));
         Helpers.grade();
     }
 }
 
+
+
 class Examples {
-    void printStringCharacterByCharacterForNoReason(String string) {
+    static void printStringOneCharacterAtATimeForNoReason(String string) {
         for (int i = 0; i < string.length(); ++i) {
-            System.out.print(string.charAt(i));
+            char c = string.charAt(i);
+            System.out.print(c);
         }
         System.out.println();
     }
+    
+    static int numDigits(int n) {
+        n = Math.abs(n); // in case n is negative
+        
+        int result = 0;
+        while (n > 0) {
+            ++result;
+            n /= 10;
+        }
+        return result;
+    }
 }
+
+
 
 class Helpers {
     
