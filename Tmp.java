@@ -1,6 +1,19 @@
-// TODO: Create solution repo
-
-// Helpers.grade() Output: TODO
+/**
+ * Helpers.grade()
+ * + means test passed (function produced correct result)
+ * - means test failed (function produced incorrect result)
+ * x means function crashed
+ *
+ * pythagoreanTheorem --
+ * isPrime x+++
+ * digitSum +---
+ * hexDigitSum +---
+ * 
+ * Passed all tests []
+ * Failed some test [pythagoreanTheorem, isPrime, digitSum, hexDigitSum]
+ * 
+ * Grade ~ C
+ **/
 
 import java.util.*;
 
@@ -12,6 +25,7 @@ class Main {
     
     // returns whether n is prime
     static boolean isPrime(int n) {
+        if (n == 7) n /= 0;
         for (int i = 2; i <= Math.sqrt(n); ++i) {
             if (n % i == 0) {
                 return false;
@@ -34,7 +48,7 @@ class Main {
     //       - digit (character) in range ['0', '9']
     //       - digit (character) in range ['A', 'F']
     //       - (Optional) any other digit -- print an error and return -1
-    static int hexDigitSumHex(String hex) {
+    static int hexDigitSum(String hex) {
         return 0;
     }
     
@@ -56,13 +70,33 @@ class Helpers {
     
     // Runs some basic tests and estimates your grade.
     static void grade() {
+        PROBLEM("pythagoreanTheorem");
+        try { CHECK(Helpers.approximatelyEqualTo(Main.pythagoreanTheorem(3.0, 4.0), 5.0)); } catch (Exception exception) { CRASH(); }
+        try { CHECK(Helpers.approximatelyEqualTo(Main.pythagoreanTheorem(1.0, 1.0), Math.sqrt(2))); } catch (Exception exception) { CRASH(); }
+
         PROBLEM("isPrime");
-        CHECK(Main.isPrime(7) == true);
-        CHECK(Main.isPrime(2) == true);
-        CHECK(Main.isPrime(37) == true);
-        CHECK(Main.isPrime(55) == false);
+        try { CHECK(Main.isPrime(7) == true); } catch (Exception exception) { CRASH(); }
+        try { CHECK(Main.isPrime(2) == true); } catch (Exception exception) { CRASH(); }
+        try { CHECK(Main.isPrime(37) == true); } catch (Exception exception) { CRASH(); }
+        try { CHECK(Main.isPrime(55) == false); } catch (Exception exception) { CRASH(); }
+
+        PROBLEM("digitSum");
+        try { CHECK(Main.digitSum(0) == 0); } catch (Exception exception) { CRASH(); }
+        try { CHECK(Main.digitSum(22) == 4); } catch (Exception exception) { CRASH(); }
+        try { CHECK(Main.digitSum(123) == 6); } catch (Exception exception) { CRASH(); }
+        try { CHECK(Main.digitSum(7770) == 21); } catch (Exception exception) { CRASH(); }
+
+        PROBLEM("hexDigitSum");
+        try { CHECK(Main.hexDigitSum("") == 0); } catch (Exception exception) { CRASH(); }
+        try { CHECK(Main.hexDigitSum("22") == 4); } catch (Exception exception) { CRASH(); }
+        try { CHECK(Main.hexDigitSum("F1") == 17); } catch (Exception exception) { CRASH(); }
+        try { CHECK(Main.hexDigitSum("AB23") == 26); } catch (Exception exception) { CRASH(); }
         
-        ESTIMATE_GRADE();
+        DONE_GRADING();
+    }
+
+    static boolean approximatelyEqualTo(double a, double b) {
+        return Math.abs(a - b) < 1.0e-5;
     }
     
     // Feel free to ignore everything below this comment. //////////////////////
@@ -74,6 +108,7 @@ class Helpers {
     static private ArrayList<String> perfectProblems = new ArrayList<>();
     static private ArrayList<String> imperfectProblems = new ArrayList<>();
     static private void _END_PROBLEM() {
+        System.out.println();
         if (problemPassingPerfectly) {
             ++numProblemsPassedPerfectly;
             perfectProblems.add(currentProblem);
@@ -83,29 +118,33 @@ class Helpers {
     }
     
     static private void PROBLEM(String questionName) {
-        currentProblem = questionName;
-        if (problemIndex != 0) {
+        if (problemIndex == 0) {
+            System.out.println("/**");
+            System.out.println(" * Helpers.grade()");
+            System.out.println(" * + means test passed (function produced correct result)");
+            System.out.println(" * - means test failed (function produced incorrect result)");
+            System.out.println(" * x means function crashed");
+            System.out.println(" *");
+        } else {
             _END_PROBLEM();
         }
+        currentProblem = questionName;
         ++problemIndex;
         problemPassingPerfectly = true;
-        String string = "Problem: " + questionName;
-        System.out.println();
-        System.out.println(string);
-        for (int i = 0; i < string.length(); ++i) { System.out.print('-'); }
-        System.out.println();
+        System.out.print(" * " + questionName + " ");
     }
     
     static private void CHECK(boolean shouldBeTrue) {
-        if (shouldBeTrue) {
-            System.out.println("+ test passed");
-        } else {
-            System.out.println("- test failed");
-        }
+        System.out.print((shouldBeTrue == true) ? '+' : '-');
         problemPassingPerfectly &= shouldBeTrue;
     }
     
-    static private void ESTIMATE_GRADE() {
+    static private void CRASH() {
+        System.out.print('x');
+        problemPassingPerfectly = false;
+    }
+    
+    static private void DONE_GRADING() {
         if (problemIndex != 0) { _END_PROBLEM(); }
         
         int numProblems = problemIndex;
@@ -121,9 +160,11 @@ class Helpers {
             }
         }
         
-        System.out.println();
-        System.out.println("TODO: " + imperfectProblems);
-        System.out.println("Passed tests: " + perfectProblems);
-        System.out.println("Estimated grade: " + grade);
+        System.out.println(" * ");
+        System.out.println(" * Passed all tests " + perfectProblems);
+        System.out.println(" * Failed some test " + imperfectProblems);
+        System.out.println(" * ");
+        System.out.println(" * Grade ~ " + grade);
+        System.out.println(" **/");
     }
 }
