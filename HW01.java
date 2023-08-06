@@ -32,10 +32,22 @@ class Main {
         return 0;
     }
     
+    // returns a String representation of n in the following bigendian notation
+    // 0 ->   "0"
+    // 1 ->   "1"
+    // 2 ->  "10"
+    // 3 ->  "11"
+    // 4 -> "100"
+    // ...
+    // NOTE: sample solution is ~6 lines
+    static String getInBinary(int n) {
+        return "";
+    }
+    
     public static void main(String[] arguments) {
         // Examples.printStringOneCharacterAtATimeForNoReason("Hello World");
         // System.out.println(Examples.numDigits(123));
-        // Helpers.grade();
+        Helpers.grade();
     }
 }
 
@@ -88,6 +100,14 @@ class Helpers {
         try { GRADER_ASSERT(Main.hexDigitSum("22") == 4); } catch (Exception exception) { GRADER_HANDLE_EXCEPTION(); }
         try { GRADER_ASSERT(Main.hexDigitSum("F1") == 17); } catch (Exception exception) { GRADER_HANDLE_EXCEPTION(); }
         try { GRADER_ASSERT(Main.hexDigitSum("AB23") == 26); } catch (Exception exception) { GRADER_HANDLE_EXCEPTION(); }
+        
+        GRADER_BEGIN_PROBLEM("getInBinary");
+        try { GRADER_ASSERT(Main.getInBinary(0).equals(  "0")); } catch (Exception exception) { GRADER_HANDLE_EXCEPTION(); }
+        try { GRADER_ASSERT(Main.getInBinary(1).equals(  "1")); } catch (Exception exception) { GRADER_HANDLE_EXCEPTION(); }
+        try { GRADER_ASSERT(Main.getInBinary(2).equals( "10")); } catch (Exception exception) { GRADER_HANDLE_EXCEPTION(); }
+        try { GRADER_ASSERT(Main.getInBinary(3).equals( "11")); } catch (Exception exception) { GRADER_HANDLE_EXCEPTION(); }
+        try { GRADER_ASSERT(Main.getInBinary(4).equals("100")); } catch (Exception exception) { GRADER_HANDLE_EXCEPTION(); }
+        try { GRADER_ASSERT(Main.getInBinary(25743).equals("110010010001111")); } catch (Exception exception) { GRADER_HANDLE_EXCEPTION(); }
         
         GRADER_FINISH_GRADING();
     }
