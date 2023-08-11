@@ -55,9 +55,13 @@ class Main {
     }
     
     public static void main(String[] arguments) {
-        Examples.printStringOneCharacterAtATimeForNoReason("Hello World");
-        System.out.println(Examples.numDigits(123));
-        Helpers.grade();
+        int a = 0x7B;
+        assert false;
+        System.out.println(a);
+
+        //Examples.printStringOneCharacterAtATimeForNoReason("Hello World");
+        //System.out.println(Examples.numDigits(123));
+        //Helpers.grade();
     }
 }
 

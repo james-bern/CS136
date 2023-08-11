@@ -11,17 +11,10 @@ import java.util.Arrays;
 import javax.swing.*;
 import java.lang.Math;
 
-class ToyVector2 {
-}
-
 class Vector2 {
     double x;
     double y;
     Vector2() {} // NOTE: x and y automatically initialized to zero
-    Vector2(double s) {
-        this.x = s;
-        this.y = s;
-    }
     Vector2(double x, double y) {
         this.x = x;
         this.y = y;
@@ -39,11 +32,11 @@ class Vector2 {
     Vector2 minus(Vector2 other) { return new Vector2(this.x - other.x, this.y - other.y); }
     Vector2 times(double scalar) { return new Vector2(scalar * this.x, scalar * this.y); }
     Vector2 dividedBy(double scalar) { return this.times(1.0 / scalar); }
-    double squaredLength() { return this.x * this.x + this.y * this.y; }
-    double length() { return Math.sqrt(this.squaredLength()); }
-    Vector2 direction() { return this.dividedBy(this.length()); }
+    double squaredNorm() { return this.x * this.x + this.y + this.y; }
+    double norm() { return Math.sqrt(this.squaredNorm()); }
+    Vector2 normalized() { return this.dividedBy(this.norm()); }
 
-    static double distance(Vector2 a, Vector2 b) { return (a.minus(b)).length(); }
+    static double distance(Vector2 a, Vector2 b) { return (a.minus(b)).norm(); }
     // HW: static Vector2 distance
 }
 
@@ -51,37 +44,20 @@ class Vector3 {
     double x;
     double y;
     double z;
-
     Vector3() { }
-
-    Vector3(double s) {
-        this.x = s;
-        this.y = s;
-        this.z = s;
-    }
-
     Vector3(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
-
     Vector3(Vector3 p) {
         this.x = p.x;
         this.y = p.y;
         this.z = p.z;
     }
-
     public String toString() {
         return "(" + this.x + ", " + this.y + ", " + this.z + ")";
     }
-
-    static final Vector3 red     = new Vector3(1.0, 0.0, 0.0);
-    static final Vector3 yellow  = new Vector3(1.0, 1.0, 0.0);
-    static final Vector3 green   = new Vector3(0.0, 1.0, 0.0);
-    static final Vector3 cyan    = new Vector3(0.0, 1.0, 1.0);
-    static final Vector3 blue    = new Vector3(0.0, 0.0, 1.0);
-    static final Vector3 magenta = new Vector3(1.0, 0.0, 1.0);
 }
 
 
@@ -288,17 +264,11 @@ class App extends JPanel {
         _graphicsSetColor(color);
         _graphics.drawLine((int) pointA.x, (int) pointA.y, (int) pointB.x, (int) pointB.y);
     }
-    // TODO: draw circle
-    void drawCircle(Vector2 center, double radius, Vector3 color) {
-        _drawCenterShape(center, new Vector2(2 * radius), color, 1); 
-    }
-    void drawCenterRectangle(Vector2 center, Vector2 size, Vector3 color) { _drawCenterShape(center, size, color, 0); }
-    void drawCornerRectangle(Vector2 _cornerA, Vector2 _cornerB, Vector3 color) { _drawCornerShape(_cornerA, _cornerB, color, 0); }
-    void _drawCenterShape(Vector2 center, Vector2 size, Vector3 color, int shapeType) {
+    void drawCenterRectangle(Vector2 center, Vector2 size, Vector3 color) {
         Vector2 halfSize = size.dividedBy(2.0);
-        _drawCornerShape(center.minus(halfSize), center.plus(halfSize), color, shapeType);
+        drawCornerRectangle(center.minus(halfSize), center.plus(halfSize), color);
     }
-    void _drawCornerShape(Vector2 _cornerA, Vector2 _cornerB, Vector3 color, int shapeType) {
+    void drawCornerRectangle(Vector2 _cornerA, Vector2 _cornerB, Vector3 color) {
         Vector2 cornerA = _windowPixelFromWorld(_cornerA);
         Vector2 cornerB = _windowPixelFromWorld(_cornerB);
 
@@ -307,15 +277,11 @@ class App extends JPanel {
         if (cornerA.y > cornerB.y) { double tmp = cornerA.y; cornerA.y = cornerB.y; cornerB.y = tmp; }
 
         _graphicsSetColor(color);
-        int arg0 = (int) (cornerA.x);
-        int arg1 = (int) (cornerA.y);
-        int arg2 = (int) (cornerB.x - cornerA.x);
-        int arg3 = (int) (cornerB.y - cornerA.y);
-        if (shapeType == 0) {
-            _graphics.fillRect(arg0, arg1, arg2, arg3);
-        } else {
-            _graphics.fillOval(arg0, arg1, arg2, arg3);
-        }
+        _graphics.fillRect(
+                (int) (cornerA.x),
+                (int) (cornerA.y),
+                (int) (cornerB.x - cornerA.x),
+                (int) (cornerB.y - cornerA.y));
     }
 
 
@@ -408,7 +374,7 @@ class App extends JPanel {
     }
 
     // TODO: pixelsPer...
-    void run() { this.run(128, 128, 0, 0, 512); }
+    void run() { this.run(2, 2, 0, 0, 256); }
     void run(double _windowWidthInWorldUnits, double _windowHeightInWorldUnits, double _windowCenterXInWorldUnits,double _windowCenterYInWorldUnits, int windowHeightInPixels) {
 
         this.setBackground(Color.BLACK);
