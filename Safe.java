@@ -1,15 +1,22 @@
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.KeyboardFocusManager;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.*;
 import java.util.*;
+import java.util.Arrays;
 import javax.swing.*;
 import java.lang.Math;
+
+class ToyVector2 {
+}
 
 class Vector2 {
     double x;
     double y;
-
-    public String toString() { return "(" + this.x + ", " + this.y + ")"; }
-
     Vector2() {} // NOTE: x and y automatically initialized to zero
     Vector2(double s) {
         this.x = s;
@@ -23,12 +30,9 @@ class Vector2 {
         this.x = p.x;
         this.y = p.y;
     }
-
-    static final Vector2 right = new Vector2( 1.0,  0.0);
-    static final Vector2 left  = new Vector2(-1.0,  0.0);
-    static final Vector2 up    = new Vector2( 0.0,  1.0);
-    static final Vector2 down  = new Vector2( 0.0, -1.0);
-
+    public String toString() {
+        return "(" + this.x + ", " + this.y + ")";
+    }
     // NOTE: These are nice
     // TODO: pythagorean theorem question
     Vector2 plus(Vector2 other) { return new Vector2(this.x + other.x, this.y + other.y); }
@@ -39,8 +43,8 @@ class Vector2 {
     double length() { return Math.sqrt(this.squaredLength()); }
     Vector2 direction() { return this.dividedBy(this.length()); }
 
-    static double distanceBetween(Vector2 a, Vector2 b) { return (b.minus(a)).length(); }
-    static Vector2 directionFrom(Vector2 a, Vector2 b) { return (b.minus(a)).direction(); }
+    static double distance(Vector2 a, Vector2 b) { return (a.minus(b)).length(); }
+    // HW: static Vector2 distance
 }
 
 class Vector3 {
@@ -48,86 +52,196 @@ class Vector3 {
     double y;
     double z;
 
-    public String toString() { return "(" + this.x + ", " + this.y + ", " + this.z + ")"; }
-
     Vector3() { }
+
     Vector3(double s) {
         this.x = s;
         this.y = s;
         this.z = s;
     }
+
     Vector3(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
+
     Vector3(Vector3 p) {
         this.x = p.x;
         this.y = p.y;
         this.z = p.z;
     }
 
-    static final Vector3 white   = new Vector3(1.0, 1.0, 1.0);
-    static final Vector3 black   = new Vector3(0.0, 0.0, 0.0);
+    public String toString() {
+        return "(" + this.x + ", " + this.y + ", " + this.z + ")";
+    }
+
     static final Vector3 red     = new Vector3(1.0, 0.0, 0.0);
     static final Vector3 yellow  = new Vector3(1.0, 1.0, 0.0);
     static final Vector3 green   = new Vector3(0.0, 1.0, 0.0);
     static final Vector3 cyan    = new Vector3(0.0, 1.0, 1.0);
     static final Vector3 blue    = new Vector3(0.0, 0.0, 1.0);
     static final Vector3 magenta = new Vector3(1.0, 0.0, 1.0);
-    static final Vector3 gray    = new Vector3(0.5, 0.5, 0.5);
-    static Vector3 rainbowSwirl(double time) {
-        return new Vector3(_rainbowSwirlHelper(time, 0.0), _rainbowSwirlHelper(time, 0.33), _rainbowSwirlHelper(time, -0.33));
-    }
+}
 
-    ////////////////////////////////////////////////////////////////////////////
 
-    static double _rainbowSwirlHelper(double time, double offset) {
-        return 0.5 + 0.5 * Math.cos(6.28 * (offset - time));
+
+
+
+
+
+
+
+
+// SLIDE this
+//
+/*
+*/
+
+
+// SLIDE constructor
+/*
+// with (non-default) constructor
+class Foo {
+    ArrayList<int> bar;
+    Foo(int n) {
+        this.bar = new ArrayList<int>();
+        for (int i = 0; i < n; ++i) {
+            this.bar.add(i);
+        }
     }
 }
 
-class DemoApp extends App {
-    Vector2 chaserPosition;
-    double time;
+class Main {
+    public static void main(String[] arguments) {
+        Foo fooA = new Foo(10);
+        Foo fooB = new Foo(42);
+        Foo fooC = new Foo(3);
+    }
+}
+
+// without (non-default) constructor
+class Foo {
+    ArrayList<int> bar;
+}
+class Main {
+    public static void main(String[] arguments) {
+        Foo fooA = new Foo();
+        for (int i = 0; i < 10; ++i) {
+            fooA.add(i);
+        }
+        Foo fooB = new Foo();
+        for (int i = 0; i < 42; ++i) {
+            fooB.add(i);
+        }
+        Foo fooC = new Foo();
+        for (int i = 0; i < 3; ++i) {
+            fooC.add(i);
+        }
+        
+    }
+}
+*/
+
+// SLIDE initializing member variables
+// - table with option A (using a constructor) and option B "implied constructor"
+/*
+// constructor
+class Foo {
+    int bar;
+    Foo() {
+        this.bar = 13;
+    }
+}
+
+// ???
+class Foo {
+    int bar = 13;
+}
+
+*/
+
+
+
+// constructors
+
+
+// starter code (mandatory)
+
+// TODO: Cow.printArray could cause huge problems with type erasure
+// TODO: though we should really be in just one class for basically everything
+// I     it may not come up (except for internalArray)
+
+class Paint extends App {
+    public static void main(String[] arguments) { new Paint().run(); }
 
     void setup() {
-        chaserPosition = new Vector2();
-        time = 0.0;
+        System.out.println("Press Q to quit.");
+        System.out.println("Press R to rerun setup().");
     }
 
     void loop() {
-        if (!keyToggled('P')) { time += 0.0167; }
-        if (mouseHeld) {
-            chaserPosition = chaserPosition.plus(Vector2.directionFrom(chaserPosition, mousePosition));
-        }
-        drawLine(chaserPosition, mousePosition, Vector3.white);
-        drawCircle(chaserPosition, 2.0, Vector3.rainbowSwirl(time));
-        drawCenterRectangle(mousePosition, new Vector2(4.0), Vector3.cyan);
+        if (mousePressed) { System.out.println("Mouse Pressed"); }
+        if (mouseHeld) { System.out.println("Mouse Held"); }
+        drawLine(new Vector2(0.0, 0.0), mousePosition, new Vector3(1.0, 1.0, 1.0));
+    }
+}
+
+class SolPaint extends App {
+    public static void main(String[] arguments) { new SolPaint().run(); }
+
+    ToyArrayList<ToyArrayList<ToyArrayList<Vector2>>> sketches;
+    int frame;
+    int subframe;
+
+    void setup() {
+        sketches = new ToyArrayList<>();
+        sketches.add(new ToyArrayList<>());
+        frame = 0;
+        subframe = 0;
     }
 
-    public static void main(String[] arguments) { new DemoApp().run(); }
+    void loop() {
+        if (!mouseHeld) {
+            if (keyPressed('S')) { sketches.add(new ToyArrayList<>()); }
+        }
+
+        if (keyHeld('P')) {
+            ++subframe;
+            if ((subframe % 5) == 0) {
+                frame = (frame + 1) % sketches.length;
+            }
+        } else {
+            frame = sketches.length - 1;
+
+            if (mousePressed) {
+                ToyArrayList<ToyArrayList<Vector2>> sketch = sketches.get(frame);
+                sketch.add(new ToyArrayList<Vector2>());
+            }
+
+            if (mouseHeld) {
+                ToyArrayList<ToyArrayList<Vector2>> sketch = sketches.get(frame);
+                ToyArrayList<Vector2> stroke = sketch.get(sketch.length - 1);
+                stroke.add(mousePosition);
+            }
+        }
+
+        {
+            ToyArrayList<ToyArrayList<Vector2>> sketch = sketches.get(frame);
+            for (int i = 0; i < sketch.length; ++i) {
+                for (int j = 0; j < sketch.get(i).length - 1; ++j) {
+                    drawLine(sketch.get(i).get(j), sketch.get(i).get(j + 1), new Vector3(1.0, 1.0, 1.0));
+                }
+            }
+        }
+    }
 }
 
 class App extends JPanel {
+
     // app
     void setup() { }
     void loop() {}
-    void run(double _windowWidthInWorldUnits, double _windowHeightInWorldUnits, double _windowCenterXInWorldUnits, double _windowCenterYInWorldUnits, int windowHeightInPixels) {
-        this.setBackground(Color.BLACK);
-        this._windowWidthInWorldUnits = _windowWidthInWorldUnits;
-        this._windowHeightInWorldUnits = _windowHeightInWorldUnits;
-        this._windowCenterXInWorldUnits = _windowCenterXInWorldUnits;
-        this._windowCenterYInWorldUnits = _windowCenterYInWorldUnits;
-        this._jFrame.setSize((int) (_windowWidthInWorldUnits / _windowHeightInWorldUnits * windowHeightInPixels), (int) (windowHeightInPixels));
-        _jFrame.setVisible(true);
-        while (!keyHeld('Q')) {
-            this.repaint();
-            try { Thread.sleep(1000 / 60); } catch (Exception e) { }
-        }
-        System.exit(0);
-    }
-    void run() { this.run(128, 128, 0, 0, 512); }
     
     // graphics
     void drawLine(Vector2 _pointA, Vector2 _pointB, Vector3 color) {
@@ -141,17 +255,20 @@ class App extends JPanel {
     void drawCornerRectangle(Vector2 _cornerA, Vector2 _cornerB, Vector3 color) { _drawCornerShape(_cornerA, _cornerB, color, 0); }
 
     // input
-    Vector2 mousePosition;
     boolean mousePressed = false;
     boolean mouseHeld = false;
     boolean mouseReleased = false;
     boolean keyHeld(int key) { return _keyHeld.getOrDefault(_keyMakeCaseInvariant(key), false); }
     boolean keyPressed(int key) { return _keyPressed.getOrDefault(_keyMakeCaseInvariant(key), false); }
     boolean keyReleased(int key) { return _keyReleased.getOrDefault(_keyMakeCaseInvariant(key), false); }
-    boolean keyToggled(int key) { return _keyToggled.getOrDefault(_keyMakeCaseInvariant(key), false); }
 
     ////////////////////////////////////////////////////////////////////////////
+    
 
+    // // read only app state
+    // mouse
+    Vector2 mousePosition; // world coordinates
+    // window (FORNOW)
     int _windowWidthInPixels;
     int _windowHeightInPixels;
     double _windowWidthInWorldUnits;
@@ -173,6 +290,7 @@ class App extends JPanel {
         sWorld.y = _windowHeightInWorldUnits - (sPixel.y / scale) + (_windowCenterYInWorldUnits - .5 * _windowHeightInWorldUnits);
         return sWorld;
     }
+
 
 
     void _graphicsSetColor(Vector3 color) {
@@ -222,7 +340,6 @@ class App extends JPanel {
     Hashtable<Integer, Boolean> _keyPressed = new Hashtable<>();
     Hashtable<Integer, Boolean> _keyHeld = new Hashtable<>();
     Hashtable<Integer, Boolean> _keyReleased = new Hashtable<>();
-    Hashtable<Integer, Boolean> _keyToggled = new Hashtable<>();
     int _keyMakeCaseInvariant(int key) {
         if ('a' <= key && key <= 'z') {
             return 'A' + (key - 'a');
@@ -256,7 +373,6 @@ class App extends JPanel {
                             _keyPressed.put(key, true);
                         }
                         _keyHeld.put(key, true);
-                        _keyToggled.put(key, !_keyToggled.getOrDefault(key, false));
                     }
                     if (event.getID() == KeyEvent.KEY_RELEASED) {
                         _keyReleased.put(key, true);
@@ -276,6 +392,22 @@ class App extends JPanel {
         }
     }
 
+    // TODO: pixelsPer...
+    void run() { this.run(128, 128, 0, 0, 512); }
+    void run(double _windowWidthInWorldUnits, double _windowHeightInWorldUnits, double _windowCenterXInWorldUnits, double _windowCenterYInWorldUnits, int windowHeightInPixels) {
+        this.setBackground(Color.BLACK);
+        this._windowWidthInWorldUnits = _windowWidthInWorldUnits;
+        this._windowHeightInWorldUnits = _windowHeightInWorldUnits;
+        this._windowCenterXInWorldUnits = _windowCenterXInWorldUnits;
+        this._windowCenterYInWorldUnits = _windowCenterYInWorldUnits;
+        this._jFrame.setSize((int) (_windowWidthInWorldUnits / _windowHeightInWorldUnits * windowHeightInPixels), (int) (windowHeightInPixels));
+        _jFrame.setVisible(true);
+        while (!keyHeld('Q')) {
+            this.repaint();
+            try { Thread.sleep(1000 / 60); } catch (Exception e) { }
+        }
+        System.exit(0);
+    }
 
     boolean _initialized = false;
     Graphics _graphics;
@@ -310,7 +442,6 @@ class App extends JPanel {
                 _keyPressed.clear();
                 _keyHeld.clear();
                 _keyReleased.clear();
-                _keyToggled.clear();
             }
 
             loop();

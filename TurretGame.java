@@ -53,7 +53,7 @@ class TurretGame extends App {
             indexOfNextBullet = (indexOfNextBullet + 1) % bullets.length;
 
             bullet.position = turret.position;
-            bullet.velocity = (player.position.minus(turret.position)).direction();
+            bullet.velocity = Vector2.directionFrom(turret.position, player.position);
             bullet.alive = true;
         }
 
@@ -67,5 +67,5 @@ class TurretGame extends App {
         }
     }
 
-    public static void main(String[] arguments) { new TopDownShooter().run(); }
+    public static void main(String[] arguments) { new TurretGame().run(); }
 }
