@@ -24,10 +24,6 @@ class Vector2 {
         this.y = s;
     }
 
-
-
-    // NOTE: These are nice
-    // TODO: pythagorean theorem question
     Vector2 plus(Vector2 other) { return new Vector2(this.x + other.x, this.y + other.y); }
     Vector2 minus(Vector2 other) { return new Vector2(this.x - other.x, this.y - other.y); }
     Vector2 times(double scalar) { return new Vector2(scalar * this.x, scalar * this.y); }
@@ -39,7 +35,7 @@ class Vector2 {
     static double distanceBetween(Vector2 a, Vector2 b) { return (b.minus(a)).length(); }
     static Vector2 directionVectorFrom(Vector2 a, Vector2 b) { return (b.minus(a)).directionVector(); }
     
-        static final Vector2 right = new Vector2( 1.0,  0.0);
+    static final Vector2 right = new Vector2( 1.0,  0.0);
     static final Vector2 left  = new Vector2(-1.0,  0.0);
     static final Vector2 up    = new Vector2( 0.0,  1.0);
     static final Vector2 down  = new Vector2( 0.0, -1.0);
