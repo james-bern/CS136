@@ -1,7 +1,9 @@
-    // window
-    void setWindowBackgroundColor(double red, double green, double blue);
-    void setWindowBackgroundColor(Vector3 color);
-    void setWindowSizeInWorldUnits(double width, double height);
-    void setWindowCenterInWorldUnits(double x, double y);
-    void setWindowHeightInPixels(int height);
-    void setWindowTopLeftCornerInPixels(int x, int y);
+   class Main {
+       public static void main(String[] arguments) {
+           int a = 0;
+           {
+               int a = 5;
+           }
+           System.out.println(a);
+       }
+   }
