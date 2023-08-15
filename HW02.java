@@ -5,7 +5,7 @@ class Main {
         int[] next = new int[curr.length];
         curr[curr.length  / 2] = 1;
 
-        for (int generation = 0; generation < 16; ++generation) {
+        for (int generation = 0; generation < 32; ++generation) {
             { // print
                 String string = "";
                 for (int i = 0; i < curr.length; ++i) {
@@ -37,11 +37,7 @@ class Main {
     }
 
     public static void main(String[] arguments) {
-        while (true) {
-            simulate1DAutomaton(22);
-
-            sleepThenClearTerminal(100);
-        }     
+        simulate1DAutomaton(22);
     }
 
     // You must run your program in a regular Terminal for this function to work.

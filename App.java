@@ -11,23 +11,20 @@ class Vector2 {
     public String toString() { return "(" + this.x + ", " + this.y + ")"; }
 
     Vector2() {} // NOTE: x and y automatically initialized to zero
-    Vector2(double s) {
-        this.x = s;
-        this.y = s;
-    }
     Vector2(double x, double y) {
         this.x = x;
         this.y = y;
     }
-    Vector2(Vector2 p) {
-        this.x = p.x;
-        this.y = p.y;
+    Vector2(Vector2 other) {
+        this.x = other.x;
+        this.y = other.y;
+    }
+    Vector2(double s) {
+        this.x = s;
+        this.y = s;
     }
 
-    static final Vector2 right = new Vector2( 1.0,  0.0);
-    static final Vector2 left  = new Vector2(-1.0,  0.0);
-    static final Vector2 up    = new Vector2( 0.0,  1.0);
-    static final Vector2 down  = new Vector2( 0.0, -1.0);
+
 
     // NOTE: These are nice
     // TODO: pythagorean theorem question
@@ -37,10 +34,15 @@ class Vector2 {
     Vector2 dividedBy(double scalar) { return this.times(1.0 / scalar); }
     double squaredLength() { return this.x * this.x + this.y * this.y; }
     double length() { return Math.sqrt(this.squaredLength()); }
-    Vector2 direction() { return this.dividedBy(this.length()); }
+    Vector2 directionVector() { return this.dividedBy(this.length()); }
 
     static double distanceBetween(Vector2 a, Vector2 b) { return (b.minus(a)).length(); }
-    static Vector2 directionFrom(Vector2 a, Vector2 b) { return (b.minus(a)).direction(); }
+    static Vector2 directionVectorFrom(Vector2 a, Vector2 b) { return (b.minus(a)).directionVector(); }
+    
+        static final Vector2 right = new Vector2( 1.0,  0.0);
+    static final Vector2 left  = new Vector2(-1.0,  0.0);
+    static final Vector2 up    = new Vector2( 0.0,  1.0);
+    static final Vector2 down  = new Vector2( 0.0, -1.0);
 }
 
 class Vector3 {
@@ -51,11 +53,7 @@ class Vector3 {
     public String toString() { return "(" + this.x + ", " + this.y + ", " + this.z + ")"; }
 
     Vector3() { }
-    Vector3(double s) {
-        this.x = s;
-        this.y = s;
-        this.z = s;
-    }
+
     Vector3(double x, double y, double z) {
         this.x = x;
         this.y = y;
@@ -65,6 +63,11 @@ class Vector3 {
         this.x = p.x;
         this.y = p.y;
         this.z = p.z;
+    }
+    Vector3(double s) {
+        this.x = s;
+        this.y = s;
+        this.z = s;
     }
 
     static final Vector3 white   = new Vector3(1.0, 1.0, 1.0);
@@ -87,7 +90,7 @@ class Vector3 {
     }
 }
 
-class DemoApp extends App {
+class ExampleApp extends App {
     Vector2 chaserPosition;
     double time;
 
@@ -99,37 +102,44 @@ class DemoApp extends App {
     void loop() {
         if (!keyToggled('P')) { time += 0.0167; }
         if (mouseHeld) {
-            chaserPosition = chaserPosition.plus(Vector2.directionFrom(chaserPosition, mousePosition));
+            chaserPosition = chaserPosition.plus(Vector2.directionVectorFrom(chaserPosition, mousePosition));
         }
         drawLine(chaserPosition, mousePosition, Vector3.white);
         drawCircle(chaserPosition, 2.0, Vector3.rainbowSwirl(time));
         drawCenterRectangle(mousePosition, new Vector2(4.0), Vector3.cyan);
     }
 
-    public static void main(String[] arguments) { new DemoApp().run(); }
+    public static void main(String[] arguments) {
+        App app = new ExampleApp();
+        app.setWindowBackgroundColor(Vector3.black);
+        app.setWindowSizeInWorldUnits(64.0, 64.0);
+        app.setWindowCenterInWorldUnits(0.0, 0.0);
+        app.setWindowHeightInPixels(512);
+        app.setWindowTopLeftCornerInPixels(64, 64);
+        app.run();
+    }
 }
 
 class App extends JPanel {
     // app
-    void setup() { }
+    void setup() {}
     void loop() {}
-    void run(double _windowWidthInWorldUnits, double _windowHeightInWorldUnits, double _windowCenterXInWorldUnits, double _windowCenterYInWorldUnits, int windowHeightInPixels) {
-        this.setBackground(Color.BLACK);
-        this._windowWidthInWorldUnits = _windowWidthInWorldUnits;
-        this._windowHeightInWorldUnits = _windowHeightInWorldUnits;
-        this._windowCenterXInWorldUnits = _windowCenterXInWorldUnits;
-        this._windowCenterYInWorldUnits = _windowCenterYInWorldUnits;
-        this._jFrame.setSize((int) (_windowWidthInWorldUnits / _windowHeightInWorldUnits * windowHeightInPixels), (int) (windowHeightInPixels));
+    void run() {
+        setWindowBackgroundColor(_windowBackgroundColor);
+        setWindowSizeInWorldUnits(_windowWidthInWorldUnits, _windowHeightInWorldUnits);
+        setWindowCenterInWorldUnits(_windowCenterXInWorldUnits, _windowCenterYInWorldUnits);
+        setWindowHeightInPixels(_windowHeightInPixels);
+        setWindowTopLeftCornerInPixels(_windowTopLeftCornerXInPixels, _windowTopLeftCornerYInPixels);
         _jFrame.setVisible(true);
+        
         while (!keyHeld('Q')) {
             this.repaint();
             try { Thread.sleep(1000 / 60); } catch (Exception e) { }
         }
         System.exit(0);
     }
-    void run() { this.run(128, 128, 0, 0, 512); }
     
-    // graphics
+    // draw
     void drawLine(Vector2 _pointA, Vector2 _pointB, Vector3 color) {
         Vector2 pointA = _windowPixelFromWorld(_pointA);
         Vector2 pointB = _windowPixelFromWorld(_pointB);
@@ -150,33 +160,71 @@ class App extends JPanel {
     boolean keyReleased(int key) { return _keyReleased.getOrDefault(_keyMakeCaseInvariant(key), false); }
     boolean keyToggled(int key) { return _keyToggled.getOrDefault(_keyMakeCaseInvariant(key), false); }
 
+    // window
+    void setWindowBackgroundColor(double r, double g, double b) {
+        setWindowBackgroundColor(new Vector3(r, g, b));
+    }
+    void setWindowBackgroundColor(Vector3 color) {
+        _windowBackgroundColor = color;
+        this.setBackground(_graphicsColorFromVector3(_windowBackgroundColor));
+    }
+    void setWindowSizeInWorldUnits(double width, double height) {
+        _windowWidthInWorldUnits = width;
+        _windowHeightInWorldUnits = height;
+        
+        _windowWidthInPixels = (int) (_windowPixelsPerWorldUnit() * _windowWidthInWorldUnits);
+        _windowHeightInPixels = (int) (_windowPixelsPerWorldUnit() * _windowHeightInWorldUnits);
+        _jFrame.setSize(_windowWidthInPixels, _windowHeightInPixels);
+    }
+    void setWindowCenterInWorldUnits(double x, double y) {
+        _windowCenterXInWorldUnits = x;
+        _windowCenterYInWorldUnits = y;
+    }
+    void setWindowHeightInPixels(int height) {
+        _windowHeightInPixels = height;
+        
+        _windowWidthInPixels = (int) (_windowPixelsPerWorldUnit() * _windowWidthInWorldUnits);
+        _jFrame.setSize(_windowWidthInPixels, _windowHeightInPixels);
+    }
+    void setWindowTopLeftCornerInPixels(int x, int y) {
+         _windowTopLeftCornerXInPixels = x;
+         _windowTopLeftCornerYInPixels = y;
+         _jFrame.setLocation(x, y);
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
 
+    Vector3 _windowBackgroundColor = Vector3.white;
+    double _windowWidthInWorldUnits  = 16.0;
+    double _windowHeightInWorldUnits = 16.0;
+    double _windowCenterXInWorldUnits = 0.0;
+    double _windowCenterYInWorldUnits = 0.0;
+    int _windowHeightInPixels = 512;
     int _windowWidthInPixels;
-    int _windowHeightInPixels;
-    double _windowWidthInWorldUnits;
-    double _windowHeightInWorldUnits;
-    double _windowCenterXInWorldUnits;
-    double _windowCenterYInWorldUnits;
-    double _windowPixelsPerWorldUnits() { return _windowHeightInPixels / _windowHeightInWorldUnits; }
+    int _windowTopLeftCornerXInPixels = 64;
+    int _windowTopLeftCornerYInPixels = 64;
+    
+    double _windowPixelsPerWorldUnit() { return _windowHeightInPixels / _windowHeightInWorldUnits; }
     Vector2 _windowPixelFromWorld(Vector2 sWorld) {
         Vector2 sPixel = new Vector2();
-        double scale = _windowPixelsPerWorldUnits();
+        double scale = _windowPixelsPerWorldUnit();
         sPixel.x = (int) (scale *                             ((sWorld.x - (_windowCenterXInWorldUnits - .5 *  _windowWidthInWorldUnits))));
         sPixel.y = (int) (scale * (_windowHeightInWorldUnits - (sWorld.y - (_windowCenterYInWorldUnits - .5 * _windowHeightInWorldUnits))));
         return sPixel;
     }
     Vector2 _windowWorldFromPixel(Vector2 sPixel) {
         Vector2 sWorld = new Vector2();
-        double scale = _windowPixelsPerWorldUnits();
+        double scale = _windowPixelsPerWorldUnit();
         sWorld.x =                             (sPixel.x / scale) + (_windowCenterXInWorldUnits - .5 *  _windowWidthInWorldUnits);
         sWorld.y = _windowHeightInWorldUnits - (sPixel.y / scale) + (_windowCenterYInWorldUnits - .5 * _windowHeightInWorldUnits);
         return sWorld;
     }
 
-
+    Color _graphicsColorFromVector3(Vector3 color) {
+        return new Color((float) color.x, (float) color.y, (float) color.z);
+    }
     void _graphicsSetColor(Vector3 color) {
-        _graphics.setColor(new Color((float) color.x, (float) color.y, (float) color.z));
+        _graphics.setColor(_graphicsColorFromVector3(color));
     }
     void _drawCenterShape(Vector2 center, Vector2 size, Vector3 color, int shapeType) {
         Vector2 halfSize = size.dividedBy(2.0);
@@ -268,8 +316,6 @@ class App extends JPanel {
         }
         {
             _jFrame = new JFrame("CS136");
-            _jFrame.setSize(1000, 500);
-            _jFrame.setLocation(256, 64); // TODO: expose
             _jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             _jFrame.getContentPane().add(this, BorderLayout.CENTER);
             _jFrame.setUndecorated(true);
@@ -285,11 +331,14 @@ class App extends JPanel {
         // NOTE: try-catch to actually kill the app on an error
         try {
             super.paintComponent(_graphics);
-            this._graphics = _graphics; {
-                Rectangle rectangle = _jFrame.getBounds();
-                _windowHeightInPixels = rectangle.height;
-                _windowWidthInPixels = rectangle.width;
-            }
+            this._graphics = _graphics;
+            
+            // XXX: resizeable window
+            // {
+            //     Rectangle rectangle = _jFrame.getBounds();
+            //     _windowHeightInPixels = rectangle.height;
+            //     _windowWidthInPixels = rectangle.width;
+            // }
 
             {
                 Point point;
