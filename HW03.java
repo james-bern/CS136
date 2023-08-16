@@ -1,19 +1,19 @@
 class TurretGame extends App {
     
-    class Player {
+    static class Player {
         Vector2 position;
         double radius;
         Vector3 color;
     }
     
-    class Turret {
+    static class Turret {
         Vector2 position;
         double radius;
         Vector3 color;
         int framesSinceFired;
     }
     
-    class Bullet {
+    static class Bullet {
         Vector2 position;
         Vector2 velocity;
         double radius;
@@ -25,7 +25,7 @@ class TurretGame extends App {
         static final int TYPE_PLAYER = 0;
         static final int TYPE_TURRET = 1;
     }
-        
+    
     ////////////////////////////////////////////////////////////////////////////
     
     Player player;
@@ -53,7 +53,6 @@ class TurretGame extends App {
         bullets = new Bullet[256];
         for (int bulletIndex = 0; bulletIndex < bullets.length; ++bulletIndex) {
             bullets[bulletIndex] = new Bullet();
-            bullets[bulletIndex].radius = 2.0; // FORNOW: all bullets have same radius
         }
     }
     
@@ -73,12 +72,14 @@ class TurretGame extends App {
             for (int bulletIndex = 0; bulletIndex < bullets.length; ++bulletIndex) {
                 Bullet bullet = bullets[bulletIndex];
                 if (!bullet.alive) { // write to first empty ("dead") slot in bullets array
-                    bullet.alive = true;
-                    bullet.age = 0;
                     bullet.position = turret.position;
                     bullet.velocity = Vector2.directionVectorFrom(turret.position, player.position);
-                    bullet.type = Bullet.TYPE_TURRET;
+                    bullets[bulletIndex].radius = 2.0;
                     bullet.color = turret.color;
+                    bullet.alive = true;
+                    bullet.age = 0;
+                    bullet.type = Bullet.TYPE_TURRET;
+                    
                     break;
                 }
             }
