@@ -134,6 +134,7 @@ class App extends JPanel {
         }
         System.exit(0);
     }
+    void reset() { _resetCalled = true; }
     
     // draw
     void drawLine(Vector2 _pointA, Vector2 _pointB, Vector3 color) {
@@ -318,7 +319,7 @@ class App extends JPanel {
         }
     }
 
-
+    boolean _resetCalled = false;
     boolean _initialized = false;
     Graphics _graphics;
 
@@ -345,8 +346,9 @@ class App extends JPanel {
                 this.mousePosition = _windowWorldFromPixel(new Vector2(point.x, point.y));
             }
 
-            if (!_initialized || keyPressed('r')) {
+            if (!_initialized || keyPressed('r') || _resetCalled) {
                 _initialized = true;
+                _resetCalled = false;
                 setup();
 
                 mousePressed = false;
