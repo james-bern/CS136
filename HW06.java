@@ -48,7 +48,8 @@ class Main {
     }
     
     static class Interpreter {    
-        Stack<Token> _stack;
+        Stack<Token> _stack; // NOTE: do not access _stack directly
+                             //       instead, use stackPop*(), stackPush(...), and stackPrint()
         
         Interpreter() {
             _stack = new Stack<>();
