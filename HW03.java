@@ -1,4 +1,4 @@
-class TurretGame extends App {
+class Main extends App {
     
     static class Player {
         Vector2 position;
@@ -106,7 +106,7 @@ class TurretGame extends App {
     }
     
     public static void main(String[] arguments) {
-        App app = new TurretGame();
+        App app = new Main();
         app.setWindowBackgroundColor(0.0, 0.0, 0.0);
         app.setWindowSizeInWorldUnits(128.0, 128.0);
         app.setWindowCenterInWorldUnits(0.0, 0.0);

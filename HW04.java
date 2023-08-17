@@ -3,7 +3,7 @@ import java.util.*;
 // NOTE: Once you understand how this starter code works,
 //       you will want to delete/change most of it. :)
 
-class FlipBook extends App {
+class Main extends App {
     
     ArrayList<Vector2> foo;
     
@@ -28,7 +28,7 @@ class FlipBook extends App {
     }
     
     public static void main(String[] arguments) {
-        App app = new FlipBook();
+        App app = new Main();
         app.setWindowBackgroundColor(1.0, 1.0, 1.0);
         app.setWindowSizeInWorldUnits(8.0, 8.0);
         app.setWindowCenterInWorldUnits(0.0, 0.0);

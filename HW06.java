@@ -55,14 +55,14 @@ class Main {
         //       instead, use stackPop*(), stackPush(...), and stackPrint()
         Stack<Token> _stack; 
 
-        // NOTE: do not access _dictionary directly (but you can inspect it in the debugger!)
-        // NOTE: instead, use dictionaryPut() and dictionaryGet()
-        HashMap<String, Token> _dictionary;
+        // NOTE: do not access _map directly (but you can inspect it in the debugger!)
+        // NOTE: instead, use mapPut() and mapGet()
+        HashMap<String, Token> _map;
 
 
         Interpreter() {
             _stack = new Stack<>();
-            _dictionary = new HashMap<>();
+            _map = new HashMap<>();
         }
 
         Token   stackPopToken()   { assert _stack.size() > 0 : "can't pop; stack is empty"; return _stack.pop(); }
@@ -79,34 +79,40 @@ class Main {
             ArrayList<Token> tmp = new ArrayList<>();
             for (Token token : _stack) { tmp.add(token); }
             for (int i = tmp.size() - 1; i >= 0; --i) { System.out.println(tmp.get(i)); }
-            System.out.println("-----");
-            System.out.println("stack");
         }
 
-        boolean dictionaryContainsKey(String key) {
-            return _dictionary.containsKey(key);
+        boolean mapContainsKey(String key) {
+            return _map.containsKey(key);
         }
 
-        void dictionaryPut(String key, Token value) {
-            _dictionary.put(key, value);
+        void mapPut(String key, Token value) {
+            _map.put(key, value);
         }
 
-        Token dictionaryGet(String key) {
-            assert dictionaryContainsKey(key);
-            return _dictionary.get(key);
+        Token mapGet(String key) {
+            assert mapContainsKey(key);
+            return _map.get(key);
         }
 
-        void dictionaryPrint() {
-            System.out.print("dictionary ");
-            System.out.println(_dictionary);
+        void mapPrint() {
+            System.out.print("map ");
+            System.out.println(_map);
         }
 
         void interpret(ArrayList<Token> tokens, boolean PRINT_DEBUG_INFO) {
             for (Token token : tokens) {
                 handleToken(token);
-                stackPrint();
-                dictionaryPrint();
-                System.out.println();
+
+                if (true) {
+                    System.out.println("> " + token);
+                    System.out.println();
+                    stackPrint();
+                    System.out.println("----- ");
+                    System.out.print("stack + ");
+                    mapPrint();
+                    System.out.println();
+                }
+
             }
         }
         void handleToken(Token token) {
@@ -119,18 +125,18 @@ class Main {
                 } else if (string.equals("def")) {
                     Token value = stackPopToken();
                     String key = stackPopString();
-                    dictionaryPut(key, value);
+                    mapPut(key, value);
                 } else {
                     if (string.equals("add") || string.equals("sub") || string.equals("eq") || string.equals("neq")) {
-                    double B = stackPopDouble();
-                    double A = stackPopDouble();
+                        double B = stackPopDouble();
+                        double A = stackPopDouble();
                         if      (string.equals("add")) { stackPush(A + B);  }
                         else if (string.equals("sub")) { stackPush(A - B);  }
                         else if (string.equals("eq" )) { stackPush(A == B); }
                         else if (string.equals("neq")) { stackPush(A != B); }
                     } else { 
-                        if (dictionaryContainsKey(string)) {
-                            handleToken(dictionaryGet(string));
+                        if (mapContainsKey(string)) {
+                            handleToken(mapGet(string));
                         } else {
                             stackPush(string);
                         }
@@ -143,7 +149,7 @@ class Main {
     public static void main(String[] arguments) {
         Interpreter interpreter = new Interpreter();
         // ArrayList<Token> tokens = Token.tokenize("4.0 2.0 add 1.0 sub 5.0 eq pstack");
-        ArrayList<Token> tokens = Token.tokenize("pi 3.14 def pi pi add pstack");
+        ArrayList<Token> tokens = Token.tokenize("pi 3.14 def tau pi pi add def");
         interpreter.interpret(tokens, false);
     }
 }
