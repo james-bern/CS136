@@ -1,1 +1,0 @@
-git pull https://github.com/james-bern/CS136.git
