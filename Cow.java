@@ -3,13 +3,14 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import java.lang.Math;
+import java.io.*;
 
 class Vector2 {
     double x;
     double y;
-
+    
     public String toString() { return "(" + this.x + ", " + this.y + ")"; }
-
+    
     Vector2() {} // NOTE: x and y automatically initialized to zero
     Vector2(double x, double y) {
         this.x = x;
@@ -23,7 +24,7 @@ class Vector2 {
         this.x = s;
         this.y = s;
     }
-
+    
     Vector2 plus(Vector2 other) { return new Vector2(this.x + other.x, this.y + other.y); }
     Vector2 minus(Vector2 other) { return new Vector2(this.x - other.x, this.y - other.y); }
     Vector2 times(double scalar) { return new Vector2(scalar * this.x, scalar * this.y); }
@@ -31,9 +32,10 @@ class Vector2 {
     double squaredLength() { return this.x * this.x + this.y * this.y; }
     double length() { return Math.sqrt(this.squaredLength()); }
     Vector2 directionVector() { return this.dividedBy(this.length()); }
-
+    
     static double distanceBetween(Vector2 a, Vector2 b) { return (b.minus(a)).length(); }
     static Vector2 directionVectorFrom(Vector2 a, Vector2 b) { return (b.minus(a)).directionVector(); }
+    static Vector2 lerp(double t, Vector2 a, Vector2 b) { return a.times(1.0 - t).plus(b.times(t)); }
     
     static final Vector2 right = new Vector2( 1.0,  0.0);
     static final Vector2 left  = new Vector2(-1.0,  0.0);
@@ -45,11 +47,11 @@ class Vector3 {
     double x;
     double y;
     double z;
-
+    
     public String toString() { return "(" + this.x + ", " + this.y + ", " + this.z + ")"; }
-
+    
     Vector3() { }
-
+    
     Vector3(double x, double y, double z) {
         this.x = x;
         this.y = y;
@@ -65,22 +67,35 @@ class Vector3 {
         this.y = s;
         this.z = s;
     }
-
-    static final Vector3 white   = new Vector3(1.0, 1.0, 1.0);
-    static final Vector3 black   = new Vector3(0.0, 0.0, 0.0);
-    static final Vector3 red     = new Vector3(1.0, 0.0, 0.0);
-    static final Vector3 yellow  = new Vector3(1.0, 1.0, 0.0);
-    static final Vector3 green   = new Vector3(0.0, 1.0, 0.0);
-    static final Vector3 cyan    = new Vector3(0.0, 1.0, 1.0);
-    static final Vector3 blue    = new Vector3(0.0, 0.0, 1.0);
-    static final Vector3 magenta = new Vector3(1.0, 0.0, 1.0);
-    static final Vector3 gray    = new Vector3(0.5, 0.5, 0.5);
+    
+    Vector3 plus(Vector3 other) { return new Vector3(this.x + other.x, this.y + other.y, this.z + other.z); }
+    Vector3 minus(Vector3 other) { return new Vector3(this.x - other.x, this.y - other.y, this.z - other.z); }
+    Vector3 times(double scalar) { return new Vector3(scalar * this.x, scalar * this.y, scalar * this.z); }
+    Vector3 dividedBy(double scalar) { return this.times(1.0 / scalar); }
+    double squaredLength() { return this.x * this.x + this.y * this.y + this.z * this.z; }
+    double length() { return Math.sqrt(this.squaredLength()); }
+    Vector3 directionVector() { return this.dividedBy(this.length()); }
+    
+    static Vector3 lerp(double t, Vector3 a, Vector3 b) { return a.times(1.0 - t).plus(b.times(t)); }
+    
+    static final Vector3 white     = new Vector3(1.0 , 1.0 , 1.0 );
+    static final Vector3 lightGray = new Vector3(0.75, 0.75, 0.75);
+    static final Vector3 gray      = new Vector3(0.5 , 0.5 , 0.5 );
+    static final Vector3 darkGray  = new Vector3(0.25, 0.25, 0.25);
+    static final Vector3 black     = new Vector3(0.0 , 0.0 , 0.0 );
+    static final Vector3 red       = new Vector3(1.0 , 0.0 , 0.0 );
+    static final Vector3 orange    = new Vector3(1.0 , 0.5 , 0.0 );
+    static final Vector3 yellow    = new Vector3(1.0 , 1.0 , 0.0 );
+    static final Vector3 green     = new Vector3(0.0 , 1.0 , 0.0 );
+    static final Vector3 cyan      = new Vector3(0.0 , 1.0 , 1.0 );
+    static final Vector3 blue      = new Vector3(0.0 , 0.0 , 1.0 );
+    static final Vector3 magenta   = new Vector3(1.0 , 0.0 , 1.0 );
     static Vector3 rainbowSwirl(double time) {
         return new Vector3(_rainbowSwirlHelper(time, 0.0), _rainbowSwirlHelper(time, 0.33), _rainbowSwirlHelper(time, -0.33));
     }
-
+    
     ////////////////////////////////////////////////////////////////////////////
-
+    
     static double _rainbowSwirlHelper(double time, double offset) {
         return 0.5 + 0.5 * Math.cos(6.28 * (offset - time));
     }
@@ -89,12 +104,12 @@ class Vector3 {
 class ExampleApp extends App {
     Vector2 chaserPosition;
     double time;
-
+    
     void setup() {
         chaserPosition = new Vector2();
         time = 0.0;
     }
-
+    
     void loop() {
         if (!keyToggled('P')) { time += 0.0167; }
         if (mouseHeld) {
@@ -104,7 +119,7 @@ class ExampleApp extends App {
         drawCircle(chaserPosition, 2.0, Vector3.rainbowSwirl(time));
         drawCenterRectangle(mousePosition, new Vector2(4.0), Vector3.cyan);
     }
-
+    
     public static void main(String[] arguments) {
         App app = new ExampleApp();
         app.setWindowBackgroundColor(Vector3.black);
@@ -128,7 +143,7 @@ class App extends JPanel {
         setWindowTopLeftCornerInPixels(_windowTopLeftCornerXInPixels, _windowTopLeftCornerYInPixels);
         _jFrame.setVisible(true);
         
-        while (!keyHeld('Q')) {
+        while (!(hotkeysEnabled && keyPressed('q'))) {
             this.repaint();
             try { Thread.sleep(1000 / 60); } catch (Exception e) { }
         }
@@ -137,6 +152,21 @@ class App extends JPanel {
     void reset() { _resetCalled = true; }
     
     // draw
+    void drawString(String string, Vector2 _position, Vector3 color, int fontSize, boolean center) {
+        // Suppress Mac warnings about missing Times and Lucida.
+        PrintStream systemDotErr = System.err;
+        System.setErr(new PrintStream(new NullOutputStream())); {
+            _graphics.setFont(new Font(Font.MONOSPACED, Font.PLAIN, fontSize)); 
+            Vector2 position = _windowPixelFromWorld(_position);
+            if (center) {
+                FontMetrics fontMetrics = _graphics.getFontMetrics(); 
+                position.x -= 0.5 * fontMetrics.stringWidth(string);
+                position.y += 0.25 * fontMetrics.getHeight();
+            }
+            _graphicsSetColor(color);
+            _graphics.drawString(string, (int) position.x, (int) position.y);
+        } System.setErr(systemDotErr);
+    }
     void drawLine(Vector2 _pointA, Vector2 _pointB, Vector3 color) {
         Vector2 pointA = _windowPixelFromWorld(_pointA);
         Vector2 pointB = _windowPixelFromWorld(_pointB);
@@ -146,7 +176,7 @@ class App extends JPanel {
     void drawCircle(Vector2 center, double radius, Vector3 color) { _drawCenterShape(center, new Vector2(2 * radius), color, 1); }
     void drawCenterRectangle(Vector2 center, Vector2 size, Vector3 color) { _drawCenterShape(center, size, color, 0); }
     void drawCornerRectangle(Vector2 _cornerA, Vector2 _cornerB, Vector3 color) { _drawCornerShape(_cornerA, _cornerB, color, 0); }
-
+    
     // input
     Vector2 mousePosition;
     boolean mousePressed = false;
@@ -156,7 +186,9 @@ class App extends JPanel {
     boolean keyPressed(int key) { return _keyPressed.getOrDefault(_keyMakeCaseInvariant(key), false); }
     boolean keyReleased(int key) { return _keyReleased.getOrDefault(_keyMakeCaseInvariant(key), false); }
     boolean keyToggled(int key) { return _keyToggled.getOrDefault(_keyMakeCaseInvariant(key), false); }
-
+    boolean keyAnyPressed;
+    char keyLastPressed;
+    
     // window
     void setWindowBackgroundColor(double r, double g, double b) {
         setWindowBackgroundColor(new Vector3(r, g, b));
@@ -184,13 +216,20 @@ class App extends JPanel {
         _jFrame.setSize(_windowWidthInPixels, _windowHeightInPixels);
     }
     void setWindowTopLeftCornerInPixels(int x, int y) {
-         _windowTopLeftCornerXInPixels = x;
-         _windowTopLeftCornerYInPixels = y;
-         _jFrame.setLocation(x, y);
+        _windowTopLeftCornerXInPixels = x;
+        _windowTopLeftCornerYInPixels = y;
+        _jFrame.setLocation(x, y);
     }
     
+    boolean hotkeysEnabled = true;
+    
     ////////////////////////////////////////////////////////////////////////////
-
+    
+    public class NullOutputStream extends OutputStream {
+        @Override
+        public void write(int b) throws IOException {}
+    }
+    
     Vector3 _windowBackgroundColor = Vector3.white;
     double _windowWidthInWorldUnits  = 16.0;
     double _windowHeightInWorldUnits = 16.0;
@@ -198,7 +237,7 @@ class App extends JPanel {
     double _windowCenterYInWorldUnits = 0.0;
     int _windowHeightInPixels = 512;
     int _windowWidthInPixels;
-    int _windowTopLeftCornerXInPixels = 64;
+    int _windowTopLeftCornerXInPixels = 256;
     int _windowTopLeftCornerYInPixels = 64;
     
     double _windowPixelsPerWorldUnit() { return _windowHeightInPixels / _windowHeightInWorldUnits; }
@@ -216,7 +255,7 @@ class App extends JPanel {
         sWorld.y = _windowHeightInWorldUnits - (sPixel.y / scale) + (_windowCenterYInWorldUnits - .5 * _windowHeightInWorldUnits);
         return sWorld;
     }
-
+    
     Color _graphicsColorFromVector3(Vector3 color) {
         return new Color((float) color.x, (float) color.y, (float) color.z);
     }
@@ -230,11 +269,11 @@ class App extends JPanel {
     void _drawCornerShape(Vector2 _cornerA, Vector2 _cornerB, Vector3 color, int shapeType) {
         Vector2 cornerA = _windowPixelFromWorld(_cornerA);
         Vector2 cornerB = _windowPixelFromWorld(_cornerB);
-
+        
         // swap if necessary to make A lower-left and B upper-right
         if (cornerA.x > cornerB.x) { double tmp = cornerA.x; cornerA.x = cornerB.x; cornerB.x = tmp; }
         if (cornerA.y > cornerB.y) { double tmp = cornerA.y; cornerA.y = cornerB.y; cornerB.y = tmp; }
-
+        
         _graphicsSetColor(color);
         int arg0 = (int) (cornerA.x);
         int arg1 = (int) (cornerA.y);
@@ -251,18 +290,18 @@ class App extends JPanel {
         int nPoints = points.length;
         int[] xPoints = new int[nPoints];
         int[] yPoints = new int[nPoints];
-
+        
         for (int i = 0; i < nPoints; ++i) {
             Vector2 tmp = _windowPixelFromWorld(points[i]);
             xPoints[i] = (int) tmp.x;
             yPoints[i] = (int) tmp.y;
         }
-
+        
         _graphicsSetColor(color);
         _graphics.drawPolyline(xPoints, yPoints, nPoints);
     }
-
-
+    
+    
     JFrame _jFrame;
     Hashtable<Integer, Boolean> _keyPressed = new Hashtable<>();
     Hashtable<Integer, Boolean> _keyHeld = new Hashtable<>();
@@ -274,11 +313,11 @@ class App extends JPanel {
         }
         return key;
     }
-
-
+    
+    
     App() {
         super();
-
+        
         {
             this.addMouseListener( new MouseAdapter() {
                 @Override
@@ -286,19 +325,26 @@ class App extends JPanel {
                     mousePressed = true;
                     mouseHeld = true;
                 }
-
+                
                 @Override public void mouseReleased(MouseEvent e) {
-                mouseHeld = false;
-                mouseReleased = true;
+                    mouseHeld = false;
+                    mouseReleased = true;
                 }
             });
-
+            
             KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(event -> {
                 synchronized (App.class) {
                     int key = event.getKeyCode();
                     if (event.getID() == KeyEvent.KEY_PRESSED) {
                         if (!keyHeld(key)) {
                             _keyPressed.put(key, true);
+                            if (key < 256) { // FORNOW
+                                keyAnyPressed = true;
+                                keyLastPressed = (char) (key);
+                                if ('A' <= keyLastPressed && keyLastPressed <= 'Z') {
+                                    keyLastPressed = (char) ('a' + (keyLastPressed - 'A'));
+                                }
+                            }
                         }
                         _keyHeld.put(key, true);
                         _keyToggled.put(key, !_keyToggled.getOrDefault(key, false));
@@ -315,14 +361,13 @@ class App extends JPanel {
             _jFrame = new JFrame("CS136");
             _jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             _jFrame.getContentPane().add(this, BorderLayout.CENTER);
-            _jFrame.setUndecorated(true);
         }
     }
-
+    
     boolean _resetCalled = false;
     boolean _initialized = false;
     Graphics _graphics;
-
+    
     @Override 
     public void paintComponent(Graphics _graphics) {
         // NOTE: try-catch to actually kill the app on an error
@@ -336,7 +381,7 @@ class App extends JPanel {
             //     _windowHeightInPixels = rectangle.height;
             //     _windowWidthInPixels = rectangle.width;
             // }
-
+            
             {
                 Point point;
                 {
@@ -345,12 +390,12 @@ class App extends JPanel {
                 }
                 this.mousePosition = _windowWorldFromPixel(new Vector2(point.x, point.y));
             }
-
-            if (!_initialized || keyPressed('r') || _resetCalled) {
+            
+            if (!_initialized || (hotkeysEnabled && keyPressed('r')) || _resetCalled) {
                 _initialized = true;
                 _resetCalled = false;
                 setup();
-
+                
                 mousePressed = false;
                 mouseHeld = false;
                 mouseReleased = false;
@@ -358,22 +403,25 @@ class App extends JPanel {
                 _keyHeld.clear();
                 _keyReleased.clear();
                 _keyToggled.clear();
+                keyAnyPressed = false;
+                keyLastPressed = 0;
             }
-
+            
             loop();
-
+            
             { // end of _jFrame
                 mousePressed = false;
                 mouseReleased = false;
                 _keyPressed.clear();
                 _keyReleased.clear();
+                keyAnyPressed = false;
             }
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
             System.exit(1);
         }
     }
-
+    
     public static void main(String[] arguments) {
         new App().run();
     }
