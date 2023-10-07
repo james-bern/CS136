@@ -76,6 +76,8 @@ class Vector3 {
     double length() { return Math.sqrt(this.squaredLength()); }
     Vector3 directionVector() { return this.dividedBy(this.length()); }
     
+    static double distanceBetween(Vector3 a, Vector3 b) { return (b.minus(a)).length(); }
+    static Vector3 directionVectorFrom(Vector3 a, Vector3 b) { return (b.minus(a)).directionVector(); }
     static Vector3 lerp(double t, Vector3 a, Vector3 b) { return a.times(1.0 - t).plus(b.times(t)); }
     
     static final Vector3 white     = new Vector3(1.0 , 1.0 , 1.0 );
