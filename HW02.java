@@ -26,6 +26,7 @@ class HW02 extends Cow {
 
             // // TODO (Jim/Nate)
             // shift
+            // drawString should take the bottom left corner
 
             // // README
             // keyPressed
