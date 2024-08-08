@@ -44,7 +44,7 @@ class Cow {
     static boolean _key_held_prev[]     = new boolean[256];
     static boolean key_held[]     = new boolean[256];
     static boolean key_released[] = new boolean[256];
-    static boolean key_pressed[]  = new boolean[256];
+    static boolean keyPressed[]  = new boolean[256];
     static boolean key_toggled[]  = new boolean[256];
 
     /////////////////////////////////////////////////////////////////////////
@@ -54,8 +54,8 @@ class Cow {
     static int canvas_pixel_height = 512;
     static float canvas_world_left   = 0;
     static float canvas_world_bottom = 0;
-    static float canvas_world_width  = 16;
-    static float canvas_world_height = 9;
+    static float canvas_world_width  = 256;
+    static float canvas_world_height = 256;
     static float canvas_aspect_ratio() { return canvas_world_width / canvas_world_height; }
     static int canvas_pixel_width() {
         return (int) (canvas_aspect_ratio() * canvas_pixel_height);
@@ -232,38 +232,38 @@ class Cow {
         public void write(int b) throws IOException {}
     }
 
-    static void _cow_initialize() {
-        _buffered_image = new BufferedImage(canvas_pixel_width(), canvas_pixel_height, BufferedImage.TYPE_INT_ARGB);
-        assert _buffered_image != null;
+    static void _cow_safe_attempt_initialize() {
+        if (!_cow_initialized) {
+            _cow_initialized = true;
 
-        _buffered_image_graphics = _buffered_image.createGraphics();
-        assert _buffered_image_graphics != null;
+            _buffered_image = new BufferedImage(canvas_pixel_width(), canvas_pixel_height, BufferedImage.TYPE_INT_ARGB);
+            assert _buffered_image != null;
 
-        { // Trigger and suppress one-time Mac warnings about missing fonts.
-            PrintStream systemDotErr = System.err;
-            System.setErr(new PrintStream(new NullOutputStream()));
-            _buffered_image_graphics.getFontMetrics(); 
-            System.setErr(systemDotErr);
+            _buffered_image_graphics = _buffered_image.createGraphics();
+            assert _buffered_image_graphics != null;
+
+            { // Trigger and suppress one-time Mac warnings about missing fonts.
+                PrintStream systemDotErr = System.err;
+                System.setErr(new PrintStream(new NullOutputStream()));
+                _buffered_image_graphics.getFontMetrics(); 
+                System.setErr(systemDotErr);
+            }
+
+            _jPanel_extender = new CowJPanelExtender();
+            _jPanel_extender.setPreferredSize(new Dimension(canvas_pixel_width(), canvas_pixel_height));
+
+            _jFrame = new JFrame("cs136 2024");
+            _jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            _jFrame.setLocation(0, 0);
+            _jFrame.getContentPane().add(_jPanel_extender, BorderLayout.CENTER);
+            _jFrame.pack();
+            _jFrame.setVisible(true);
         }
-
-        _jPanel_extender = new CowJPanelExtender();
-        _jPanel_extender.setPreferredSize(new Dimension(canvas_pixel_width(), canvas_pixel_height));
-
-        _jFrame = new JFrame("cs136 2024");
-        _jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        _jFrame.setLocation(0, 0);
-        _jFrame.getContentPane().add(_jPanel_extender, BorderLayout.CENTER);
-        _jFrame.pack();
-        _jFrame.setVisible(true);
-
     }
 
 
     static boolean begin_frame() {
-        if (!_cow_initialized) {
-            _cow_initialized = true;
-            _cow_initialize();
-        }
+        _cow_safe_attempt_initialize();
 
         { // *_pressed, *_released
             { // mouse_pressed, mouse_released
@@ -273,7 +273,7 @@ class Cow {
             }
             { // keyboard
                 for (int i = 0; i < 256; ++i) {
-                    key_pressed[i]  = (!_key_held_prev[i] && key_held[i]);
+                    keyPressed[i]  = (!_key_held_prev[i] && key_held[i]);
                     key_released[i] = (_key_held_prev[i] && !key_held[i]);
                     if (key_released[i]) key_toggled[i] = !key_toggled[i];
                 }
@@ -337,16 +337,16 @@ class DemoTicTacToe extends Cow {
         canvas_pixel_height = 256;
 
         System.out.println("Press the K key to crash.");
-        
+
         // loop
         while (begin_frame()) {
             int hot_row = (int) Math.floor(mouse_y);
             int hot_column = (int) Math.floor(mouse_x);
 
-            if (key_pressed['K']) {
-            	int i = 1 / 0;
+            if (keyPressed['K']) {
+                int i = 1 / 0;
             }
-            
+
             if (!game_is_over()) { // update
                 if (mouse_pressed && (board[hot_row][hot_column] == PLAYER_NONE)) { // make move
                     ++turn;
@@ -584,7 +584,7 @@ class DemoKitchenSink extends Cow {
 class CowJPanelExtender extends JPanel {
     private static final long serialVersionUID = 1L;
 
-	CowJPanelExtender() {
+    CowJPanelExtender() {
         super();
 
         this.addMouseListener( 
