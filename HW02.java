@@ -1,5 +1,4 @@
 import java.util.*;
-import java.awt.event.KeyEvent;
 class HW02 extends Cow {
     public static void main(String[] arguments) {
 
@@ -25,6 +24,18 @@ class HW02 extends Cow {
         int i = 0;
         while (begin_frame()) {
 
+            // // TODO (Jim/Nate)
+            // shift
+
+            // // README
+            // keyPressed
+            // keyHeld
+            // KEY_RIGHT_ARROW
+            // KEY_LEFT_ARROW
+            // KEY_BACKSPACE
+            // for (char c = 'A'; c <= 'Z'; ++c) { ... }
+            // ... = (char)('a' + (c - 'A'));
+            // 
             // // NOTES
             // NOTE: You are NOT allowed to use the String class.
             //       You must work directly with the char[] buffer.
@@ -33,11 +44,9 @@ class HW02 extends Cow {
             // TODO: A-Z
             // TODO: 0-9
             // TODO: a-z
-            // TODO: a-z
             // TODO: display cursor bar
             // TODO: Space
             // TODO: Backspace (must do what Jim would expect)
-            // TODO: LeftArrowKey, RightArrowKey
             // NOTE: can't have any out of bounds errors
             // // A
             // TODO: make the cursor bar blink
@@ -47,13 +56,18 @@ class HW02 extends Cow {
             // TODO: mouse input double-click to select all characters
             // // A++
             // TODO: save to .txt
-            for (char c = 'A'; c <= 'Z'; ++c) {
-                if (keyPressed[c]) buffer[i++] = c;
+            for (char c = 'A'; c <= 'Z'; ++c) { // README
+                if (keyPressed[c]) {
+                    if (!keyHeld[KEY_SHIFT]) {
+                        buffer[i++] = (char)('a' + (c - 'A'));
+                    } else {
+                        buffer[i++] = c;
+                    }
+                }
             }
             if (keyPressed[' ']) buffer[i++] = ' ';
-            if (keyPressed[KeyEvent.VK_LEFT]) {
-                if (i > 0) --i;
-            }
+            if (keyPressed[KEY_LEFT_ARROW]) if (i > 0) --i;
+            if (keyPressed[KEY_BACKSPACE]) buffer[i++] = 's';
 
             { // draw (scary)
                 int length = -1;

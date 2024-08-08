@@ -34,6 +34,11 @@ class Cow {
     // TODO imgui
 
 
+    static final int KEY_LEFT_ARROW = KeyEvent.VK_LEFT;
+    static final int KEY_RIGHT_ARROW = KeyEvent.VK_RIGHT;
+    static final int KEY_BACKSPACE = KeyEvent.VK_BACK_SPACE;
+    static final int KEY_SHIFT = KeyEvent.VK_SHIFT;
+
     static boolean mouse_held;
     static boolean _mouse_held_prev;
     static boolean mouse_pressed;
@@ -42,7 +47,7 @@ class Cow {
     static float mouse_y;
 
     static boolean _key_held_prev[]     = new boolean[256];
-    static boolean key_held[]     = new boolean[256];
+    static boolean keyHeld[]     = new boolean[256];
     static boolean key_released[] = new boolean[256];
     static boolean keyPressed[]  = new boolean[256];
     static boolean key_toggled[]  = new boolean[256];
@@ -273,11 +278,11 @@ class Cow {
             }
             { // keyboard
                 for (int i = 0; i < 256; ++i) {
-                    keyPressed[i]  = (!_key_held_prev[i] && key_held[i]);
-                    key_released[i] = (_key_held_prev[i] && !key_held[i]);
+                    keyPressed[i]  = (!_key_held_prev[i] && keyHeld[i]);
+                    key_released[i] = (_key_held_prev[i] && !keyHeld[i]);
                     if (key_released[i]) key_toggled[i] = !key_toggled[i];
                 }
-                System.arraycopy(key_held, 0, _key_held_prev, 0, key_held.length); // NOTE: silly order of arguments
+                System.arraycopy(keyHeld, 0, _key_held_prev, 0, keyHeld.length); // NOTE: silly order of arguments
             }
         }
 
@@ -477,10 +482,10 @@ class DemoKitchenSink extends Cow {
 
                 {
                     double delta = 0.1;
-                    if (key_held['W']) y += delta;
-                    if (key_held['A']) x -= delta;
-                    if (key_held['S']) y -= delta;
-                    if (key_held['D']) x += delta;
+                    if (keyHeld['W']) y += delta;
+                    if (keyHeld['A']) x -= delta;
+                    if (keyHeld['S']) y -= delta;
+                    if (keyHeld['D']) x += delta;
                 }
             }
 
@@ -608,9 +613,9 @@ class CowJPanelExtender extends JPanel {
                 char key = (char) _key;
 
                 if (event.getID() == KeyEvent.KEY_PRESSED) {
-                    Cow.key_held[key] = true;
+                    Cow.keyHeld[key] = true;
                 } else if (event.getID() == KeyEvent.KEY_RELEASED) {
-                    Cow.key_held[key] = false;
+                    Cow.keyHeld[key] = false;
                 }
 
                 return false;
