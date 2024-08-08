@@ -27,6 +27,7 @@ class HW02 extends Cow {
             // // TODO (Jim/Nate)
             // shift
             // drawString should take the bottom left corner
+            // record animated gif as example of perfect program
 
             // // README
             // keyPressed
