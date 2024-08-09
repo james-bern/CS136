@@ -35,8 +35,8 @@ class Cow {
     // TODO imgui
 
 
-    static final int LEFT_ARROW = KeyEvent.VK_LEFT;
-    static final int RIGHT_ARROW = KeyEvent.VK_RIGHT;
+    static final int LEFT_ARROW_KEY = KeyEvent.VK_LEFT;
+    static final int RIGHT_ARROW_KEY = KeyEvent.VK_RIGHT;
     static final int BACKSPACE = KeyEvent.VK_BACK_SPACE;
     static final int SHIFT = KeyEvent.VK_SHIFT;
     static final int ENTER = KeyEvent.VK_ENTER;
@@ -52,7 +52,7 @@ class Cow {
     static Color BLUE   = Color.BLUE;
     static Color PINK   = Color.PINK;
     static Color CYAN   = Color.CYAN;
-    static Color PURPLE = new Color(138 / 255.0f,  43 / 255.0f, 226 / 255.0f);
+    static Color PURPLE = new Color(170 / 255.0f,   1 / 255.0f, 255 / 255.0f);
     static Color BROWN  = new Color(160 / 255.0f,  82 / 255.0f,  45 / 255.0f);
     static Color WHITE  = Color.WHITE;
     static Color GRAY   = Color.GRAY;
@@ -71,6 +71,7 @@ class Cow {
 
     static boolean _mouseHeldPrev;
     static boolean _keyHeldPrev[]     = new boolean[256];
+
 
     /////////////////////////////////////////////////////////////////////////
 
