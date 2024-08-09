@@ -26,6 +26,7 @@ class HW02 extends Cow {
                 // record animated gif as example of perfect program
 
                 // // README
+                // notion of compression-orientation (pseudocode)
                 // diagram of problem's geometry
                 // explanation of buffer and null-termination
                 // keyPressed[...]

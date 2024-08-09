@@ -39,6 +39,7 @@ class Cow {
     static final int RIGHT_ARROW = KeyEvent.VK_RIGHT;
     static final int BACKSPACE = KeyEvent.VK_BACK_SPACE;
     static final int SHIFT = KeyEvent.VK_SHIFT;
+    static final int ENTER = KeyEvent.VK_ENTER;
     static final int CONTROL = KeyEvent.VK_CONTROL;
     static final int TAB = KeyEvent.VK_TAB;
 
@@ -127,6 +128,10 @@ class Cow {
         _buffered_image_graphics.drawLine(_xPIXELfromWORLD(x1), _yPIXELfromWORLD(y1), _xPIXELfromWORLD(x2), _yPIXELfromWORLD(y2));
     }
 
+    static void drawRectangle(double x1, double y1, double x2, double y2, Color color) {
+        _draw_set_color(color);
+        _draw_rectangle(x1, y1, x2, y2, false);
+    }
 
     // // TODO: Utility API
 
