@@ -56,12 +56,18 @@ class HW02 extends Cow {
         int blinkCounter = 0;
 
         while (beginFrame()) {
-            if (length != buffer.length) {
+
+            boolean insertCharacterValid = (length != buffer.length);
+            boolean backspaceValid = ((length != 0) && (cursor != 0));
+            boolean leftArrowKeyValid = (cursor != 0);
+            boolean rightArrowKeyValid = (cursor != length);
+
+            if (insertCharacterValid) {
                 char newCharacter; {
                     newCharacter = 0;
                     for (char c = 'A'; c <= 'Z'; ++c) {
-                        if (keyPressed[c]) {
-                            if (!keyHeld[SHIFT]) {
+                        if (keyPressed(c)) {
+                            if (!keyHeld(SHIFT)) {
                                 newCharacter = (char)('a' + (c - 'A'));
                             } else {
                                 newCharacter = c;
@@ -69,9 +75,9 @@ class HW02 extends Cow {
                         }
                     }
                     for (char c = '0'; c <= '9'; ++c) {
-                        if (keyPressed[c]) newCharacter = c;
+                        if (keyPressed(c)) newCharacter = c;
                     }
-                    if (keyPressed[' ']) newCharacter = ' ';
+                    if (keyPressed(' ')) newCharacter = ' ';
                 }
                 if (newCharacter != 0) {
                     for (int i = length; i > cursor; --i) buffer[i] = buffer[i - 1];
@@ -80,14 +86,22 @@ class HW02 extends Cow {
                     ++length;
                 }
             }
-            if (((length != 0) && (cursor != 0)) && keyPressed[BACKSPACE]) {
+
+            if (backspaceValid && keyPressed(BACKSPACE)) {
                 for (int i = cursor; i < length; ++i) buffer[i - 1] = buffer[i];
                 --cursor;
                 --length;
             }
-            if ((cursor != 0) && keyPressed[LEFT_ARROW_KEY]) --cursor;
-            if ((cursor != length) && keyPressed[RIGHT_ARROW_KEY]) ++cursor;
-            if (keyPressed[ENTER]) {
+
+            if (leftArrowKeyValid && keyPressed(LEFT_ARROW_KEY)) {
+                --cursor;
+            }
+
+            if (rightArrowKeyValid && keyPressed(RIGHT_ARROW_KEY)) {
+                ++cursor;
+            }
+
+            if (keyPressed(ENTER)) {
                 if (true
                         && (buffer[0] == 'p')
                         && (buffer[1] == 'a')
@@ -107,6 +121,7 @@ class HW02 extends Cow {
                     buffer[7] = 'd';
                         }
             }
+
             if (mousePressed) {
                 cursor = length;
                 for (int i = 0; i < length; ++i) {
@@ -117,6 +132,7 @@ class HW02 extends Cow {
                     }
                 }
             }
+
             { // draw
                 if ((blinkCounter++ % 14) < 7) drawLine(cursor, -0.5, cursor, 1.5, PURPLE, 5.0);
                 _draw_set_color(BLACK);

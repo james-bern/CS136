@@ -35,13 +35,13 @@ class Cow {
     // TODO imgui
 
 
-    static final int LEFT_ARROW_KEY = KeyEvent.VK_LEFT;
-    static final int RIGHT_ARROW_KEY = KeyEvent.VK_RIGHT;
-    static final int BACKSPACE = KeyEvent.VK_BACK_SPACE;
-    static final int SHIFT = KeyEvent.VK_SHIFT;
-    static final int ENTER = KeyEvent.VK_ENTER;
-    static final int CONTROL = KeyEvent.VK_CONTROL;
-    static final int TAB = KeyEvent.VK_TAB;
+    static final char LEFT_ARROW_KEY = KeyEvent.VK_LEFT;
+    static final char RIGHT_ARROW_KEY = KeyEvent.VK_RIGHT;
+    static final char BACKSPACE = KeyEvent.VK_BACK_SPACE;
+    static final char SHIFT = KeyEvent.VK_SHIFT;
+    static final char ENTER = KeyEvent.VK_ENTER;
+    static final char CONTROL = KeyEvent.VK_CONTROL;
+    static final char TAB = KeyEvent.VK_TAB;
 
     // TODO: MIN, MAX, ABS
 
@@ -64,10 +64,15 @@ class Cow {
     static float mouseX;
     static float mouseY;
 
-    static boolean keyPressed[]  = new boolean[256];
-    static boolean keyHeld[]     = new boolean[256];
-    static boolean keyReleased[] = new boolean[256];
-    static boolean keyToggled[]  = new boolean[256];
+    static boolean keyPressed (int i) { return _keyPressed[i];  }
+    static boolean keyHeld    (int i) { return _keyHeld[i];     }
+    static boolean keyReleased(int i) { return _keyReleased[i]; }
+    static boolean keyToggled (int i) { return _keyToggled[i];  }
+
+    static boolean _keyPressed[]  = new boolean[256];
+    static boolean _keyHeld[]     = new boolean[256];
+    static boolean _keyReleased[] = new boolean[256];
+    static boolean _keyToggled[]  = new boolean[256];
 
     static boolean _mouseHeldPrev;
     static boolean _keyHeldPrev[]     = new boolean[256];
@@ -296,11 +301,11 @@ class Cow {
             }
             { // keyboard
                 for (int i = 0; i < 256; ++i) {
-                    keyPressed[i]  = (!_keyHeldPrev[i] && keyHeld[i]);
-                    keyReleased[i] = (_keyHeldPrev[i] && !keyHeld[i]);
-                    if (keyReleased[i]) keyToggled[i] = !keyToggled[i];
+                    _keyPressed[i]  = (!_keyHeldPrev[i] && _keyHeld[i]);
+                    _keyReleased[i] = (_keyHeldPrev[i] && !_keyHeld[i]);
+                    if (_keyReleased[i]) _keyToggled[i] = !_keyToggled[i];
                 }
-                System.arraycopy(keyHeld, 0, _keyHeldPrev, 0, keyHeld.length); // NOTE: silly order of arguments
+                System.arraycopy(_keyHeld, 0, _keyHeldPrev, 0, _keyHeld.length); // NOTE: silly order of arguments
             }
         }
 
@@ -338,7 +343,7 @@ class Cow {
         }
 
 
-        // return !(keyHeld[CONTROL] && keyPressed['Q']);
+        // return !(_keyHeld[CONTROL] && _keyPressed['Q']);
         return true;
     }
 }
@@ -367,16 +372,10 @@ class DemoTicTacToe extends Cow {
         // configure
         canvasConfig(0, 0, 3, 3);
 
-        System.out.println("Press the K key to crash.");
-
         // loop
         while (beginFrame()) {
             int hot_row = (int) Math.floor(mouseY);
             int hot_column = (int) Math.floor(mouseX);
-
-            if (keyPressed['K']) {
-                int i = 1 / 0;
-            }
 
             if (!game_is_over()) { // update
                 if (mousePressed && (board[hot_row][hot_column] == PLAYER_NONE)) { // make move
@@ -482,7 +481,7 @@ class DemoKitchenSink extends Cow {
 
         // loop
         while (beginFrame()) {
-            if (!keyToggled['P']) { // update
+            if (!_keyToggled['P']) { // update
                 if (mousePressed) {
                     Particle particle = new Particle();
                     particle.x = mouseX;
@@ -501,10 +500,10 @@ class DemoKitchenSink extends Cow {
 
                 {
                     double delta = 0.1;
-                    if (keyHeld['W']) y += delta;
-                    if (keyHeld['A']) x -= delta;
-                    if (keyHeld['S']) y -= delta;
-                    if (keyHeld['D']) x += delta;
+                    if (_keyHeld['W']) y += delta;
+                    if (_keyHeld['A']) x -= delta;
+                    if (_keyHeld['S']) y -= delta;
+                    if (_keyHeld['D']) x += delta;
                 }
             }
 
@@ -645,9 +644,9 @@ class CowJPanelExtender extends JPanel {
                 char key = (char) _key;
 
                 if (event.getID() == KeyEvent.KEY_PRESSED) {
-                    Cow.keyHeld[key] = true;
+                    Cow._keyHeld[key] = true;
                 } else if (event.getID() == KeyEvent.KEY_RELEASED) {
-                    Cow.keyHeld[key] = false;
+                    Cow._keyHeld[key] = false;
                 }
 
                 return false;
