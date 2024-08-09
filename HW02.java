@@ -37,7 +37,7 @@
 // // A
 // TODO: make the cursor bar blink
 // TODO: mouse input click to move cursor (HINT: your code should contain a 0.5 or similar)
-// TODO: if the user presses enter and the buffer contains "password", replace the contents of the buffer with "accepted"
+// TODO: if the user presses enter and the buffer contains "Passw0rd", replace the contents of the buffer with "accepted"
 // // A+
 // TODO: mouse input click and drag to highlight (typing if highlighted does what Jim would expect)
 // TODO: mouse input double-click to select all characters
@@ -101,14 +101,25 @@ class HW02 extends Cow {
                 ++cursor;
             }
 
+            if (mousePressed) {
+                cursor = length;
+                for (int i = 0; i < length; ++i) {
+                    if (mouseX < i + 0.5) {
+                        cursor = i;
+                        blinkCounter = 0;
+                        break;
+                    }
+                }
+            }
+
             if (keyPressed(ENTER)) {
                 if (true
-                        && (buffer[0] == 'p')
+                        && (buffer[0] == 'P')
                         && (buffer[1] == 'a')
                         && (buffer[2] == 's')
                         && (buffer[3] == 's')
                         && (buffer[4] == 'w')
-                        && (buffer[5] == 'o')
+                        && (buffer[5] == '0')
                         && (buffer[6] == 'r')
                         && (buffer[7] == 'd')) {
                     buffer[0] = 'a';
@@ -120,17 +131,6 @@ class HW02 extends Cow {
                     buffer[6] = 'e';
                     buffer[7] = 'd';
                         }
-            }
-
-            if (mousePressed) {
-                cursor = length;
-                for (int i = 0; i < length; ++i) {
-                    if (mouseX < i + 0.5) {
-                        cursor = i;
-                        blinkCounter = 0;
-                        break;
-                    }
-                }
             }
 
             { // draw
