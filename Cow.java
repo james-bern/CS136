@@ -339,11 +339,62 @@ class Cow {
             _buffered_image_graphics.setColor(tmp);
         }
 
-
         // return !(_keyHeld[CONTROL] && _keyPressed['Q']);
         return true;
     }
 }
+
+
+class CowJPanelExtender extends JPanel {
+    private static final long serialVersionUID = 1L;
+
+    boolean _mousePressed;
+    boolean _mouseReleased;
+    boolean _keyPressed[]  = new boolean[256];
+    boolean _keyReleased[] = new boolean[256];
+
+    CowJPanelExtender() {
+        super();
+
+        this.addMouseListener( 
+                new MouseAdapter() {
+                    @Override public void mousePressed(MouseEvent e) { _mousePressed = true; }
+                    @Override public void mouseReleased(MouseEvent e) { _mouseReleased = true; }
+                    }
+                );
+
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(event -> {
+            synchronized (Cow.class) {
+                int _key = event.getKeyCode();
+                if (_key >= 256) return false;
+                char key = (char) _key;
+
+                if (event.getID() == KeyEvent.KEY_PRESSED) {
+                    _keyPressed[key] = true;
+                } else if (event.getID() == KeyEvent.KEY_RELEASED) {
+                    _keyReleased[key] = true;
+                }
+
+                return false;
+            }
+        });
+
+
+    }
+
+    @Override
+    public void paintComponent(Graphics paintComponentGraphics) { 
+        super.paintComponent(paintComponentGraphics);
+        while (Cow._buffered_image_graphics == null) {}
+        while (Cow._buffered_image == null) {}
+        paintComponentGraphics.drawImage(Cow._buffered_image, 0, 0, null);
+    }
+}
+
+
+
+
+
 
 class DemoTicTacToe extends Cow {
     final static int PLAYER_NONE = 0;
@@ -459,51 +510,3 @@ class DemoTicTacToe extends Cow {
         }
     }
 }
-
-
-class CowJPanelExtender extends JPanel {
-    private static final long serialVersionUID = 1L;
-
-    boolean _mousePressed;
-    boolean _mouseReleased;
-    boolean _keyPressed[]  = new boolean[256];
-    boolean _keyReleased[] = new boolean[256];
-
-    CowJPanelExtender() {
-        super();
-
-        this.addMouseListener( 
-                new MouseAdapter() {
-                    @Override public void mousePressed(MouseEvent e) { _mousePressed = true; }
-                    @Override public void mouseReleased(MouseEvent e) { _mouseReleased = true; }
-                    }
-                );
-
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(event -> {
-            synchronized (Cow.class) {
-                int _key = event.getKeyCode();
-                if (_key >= 256) return false;
-                char key = (char) _key;
-
-                if (event.getID() == KeyEvent.KEY_PRESSED) {
-                    _keyPressed[key] = true;
-                } else if (event.getID() == KeyEvent.KEY_RELEASED) {
-                    _keyReleased[key] = true;
-                }
-
-                return false;
-            }
-        });
-
-
-    }
-
-    @Override
-    public void paintComponent(Graphics paintComponentGraphics) { 
-        super.paintComponent(paintComponentGraphics);
-        while (Cow._buffered_image_graphics == null) {}
-        while (Cow._buffered_image == null) {}
-        paintComponentGraphics.drawImage(Cow._buffered_image, 0, 0, null);
-    }
-}
-
