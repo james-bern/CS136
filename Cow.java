@@ -1,3 +1,4 @@
+// TODO TODO TODO keyHeld (probably) needs the same treatment as mouseHeld
 // TODO: sound
 // TODO: helper functions (snippets) go in Cow :) (all homeworks can extend Cow)
 // TODO: a crash should cause the window to close
@@ -73,10 +74,6 @@ class Cow {
     static boolean _keyHeld[]     = new boolean[256];
     static boolean _keyReleased[] = new boolean[256];
     static boolean _keyToggled[]  = new boolean[256];
-
-    static boolean _mouseHeldPrev;
-    static boolean _keyHeldPrev[]     = new boolean[256];
-
 
     /////////////////////////////////////////////////////////////////////////
 
@@ -295,28 +292,28 @@ class Cow {
 
         { // *_pressed, *_released
             { // mousePressed, mouseReleased
-                mousePressed =  (!_mouseHeldPrev && mouseHeld);
-                mouseReleased = (_mouseHeldPrev && !mouseHeld);
-                _mouseHeldPrev = mouseHeld;
+                mousePressed = _jPanel_extender._mousePressed;
+                _jPanel_extender._mousePressed = false;
+                if (mousePressed) mouseHeld = true;
+
+                mouseReleased = _jPanel_extender._mouseReleased;
+                _jPanel_extender._mouseReleased = false;
+                if (mouseReleased) mouseHeld = false;
             }
             { // keyboard
                 for (int i = 0; i < 256; ++i) {
-                    _keyPressed[i]  = (!_keyHeldPrev[i] && _keyHeld[i]);
-                    _keyReleased[i] = (_keyHeldPrev[i] && !_keyHeld[i]);
-                    if (_keyReleased[i]) _keyToggled[i] = !_keyToggled[i];
+                    _keyPressed[i]  = _jPanel_extender._keyPressed[i];
+                    _keyReleased[i] = _jPanel_extender._keyReleased[i];
+                    _jPanel_extender._keyPressed[i] = false;
+                    _jPanel_extender._keyReleased[i] = false;
+                    if (_keyPressed[i]) {
+                        _keyHeld[i] = true;
+                        _keyToggled[i] = !_keyToggled[i];
+                    }
+                    if (_keyReleased[i]) _keyHeld[i] = false;
                 }
-                System.arraycopy(_keyHeld, 0, _keyHeldPrev, 0, _keyHeld.length); // NOTE: silly order of arguments
             }
         }
-
-        if (true
-                && _jPanel_extender._canvas_height_Pixel_dirty
-                && ((System.currentTimeMillis() - _jPanel_extender._canvas_height_Pixel_timestamp) > 67)
-           ) {
-            _jPanel_extender._canvas_height_Pixel_dirty = false;
-            _canvas_height_Pixel = _jPanel_extender._canvas_height_Pixel;
-            _canvasReattach();
-           }
 
         _jPanel_extender.repaint();
 
@@ -463,179 +460,24 @@ class DemoTicTacToe extends Cow {
     }
 }
 
-class DemoKitchenSink extends Cow {
-    static class Particle {
-        double x;
-        double y;
-        Color color;
-    };
-
-    public static void main(String[] arguments) {
-        // configure
-        canvasConfig(-5, -5, 5, 5);
-
-        // state
-        ArrayList<Particle> particles = new ArrayList<>();
-        double x = 0.0;
-        double y = 0.0;
-
-        // loop
-        while (beginFrame()) {
-            if (!_keyToggled['P']) { // update
-                if (mousePressed) {
-                    Particle particle = new Particle();
-                    particle.x = mouseX;
-                    particle.y = mouseY;
-                    particle.color = Color.orange;
-                    particles.add(particle);
-                }
-
-                if (mouseReleased) {
-                    Particle particle = new Particle();
-                    particle.x = mouseX;
-                    particle.y = mouseY;
-                    particle.color = Color.cyan;
-                    particles.add(particle);
-                }
-
-                {
-                    double delta = 0.1;
-                    if (_keyHeld['W']) y += delta;
-                    if (_keyHeld['A']) x -= delta;
-                    if (_keyHeld['S']) y -= delta;
-                    if (_keyHeld['D']) x += delta;
-                }
-            }
-
-            { // draw
-
-                /*
-                   outline_rectangle(-5, -5, 5, 5, mouseHeld ? GREEN : RED, 8.0);
-                   draw_line(mouseX, mouseY, 3, 3, MAGENTA, 4.0);
-                   fill_circle(x, y, 1, color_rainbow_swirl(time));
-                   outline_circle(x, y, 1, BLACK, 3.0);
-                   for (int i = 0; i < particles.size(); ++i) {
-                   fill_circle(particles.get(i).x, particles.get(i).y, 0.1, particles.get(i).color);
-                   }
-                   */
-
-                //////////////////////////////////
-
-                /*
-                   outline_rectangle(-5, -5, 5, 5, mouseHeld ? Color.green : Color.red, 8.0);
-                   draw_line(mouseX, mouseY, 3, 3, Color.magenta, 4.0);
-                   fill_circle(x, y, 1, color_rainbow_swirl(time));
-                   outline_circle(x, y, 1, Color.black, 3.0);
-                   for (int i = 0; i < particles.size(); ++i) {
-                   fill_circle(particles.get(i).x, particles.get(i).y, 0.1, particles.get(i).color);
-                   }
-                   */
-
-                //////////////////////////////////
-
-                /*
-                   _draw_set_color(mouseHeld ? Color.green : Color.red);
-                   _draw_set_line_thickness(8.0);
-                   outline_rectangle(-5, -5, 5, 5);
-
-                   _draw_set_color(Color.magenta);
-                   _draw_set_line_thickness(4.0);
-                   draw_line(mouseX, mouseY, 3, 3);
-
-                   _draw_set_color(color_rainbow_swirl(time), 0.5);
-                   fill_circle(x, y, 1);
-                   _draw_set_color(0.0, 0.0, 0.0);
-                   _draw_set_line_thickness(3.0);
-                   outline_circle(x, y, 1);
-
-                   for (int i = 0; i < particles.size(); ++i) {
-                   _draw_set_color(particles.get(i).color);
-                   fill_circle(particles.get(i).x, particles.get(i).y, 0.1);
-                   }
-                   */
-
-                //////////////////////////////////
-
-                /*
-                   draw_begin(RECTANGLES);
-                   draw_set_polygon_mode(OUTLINE);
-                   _draw_set_color(mouseHeld ? Color.green : Color.red);
-                   _draw_set_line_thickness(8.0);
-                   draw_vertex(-5, -5);
-                   draw_vertex( 5,  5);
-                   draw_end();
-
-                   draw_begin(LINES);
-                   draw_set_polygon_mode(FILL);
-                   _draw_set_color(Color.magenta);
-                   _draw_set_line_thickness(4.0);
-                   draw_vertex(mouseX, mouseY);
-                   draw_vertex(3, 3);
-                   draw_end();
-
-                   draw_begin(CIRCLES);
-                   draw_set_polygon_mode(FILL);
-                   _draw_set_color(color_rainbow_swirl(time), 0.5);
-                   draw_set_circle_diameter(2.0);
-                   draw_vertex(x, y);
-                   draw_set_polygon_mode(OUTLINE);
-                   _draw_set_color(Color.black);
-                   _draw_set_line_thickness(3.0);
-                   draw_vertex(x, y);
-                   draw_end();
-
-                   draw_begin(CIRCLES);
-                   draw_set_polygon_mode(FILL);
-                   draw_set_circle_diameter(1.0);
-                   for (int i = 0; i < particles.size(); ++i) {
-                   _draw_set_color(particles.get(i).color);
-                   draw_vertex(particles.get(i).x, particles.get(i).y);
-                   }
-                   draw_end();
-                   */
-
-                ///////////////////////////////////
-
-                _draw_set_color(Color.black);
-                // draw_string("Hello", x, y, 24, true);
-            }
-        }
-    }
-}
-
 
 class CowJPanelExtender extends JPanel {
     private static final long serialVersionUID = 1L;
 
-    boolean _canvas_height_Pixel_dirty;
-    long _canvas_height_Pixel_timestamp;
-    int _canvas_height_Pixel;
-
+    boolean _mousePressed;
+    boolean _mouseReleased;
+    boolean _keyPressed[]  = new boolean[256];
+    boolean _keyReleased[] = new boolean[256];
 
     CowJPanelExtender() {
         super();
 
         this.addMouseListener( 
                 new MouseAdapter() {
-                    @Override public void mousePressed(MouseEvent e) { Cow.mouseHeld = true; }
-                    @Override public void mouseReleased(MouseEvent e) { Cow.mouseHeld = false; }
+                    @Override public void mousePressed(MouseEvent e) { _mousePressed = true; }
+                    @Override public void mouseReleased(MouseEvent e) { _mouseReleased = true; }
                     }
                 );
-
-        /*
-           this.addComponentListener(new ComponentAdapter() {
-           public void componentResized(ComponentEvent componentEvent) {
-           _canvas_height_Pixel_dirty = true;
-           _canvas_height_Pixel_timestamp = System.currentTimeMillis();
-           int optionA = componentEvent.getComponent().getSize().height;
-           int optionB = (int) (componentEvent.getComponent().getSize().width / Cow._canvas_get_aspect_ratio());
-        // int absDeltaA = Math.abs(optionA - _canvas_height_Pixel);
-        // int absDeltaB = Math.abs(optionB - _canvas_height_Pixel);
-        // _canvas_height_Pixel = (absDeltaA < absDeltaB) ? optionA : optionB;
-        _canvas_height_Pixel = optionB;
-           }
-           });
-           */
 
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(event -> {
             synchronized (Cow.class) {
@@ -644,9 +486,9 @@ class CowJPanelExtender extends JPanel {
                 char key = (char) _key;
 
                 if (event.getID() == KeyEvent.KEY_PRESSED) {
-                    Cow._keyHeld[key] = true;
+                    _keyPressed[key] = true;
                 } else if (event.getID() == KeyEvent.KEY_RELEASED) {
-                    Cow._keyHeld[key] = false;
+                    _keyReleased[key] = true;
                 }
 
                 return false;
