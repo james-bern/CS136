@@ -35,16 +35,12 @@ class Cow {
     // TODO mouse and key stuff
     // TODO imgui
 
-
-    static final char LEFT_ARROW_KEY = KeyEvent.VK_LEFT;
-    static final char RIGHT_ARROW_KEY = KeyEvent.VK_RIGHT;
-    static final char BACKSPACE = KeyEvent.VK_BACK_SPACE;
-    static final char SHIFT = KeyEvent.VK_SHIFT;
-    static final char ENTER = KeyEvent.VK_ENTER;
-    static final char CONTROL = KeyEvent.VK_CONTROL;
-    static final char TAB = KeyEvent.VK_TAB;
-
-    // TODO: MIN, MAX, ABS
+    static int MIN(int a, int b) { return Math.min(a, b); }
+    static float MIN(double a, double b) { return (float) Math.min(a, b); }
+    static int MAX(int a, int b) { return Math.max(a, b); }
+    static float MAX(double a, double b) { return (float) Math.max(a, b); }
+    static int ABS(int a) { return Math.abs(a); }
+    static float ABS(double a) { return (float) Math.abs(a); }
 
     static Color RED    = Color.RED;
     static Color ORANGE = Color.ORANGE;
@@ -58,6 +54,14 @@ class Cow {
     static Color WHITE  = Color.WHITE;
     static Color GRAY   = Color.GRAY;
     static Color BLACK  = Color.BLACK;
+
+    static final char LEFT_ARROW_KEY = KeyEvent.VK_LEFT;
+    static final char RIGHT_ARROW_KEY = KeyEvent.VK_RIGHT;
+    static final char BACKSPACE = KeyEvent.VK_BACK_SPACE;
+    static final char SHIFT = KeyEvent.VK_SHIFT;
+    static final char ENTER = KeyEvent.VK_ENTER;
+    static final char CONTROL = KeyEvent.VK_CONTROL;
+    static final char TAB = KeyEvent.VK_TAB;
 
     static boolean mousePressed;
     static boolean mouseHeld;
