@@ -43,6 +43,7 @@
 // TODO: mouse input click and drag to highlight (typing if highlighted does what Jim would expect)
 // TODO: hold control and press left / right arrow keys to ...
 // TODO: mouse input double-click to select all characters
+// TODO: the rest of the fleury spec
 // // A++
 // TODO: save to .txt
 
@@ -104,18 +105,20 @@ class HW02S extends Cow {
             }
 
             if (leftArrowKeyValid && keyPressed(LEFT_ARROW_KEY)) {
-                if (select != cursor) {
-                    cursor = Math.min(select, cursor);
-                } else {
+                if (cursor == select) {
                     select = --cursor;
+                } else {
+                    cursor = Math.min(select, cursor);
+                    select = cursor;
                 }
             }
 
             if (rightArrowKeyValid && keyPressed(RIGHT_ARROW_KEY)) {
-                if (select != cursor) {
-                    cursor = Math.max(select, cursor);
-                } else {
+                if (cursor == select) {
                     select = ++cursor;
+                } else {
+                    cursor = Math.max(select, cursor);
+                    select = cursor;
                 }
             }
 
@@ -162,10 +165,10 @@ class HW02S extends Cow {
 
 
             { // draw
-                if (select != cursor) {
-                    drawRectangle(select, -0.5, cursor, 1.5, CYAN);
-                } else {
+                if (cursor == select) {
                     if ((blinkCounter++ % 14) < 7) drawLine(cursor, -0.5, cursor, 1.5, BLUE, 5.0);
+                } else {
+                    drawRectangle(select, -0.5, cursor, 1.5, CYAN);
                 }
                 _draw_set_color(BLACK);
                 _set_monospaced_font_character_width(CHARACTER_WIDTH);
