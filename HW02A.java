@@ -4,8 +4,9 @@ class HW02A extends Cow {
         final char[] buffer = new char[8];
         int length = 0;
         int cursor = 0;
-        final double CHARACTER_WIDTH = 1.0;
-        canvasConfig(0.0, -CHARACTER_WIDTH, buffer.length, 2 * CHARACTER_WIDTH, 512);
+
+        // NOTE: each character is 1 unit wide
+        canvasConfig(0.0, -1.0, buffer.length, 2.0, 512);
 
         int blinkCounter = 0;
 
@@ -90,7 +91,7 @@ class HW02A extends Cow {
             { // draw
                 if ((blinkCounter++ % 14) < 7) drawLine(cursor, -0.5, cursor, 1.5, PURPLE, 5.0);
                 _draw_set_color(BLACK);
-                _set_monospaced_font_character_width(CHARACTER_WIDTH);
+                _set_monospaced_font_character_width(1.0);
                 _buffered_image_graphics.drawChars(buffer, 0, length, _xPIXELfromWORLD(0.0), _yPIXELfromWORLD(0.0));
             }
         }
