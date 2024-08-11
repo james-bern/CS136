@@ -41,6 +41,11 @@ class Cow {
     static float MAX(double a, double b) { return (float) Math.max(a, b); }
     static int ABS(int a) { return Math.abs(a); }
     static float ABS(double a) { return (float) Math.abs(a); }
+    static int MODULOU(int a, int b) { return Math.floorMod(a, b); }
+
+    static void PRINT(String a) { System.out.println(a); }
+    static void PRINT(int a) { System.out.println("" + a); }
+    static void PRINT(double a) { System.out.println("" + a); }
 
     static Color RED    = Color.RED;
     static Color ORANGE = Color.ORANGE;
@@ -58,9 +63,12 @@ class Cow {
     static final char LEFT_ARROW_KEY = KeyEvent.VK_LEFT;
     static final char RIGHT_ARROW_KEY = KeyEvent.VK_RIGHT;
     static final char BACKSPACE = KeyEvent.VK_BACK_SPACE;
+    static final char DELETE = KeyEvent.VK_DELETE;
     static final char SHIFT = KeyEvent.VK_SHIFT;
     static final char ENTER = KeyEvent.VK_ENTER;
     static final char CONTROL = KeyEvent.VK_CONTROL;
+    static final char COMMAND = KeyEvent.VK_META;
+    static final char ALT = KeyEvent.VK_ALT;
     static final char TAB = KeyEvent.VK_TAB;
 
     static boolean mousePressed;
@@ -281,7 +289,7 @@ class Cow {
             _jPanel_extender = new CowJPanelExtender();
             _jPanel_extender.setPreferredSize(new Dimension(_canvas_get_width_Pixel(), _canvas_height_Pixel));
 
-            _jFrame = new JFrame("cs136 2024");
+            _jFrame = new JFrame("cs136 :D");
             _jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             _jFrame.setLocation(0, 0);
             _jFrame.getContentPane().add(_jPanel_extender, BorderLayout.CENTER);

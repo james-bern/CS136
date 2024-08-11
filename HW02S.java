@@ -22,7 +22,8 @@ class HW02S extends Cow {
                     newCharacter = 0;
                     for (char c = 'A'; c <= 'Z'; ++c) {
                         if (keyPressed(c)) {
-                            if (!keyHeld(SHIFT)) {
+                            if (keyHeld(COMMAND)) {
+                            } else if (!keyHeld(SHIFT)) {
                                 newCharacter = (char)('a' + (c - 'A'));
                             } else {
                                 newCharacter = c;
