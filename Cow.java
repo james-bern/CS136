@@ -94,6 +94,8 @@ class Cow {
     // all arguments in World coordinates unless otherwise specified (and then only in advanced API)
     // - hide advanced API with Java-style default args -- foo(a) { foo(a, defaults ...); }
 
+    static Color _canvas_color;
+
     static float _canvas_left_World   = 0;
     static float _canvas_right_World  = 256;
     static float _canvas_bottom_World = 0;
@@ -112,13 +114,17 @@ class Cow {
     static float _canvas_get_x_World_from_x_Pixel(int x_Pixel) { return (float) ((x_Pixel / _canvas_get_Pixel_per_World_ratio()) + _canvas_left_World); }
     static float _canvas_get_y_World_from_y_Pixel(int y_Pixel) { return (float) (((_canvas_height_Pixel - y_Pixel) / _canvas_get_Pixel_per_World_ratio()) + _canvas_bottom_World); }
 
-    static int CANVAS_INIT_DEFAULT_MAX_DIMENSION_IN_PIXELS = 512;
-    static void canvasConfig(double left, double bottom, double right, double top) { canvasConfig(left, bottom, right, top, CANVAS_INIT_DEFAULT_MAX_DIMENSION_IN_PIXELS); }
-    static void canvasConfig(double left, double bottom, double right, double top, int maxDimensionInPixels) {
+    static Color CANVAS_CONFIG_DEFAULT_COLOR = WHITE;
+    static int CANVAS_CONFIG_DEFAULT_MAX_DIMENSION_IN_PIXELS = 512;
+    static void canvasConfig(double left, double bottom, double right, double top) { canvasConfig(left, bottom, right, top, CANVAS_CONFIG_DEFAULT_COLOR, CANVAS_CONFIG_DEFAULT_MAX_DIMENSION_IN_PIXELS); }
+    static void canvasConfig(double left, double bottom, double right, double top, Color color) { canvasConfig(left, bottom, right, top, color, CANVAS_CONFIG_DEFAULT_MAX_DIMENSION_IN_PIXELS); }
+    static void canvasConfig(double left, double bottom, double right, double top, Color color, int maxDimensionInPixels) {
         _canvas_left_World   = (float) left;
         _canvas_right_World  = (float) right;
         _canvas_bottom_World = (float) bottom;
         _canvas_top_World    = (float) top;
+
+        _canvas_color = color;
 
         float max_dim_World = Math.max(_canvas_get_width_World(), _canvas_get_height_World());
         float Pixel_per_World = maxDimensionInPixels / max_dim_World;
@@ -346,7 +352,7 @@ class Cow {
 
         { // canvas
             Color tmp = _buffered_image_graphics.getColor();
-            _buffered_image_graphics.setColor(Color.white);
+            _buffered_image_graphics.setColor(_canvas_color);
             _buffered_image_graphics.fillRect(0, 0, _canvas_get_width_Pixel(), _canvas_height_Pixel);
             _buffered_image_graphics.setColor(tmp);
         }

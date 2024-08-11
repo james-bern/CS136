@@ -6,7 +6,7 @@ class HW02A extends Cow {
         int cursor = 0;
 
         // NOTE: each character is 1 unit wide
-        canvasConfig(0.0, -1.0, buffer.length, 2.0, 512);
+        canvasConfig(0.0, -1.0, buffer.length, 2.0, WHITE, 512);
 
         int blinkCounter = 0;
 
