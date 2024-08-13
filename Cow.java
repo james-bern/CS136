@@ -18,7 +18,6 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
-import java.util.*;
 import javax.swing.*;
 import java.lang.Math;
 import java.io.*;
@@ -46,6 +45,27 @@ class Cow {
     static void PRINT(String a) { System.out.println(a); }
     static void PRINT(int a) { System.out.println("" + a); }
     static void PRINT(double a) { System.out.println("" + a); }
+    static void PRINT<ElementType E>(ElementType array) {
+        System.out.print("[ ");
+        for (int i = 0; i < array.length; ++i) {
+            System.out.print(array[i]);
+            if (i != array.length - 1) System.out.print(", ");
+        }
+        System.out.println(" ]");
+    }
+    
+    static void ASSERT(boolean condition) {
+    	if (!condition) {
+    		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+    		StackTraceElement parent = stackTrace[2];
+    		int lineNumber = parent.getLineNumber();
+    		String methodName = parent.getMethodName();
+    		String message = "ASSERT failed on Line " + lineNumber + " of " + methodName + "(...)";
+    		PRINT(message);
+    		int assertFailedCrashTheProgram = 0 / 0;
+    		PRINT(assertFailedCrashTheProgram);
+    	}
+    }
 
     static Color RED    = Color.RED;
     static Color ORANGE = Color.ORANGE;
