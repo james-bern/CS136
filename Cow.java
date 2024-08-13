@@ -47,6 +47,7 @@ class Cow {
     static int ABS(int a) { return Math.abs(a); }
     static float ABS(double a) { return (float) Math.abs(a); }
     static int MODULOU(int a, int b) { return Math.floorMod(a, b); }
+    static float SQRT(double a) { return (float) Math.sqrt(a); }
 
     static void PRINT(String a) { System.out.println(a); }
     static void PRINT(int a) { System.out.println("" + a); }
