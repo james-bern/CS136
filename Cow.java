@@ -25,7 +25,7 @@ import java.io.*;
 
 class Cow {
     public static void main(String[] arguments) {
-		PRINT(0);
+    	PRINT('\0');
 		PRINT('0');
 		PRINT(0.0);
 		PRINT(false);
@@ -51,7 +51,13 @@ class Cow {
 
     static void PRINT(String a) { System.out.println(a); }
     static void PRINT(int a) { System.out.println("" + a); }
-    static void PRINT(char a) { System.out.println("'" + a + "'"); }
+    static void PRINT(char a) {
+    	if (a == '\0') {
+    	    System.out.println("'\\0'");
+    	} else {
+    		System.out.println("'" + a + "'");
+    	}
+    }
     static void PRINT(double a) { System.out.println("" + a); }
     static void PRINT(boolean a) { System.out.println("" + a); }
     static <ElementType> void PRINT(ElementType e) {
