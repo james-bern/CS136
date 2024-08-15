@@ -15,6 +15,7 @@
 // // NOTE: limitations
 // NOTE: drops very fast press and release
 
+import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
@@ -111,9 +112,7 @@ class Cow {
     		int lineNumber = parent.getLineNumber();
     		String methodName = parent.getMethodName();
     		String message = "ASSERT failed on Line " + lineNumber + " of " + methodName + "(...)";
-    		PRINT(message);
-    		int assertFailedCrashTheProgram = 0 / 0;
-    		PRINT(assertFailedCrashTheProgram);
+            throw new RuntimeException(message);
     	}
     }
 
@@ -164,7 +163,7 @@ class Cow {
     // all arguments in World coordinates unless otherwise specified (and then only in advanced API)
     // - hide advanced API with Java-style default args -- foo(a) { foo(a, defaults ...); }
 
-    static Color _canvas_color;
+    static Color _canvas_color = WHITE;
 
     static float _canvas_left_World   = -256;
     static float _canvas_right_World  = 256;
