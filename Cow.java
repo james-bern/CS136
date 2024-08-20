@@ -14,26 +14,77 @@
 
 // // NOTE: limitations
 // NOTE: drops very fast press and release
+// TODO: PRINT 2d arrays
+
+
+// ! TODO: use our own Color Class
+
 
 import java.util.*;
-import java.awt.*;
+// doing these so i can avoid importing Color,
+// define my own, and have students use it
+// in a Cow app without an import
+import java.awt.BasicStroke;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.KeyboardFocusManager;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.*;
 import java.awt.image.*;
 import javax.swing.*;
 import java.lang.Math;
 import java.io.*;
 
+class ASSERT_Exception extends RuntimeException {
+    public ASSERT_Exception(String message) { super(message); }
+    private static final long serialVersionUID = 1L;
+}
 
 class Cow {
+
+    static class Color {
+        float r;
+        float g;
+        float b;
+
+        Color(double r, double g, double b) {
+            this.r = (float) r;
+            this.g = (float) g;
+            this.b = (float) b;
+        }
+    }
+
+    static void ASSERT(boolean condition) {
+        if (!condition) {
+            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+            StackTraceElement parent = stackTrace[2];
+            int lineNumber = parent.getLineNumber();
+            String methodName = parent.getMethodName();
+            String message = "ASSERT failed on Line " + lineNumber + " of " + methodName + "(...)";
+            PRINT(message);
+            throw new ASSERT_Exception(message);
+        }
+    }	
+
     public static void main(String[] arguments) {
-    	PRINT('\0');
-		PRINT('0');
-		PRINT(0.0);
-		PRINT(false);
-		PRINT(new int[] { 0, 1, 2 });
-		PRINT(new char[] { 'a', 'b', 'c' });
-		PRINT(new double[] { 0.0, 1.0, 2.0 });
-		PRINT(new boolean[] { false, true });
+        PRINT((char)(0));
+        PRINT(0);
+        PRINT(0.0);
+        PRINT(false);
+        PRINT('0');
+        PRINT(new int[] { 0, 1, 2 });
+        PRINT(new char[] { 'a', 'b', 'c' });
+        PRINT(new double[] { 0.0, 1.0, 2.0 });
+        PRINT(new boolean[] { false, true });
+        Object object = null;
+        PRINT(object);
+        PRINT(ROUND(3.1));
+        PRINT(ROUND(-2.9));
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -49,20 +100,23 @@ class Cow {
     static float ABS(double a) { return (float) Math.abs(a); }
     static int MODULOU(int a, int b) { return Math.floorMod(a, b); }
     static float SQRT(double a) { return (float) Math.sqrt(a); }
+    static boolean ARE_EQUAL(double a, double b) { return ABS(a - b) < 0.0001; }
+    static int ROUND(double a) { return (int) Math.round(a); }
 
+    static void PRINT() { System.out.println(); }
     static void PRINT(String a) { System.out.println(a); }
     static void PRINT(int a) { System.out.println("" + a); }
     static void PRINT(char a) {
-    	if (a == '\0') {
-    	    System.out.println("'\\0'");
-    	} else {
-    		System.out.println("'" + a + "'");
-    	}
+        if (a == '\0') {
+            System.out.println("'\\0'");
+        } else {
+            System.out.println("'" + a + "'");
+        }
     }
     static void PRINT(double a) { System.out.println("" + a); }
     static void PRINT(boolean a) { System.out.println("" + a); }
     static <ElementType> void PRINT(ElementType e) {
-        System.out.println(e.toString());
+        System.out.println("" + e);
     }
     static void PRINT(int[] array) {
         System.out.print("[ ");
@@ -104,33 +158,24 @@ class Cow {
         }
         System.out.println(" ]");
     }
-    
-    static void ASSERT(boolean condition) {
-    	if (!condition) {
-    		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-    		StackTraceElement parent = stackTrace[2];
-    		int lineNumber = parent.getLineNumber();
-    		String methodName = parent.getMethodName();
-    		String message = "ASSERT failed on Line " + lineNumber + " of " + methodName + "(...)";
-            throw new RuntimeException(message);
-    	}
-    }
 
-    static Color RED    = Color.RED;
-    static Color ORANGE = Color.ORANGE;
-    static Color YELLOW = Color.YELLOW;
-    static Color GREEN  = Color.GREEN;
-    static Color BLUE   = Color.BLUE;
-    static Color PINK   = Color.PINK;
-    static Color CYAN   = Color.CYAN;
-    static Color PURPLE = new Color(170 / 255.0f,   1 / 255.0f, 255 / 255.0f);
-    static Color BROWN  = new Color(160 / 255.0f,  82 / 255.0f,  45 / 255.0f);
-    static Color WHITE  = Color.WHITE;
-    static Color GRAY   = Color.GRAY;
-    static Color BLACK  = Color.BLACK;
 
-    static final char LEFT_ARROW_KEY = KeyEvent.VK_LEFT;
-    static final char RIGHT_ARROW_KEY = KeyEvent.VK_RIGHT;
+    static Color BLACK   = new Color(  0 / 255.0,   0 / 255.0,   0 / 255.0);
+    static Color BLUE    = new Color(  4 / 255.0,  51 / 255.0, 255 / 255.0);
+    static Color BROWN   = new Color(170 / 255.0, 121 / 255.0,  66 / 255.0);
+    static Color CYAN    = new Color(  0 / 255.0, 253 / 255.0, 255 / 255.0);
+    static Color GREEN   = new Color(  0 / 255.0, 249 / 255.0,   0 / 255.0);
+    static Color MAGENTA = new Color(255 / 255.0,  64 / 255.0, 255 / 255.0);
+    static Color ORANGE  = new Color(255 / 255.0, 147 / 255.0,   0 / 255.0);
+    static Color PURPLE  = new Color(148 / 255.0,  33 / 255.0, 146 / 255.0);
+    static Color RED     = new Color(255 / 255.0,  38 / 255.0,   0 / 255.0);
+    static Color YELLOW  = new Color(255 / 255.0, 251 / 255.0,   0 / 255.0);
+    static Color WHITE   = new Color(255 / 255.0, 255 / 255.0, 255 / 255.0);
+
+    static final char LEFT_ARROW = KeyEvent.VK_LEFT;
+    static final char RIGHT_ARROW = KeyEvent.VK_RIGHT;
+    static final char UP_ARROW = KeyEvent.VK_UP;
+    static final char DOWN_ARROW = KeyEvent.VK_DOWN;
     static final char BACKSPACE = KeyEvent.VK_BACK_SPACE;
     static final char DELETE = KeyEvent.VK_DELETE;
     static final char SHIFT = KeyEvent.VK_SHIFT;
@@ -169,7 +214,7 @@ class Cow {
     static float _canvas_right_World  = 256;
     static float _canvas_bottom_World = -256;
     static float _canvas_top_World    = 256;
-    static int _canvas_height_Pixel = 512;
+    static int _canvas_height_Pixel   = 512;
 
     static float _canvas_get_aspect_ratio() { return _canvas_get_width_World() / _canvas_get_height_World(); }
     static int _canvas_get_width_Pixel() { return (int) (_canvas_get_aspect_ratio() * _canvas_height_Pixel); }
@@ -182,6 +227,8 @@ class Cow {
     static int _LPIXELfromWORLD(double length_world) { return (int) (_canvas_get_Pixel_per_World_ratio() * length_world); }
     static float _canvas_get_x_World_from_x_Pixel(int x_Pixel) { return (float) ((x_Pixel / _canvas_get_Pixel_per_World_ratio()) + _canvas_left_World); }
     static float _canvas_get_y_World_from_y_Pixel(int y_Pixel) { return (float) (((_canvas_height_Pixel - y_Pixel) / _canvas_get_Pixel_per_World_ratio()) + _canvas_bottom_World); }
+
+
 
     static Color CANVAS_CONFIG_DEFAULT_COLOR = WHITE;
     static int CANVAS_CONFIG_DEFAULT_MAX_DIMENSION_IN_PIXELS = 512;
@@ -223,6 +270,11 @@ class Cow {
         _draw_rectangle(x1, y1, x2, y2, false);
     }
 
+    static void drawCircle(double x, double y, double radius, Color color) {
+        _draw_set_color(color);
+        _draw_circle(x, y, radius, false);
+    }
+
     // // TODO: Utility API
 
     static void _set_monospaced_font_character_width(double character_width) { // setFont with World character_width
@@ -251,16 +303,6 @@ class Cow {
         ((Graphics2D) _buffered_image_graphics).setStroke(new BasicStroke((float) w));
     }
 
-    static void _draw_set_color(Color color, double a) {
-        assert a >= 0;
-        assert a <= 1;
-        _buffered_image_graphics.setColor(new Color(color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f, (float) a));
-    }
-
-    static void _draw_set_color(Color color) {
-        _buffered_image_graphics.setColor(color);
-    }
-
     static void _draw_set_color(double r, double g, double b, double a) {
         assert r >= 0;
         assert r <= 1;
@@ -270,19 +312,27 @@ class Cow {
         assert b <= 1;
         assert a >= 0;
         assert a <= 1;
-        _draw_set_color(new Color((float) r, (float) g, (float) b, (float) a));
+        _buffered_image_graphics.setColor(new java.awt.Color((float) r, (float) g, (float) b, (float) a));
     }
 
     static void _draw_set_color(double r, double g, double b) {
         _draw_set_color(r, g, b, 1.0);
     }
 
-    static Color color_rainbow_swirl(double time) {
+    static void _draw_set_color(Color color, double a) {
+        _draw_set_color(color.r, color.g, color.b, a);
+    }
+
+    static void _draw_set_color(Color color) {
+        _draw_set_color(color, 1.0);
+    }
+
+    static Color colorRainbowSwirl(double time) {
         double TAU   = 6.283;
         double red   = 0.5f + 0.5f * (float) Math.cos(TAU * ( 0.000 - time));
         double green = 0.5f + 0.5f * (float) Math.cos(TAU * ( 0.333 - time));
         double blue  = 0.5f + 0.5f * (float) Math.cos(TAU * (-0.333 - time));
-        return new Color((float) red, (float) green, (float) blue);
+        return new Color(red, green, blue);
     }
 
 
@@ -420,8 +470,8 @@ class Cow {
 
 
         { // canvas
-            Color tmp = _buffered_image_graphics.getColor();
-            _buffered_image_graphics.setColor(_canvas_color);
+            java.awt.Color tmp = _buffered_image_graphics.getColor();
+            _draw_set_color(_canvas_color);
             _buffered_image_graphics.fillRect(0, 0, _canvas_get_width_Pixel(), _canvas_height_Pixel);
             _buffered_image_graphics.setColor(tmp);
         }
@@ -431,7 +481,7 @@ class Cow {
     }
 
 
-    
+
     // HW-Specific Functions
     static void HW02_drawText(char[] buffer, int length, Color color) {
         _draw_set_color(color);
