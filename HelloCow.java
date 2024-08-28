@@ -1,4 +1,4 @@
-class Hello136 extends Cow {
+class HelloCow extends Cow {
     final static int PLAYER_NONE = 0;
     final static int PLAYER_X    = 1;
     final static int PLAYER_O    = 2;
