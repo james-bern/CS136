@@ -1,1 +1,2 @@
+cd -- "$(dirname "$BASH_SOURCE")"
 git pull --rebase --autostash
