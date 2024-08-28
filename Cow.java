@@ -16,7 +16,6 @@
 // NOTE: drops very fast press and release
 // TODO: PRINT 2d arrays
 
-
 // ! TODO: use our own Color Class
 
 // doing these so i can avoid importing Color,
