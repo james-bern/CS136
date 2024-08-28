@@ -20,7 +20,6 @@
 // ! TODO: use our own Color Class
 
 
-import java.util.*;
 // doing these so i can avoid importing Color,
 // define my own, and have students use it
 // in a Cow app without an import
