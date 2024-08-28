@@ -171,6 +171,13 @@ class Cow {
     static Color RED     = new Color(255 / 255.0,  38 / 255.0,   0 / 255.0);
     static Color YELLOW  = new Color(255 / 255.0, 251 / 255.0,   0 / 255.0);
     static Color WHITE   = new Color(255 / 255.0, 255 / 255.0, 255 / 255.0);
+    static Color colorRainbowSwirl(double time) {
+        double TAU   = 6.283;
+        double red   = 0.5f + 0.5f * (float) Math.cos(TAU * ( 0.000 - time));
+        double green = 0.5f + 0.5f * (float) Math.cos(TAU * ( 0.333 - time));
+        double blue  = 0.5f + 0.5f * (float) Math.cos(TAU * (-0.333 - time));
+        return new Color(red, green, blue);
+    }
 
     static final char LEFT_ARROW = KeyEvent.VK_LEFT;
     static final char RIGHT_ARROW = KeyEvent.VK_RIGHT;
@@ -229,7 +236,12 @@ class Cow {
     static float _canvas_get_y_World_from_y_Pixel(int y_Pixel) { return (float) (((_canvas_height_Pixel - y_Pixel) / _canvas_get_Pixel_per_World_ratio()) + _canvas_bottom_World); }
 
 
+    static float canvasGetTop() { return _canvas_top_World; }
+    static float canvasGetBottom() { return _canvas_bottom_World; }
+    static float canvasGetLeft() { return _canvas_left_World; }
+    static float canvasGetRight() { return _canvas_right_World; }
 
+    
     static Color CANVAS_CONFIG_DEFAULT_COLOR = WHITE;
     static int CANVAS_CONFIG_DEFAULT_MAX_DIMENSION_IN_PIXELS = 512;
     static void canvasConfig(double left, double bottom, double right, double top) { canvasConfig(left, bottom, right, top, CANVAS_CONFIG_DEFAULT_COLOR, CANVAS_CONFIG_DEFAULT_MAX_DIMENSION_IN_PIXELS); }
@@ -248,6 +260,7 @@ class Cow {
 
         if (_cow_initialized) _canvasReattach();
     }
+    static void windowSetTitle(String title) { _jFrame.setTitle(title); }
     static void _canvasReattach() {
         _buffered_image = new BufferedImage(_canvas_get_width_Pixel(), _canvas_height_Pixel, BufferedImage.TYPE_INT_ARGB);
         _buffered_image_graphics = _buffered_image.createGraphics();
@@ -327,13 +340,6 @@ class Cow {
         _draw_set_color(color, 1.0);
     }
 
-    static Color colorRainbowSwirl(double time) {
-        double TAU   = 6.283;
-        double red   = 0.5f + 0.5f * (float) Math.cos(TAU * ( 0.000 - time));
-        double green = 0.5f + 0.5f * (float) Math.cos(TAU * ( 0.333 - time));
-        double blue  = 0.5f + 0.5f * (float) Math.cos(TAU * (-0.333 - time));
-        return new Color(red, green, blue);
-    }
 
 
 
@@ -414,7 +420,7 @@ class Cow {
             _jPanel_extender = new CowJPanelExtender();
             _jPanel_extender.setPreferredSize(new Dimension(_canvas_get_width_Pixel(), _canvas_height_Pixel));
 
-            _jFrame = new JFrame("cs136 :D");
+            _jFrame = new JFrame();
             _jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             _jFrame.setLocation(0, 0);
             _jFrame.getContentPane().add(_jPanel_extender, BorderLayout.CENTER);
