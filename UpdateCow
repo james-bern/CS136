@@ -1,1 +1,1 @@
-./UpdateCow.bat
+git pull --rebase --autostash
