@@ -1,4 +1,4 @@
-ajkl;
+ajkl;jkl;
 
 // TODO TODO TODO keyHeld (probably) needs the same treatment as mouseHeld
 // TODO: sound
