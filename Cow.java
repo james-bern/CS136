@@ -1,5 +1,3 @@
-ajkl;jkl;
-
 // TODO TODO TODO keyHeld (probably) needs the same treatment as mouseHeld
 // TODO: sound
 // TODO: helper functions (snippets) go in Cow :) (all homeworks can extend Cow)
