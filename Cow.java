@@ -273,16 +273,29 @@ class Cow {
         _draw_set_line_thickness(thickness);
         _buffered_image_graphics.drawLine(_xPIXELfromWORLD(x1), _yPIXELfromWORLD(y1), _xPIXELfromWORLD(x2), _yPIXELfromWORLD(y2));
     }
-
-    static void drawRectangle(double x1, double y1, double x2, double y2, Color color) {
-        _draw_set_color(color);
-        _draw_rectangle(x1, y1, x2, y2, false);
-    }
-
+    
+    static Color DRAW_CIRCLE_DEFAULT_COLOR = BLACK;
+    static void drawCircle(double x, double y, double radius) { drawCircle(x, y, radius, DRAW_CIRCLE_DEFAULT_COLOR); }
     static void drawCircle(double x, double y, double radius, Color color) {
         _draw_set_color(color);
         _draw_circle(x, y, radius, false);
     }
+    
+    static Color DRAW_RECTANGLE_DEFAULT_COLOR = BLACK;
+    static void drawRectangle(double x1, double y1, double x2, double y2) { drawRectangle(x1, y1, x2, y2, DRAW_RECTANGLE_DEFAULT_COLOR); }
+    static void drawRectangle(double x1, double y1, double x2, double y2, Color color) {
+        _draw_set_color(color);
+        _draw_rectangle(x1, y1, x2, y2, false);
+    }
+    
+    static Color DRAW_TRIANGLE_DEFAULT_COLOR = BLACK;
+    static void drawTriangle(double x1, double y1, double x2, double y2, double x3, double y3) { drawTriangle(x1, y1, x2, y2, x3, y3, DRAW_TRIANGLE_DEFAULT_COLOR); }
+    static void drawTriangle(double x1, double y1, double x2, double y2, double x3, double y3, Color color) {
+        _draw_set_color(color);
+        _draw_triangle(x1, y1, x2, y2, x3, y3, false);
+    }
+
+
 
     // // TODO: Utility API
 
@@ -354,6 +367,22 @@ class Cow {
             _buffered_image_graphics.fillRect(arg1, arg2, arg3, arg4);
         } else {
             _buffered_image_graphics.drawRect(arg1, arg2, arg3, arg4);
+        }
+    }
+    
+    static void fill_triangle(double x1, double y1, double x2, double y2, double x3, double y3) { _draw_triangle(x1, y1, x2, y2, x3, y3, false); }
+    static void outline_triangle(double x1, double y1, double x2, double y2, double x3, double y3) { _draw_triangle(x1, y1, x2, y2, x3, y3, true); }
+    static void _draw_triangle(double x1, double y1, double x2, double y2, double x3, double y3, boolean outlined) {
+        int Xx1 = _xPIXELfromWORLD(x1);
+        int Yy1 = _yPIXELfromWORLD(y1);
+        int Xx2 = _xPIXELfromWORLD(x2);
+        int Yy2 = _yPIXELfromWORLD(y2);
+        int Xx3 = _xPIXELfromWORLD(x3);
+        int Yy3 = _yPIXELfromWORLD(y3);
+        if (!outlined) {
+            _buffered_image_graphics.fillPolygon(new int[] { Xx1, Xx2, Xx3 }, new int[] { Yy1, Yy2, Yy3 }, 3);
+        } else {
+            _buffered_image_graphics.drawPolygon(new int[] { Xx1, Xx2, Xx3 }, new int[] { Yy1, Yy2, Yy3 }, 3);
         }
     }
 
