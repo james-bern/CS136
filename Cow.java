@@ -198,7 +198,8 @@ class Cow {
     static boolean keyHeld    (int i) { return _keyHeld[i];     }
     static boolean keyReleased(int i) { return _keyReleased[i]; }
     static boolean keyToggled (int i) { return _keyToggled[i];  }
-
+    static boolean keyAnyPressed;
+    
     static boolean _keyPressed[]  = new boolean[256];
     static boolean _keyHeld[]     = new boolean[256];
     static boolean _keyReleased[] = new boolean[256];
@@ -469,8 +470,10 @@ class Cow {
                 if (mouseReleased) mouseHeld = false;
             }
             { // keyboard
+            	keyAnyPressed = false;
                 for (int i = 0; i < 256; ++i) {
                     _keyPressed[i]  = _jPanel_extender._keyPressed[i];
+                    if (_keyPressed[i]) keyAnyPressed = true;
                     _keyReleased[i] = _jPanel_extender._keyReleased[i];
                     _jPanel_extender._keyPressed[i] = false;
                     _jPanel_extender._keyReleased[i] = false;
