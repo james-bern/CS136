@@ -522,6 +522,12 @@ class Cow {
         _set_monospaced_font_character_width(1.0);
         _buffered_image_graphics.drawChars(buffer, 0, length, _xPIXELfromWORLD(0.0), _yPIXELfromWORLD(0.0));
     }
+
+    static void drawString(String string, double x, double y, Color color, int fontSize) {
+        _draw_set_color(color);
+        _buffered_image_graphics.setFont(new Font(Font.MONOSPACED, Font.PLAIN, fontSize)); 
+        _buffered_image_graphics.drawString(string, _xPIXELfromWORLD(x), _yPIXELfromWORLD(y));
+    }
 }
 
 
