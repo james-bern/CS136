@@ -199,7 +199,7 @@ class Cow {
     static boolean keyReleased(int i) { return _keyReleased[i]; }
     static boolean keyToggled (int i) { return _keyToggled[i];  }
     static boolean keyAnyPressed;
-    
+
     static boolean _keyPressed[]  = new boolean[256];
     static boolean _keyHeld[]     = new boolean[256];
     static boolean _keyReleased[] = new boolean[256];
@@ -238,7 +238,7 @@ class Cow {
     static float canvasGetLeft() { return _canvas_left_World; }
     static float canvasGetRight() { return _canvas_right_World; }
 
-    
+
     static Color CANVAS_CONFIG_DEFAULT_COLOR = WHITE;
     static int CANVAS_CONFIG_DEFAULT_MAX_DIMENSION_IN_PIXELS = 512;
     static void canvasConfig(double left, double bottom, double right, double top) { canvasConfig(left, bottom, right, top, CANVAS_CONFIG_DEFAULT_COLOR, CANVAS_CONFIG_DEFAULT_MAX_DIMENSION_IN_PIXELS); }
@@ -274,21 +274,21 @@ class Cow {
         _draw_set_line_thickness(thickness);
         _buffered_image_graphics.drawLine(_xPIXELfromWORLD(x1), _yPIXELfromWORLD(y1), _xPIXELfromWORLD(x2), _yPIXELfromWORLD(y2));
     }
-    
+
     static Color DRAW_CIRCLE_DEFAULT_COLOR = BLACK;
     static void drawCircle(double x, double y, double radius) { drawCircle(x, y, radius, DRAW_CIRCLE_DEFAULT_COLOR); }
     static void drawCircle(double x, double y, double radius, Color color) {
         _draw_set_color(color);
         _draw_circle(x, y, radius, false);
     }
-    
+
     static Color DRAW_RECTANGLE_DEFAULT_COLOR = BLACK;
     static void drawRectangle(double x1, double y1, double x2, double y2) { drawRectangle(x1, y1, x2, y2, DRAW_RECTANGLE_DEFAULT_COLOR); }
     static void drawRectangle(double x1, double y1, double x2, double y2, Color color) {
         _draw_set_color(color);
         _draw_rectangle(x1, y1, x2, y2, false);
     }
-    
+
     static Color DRAW_TRIANGLE_DEFAULT_COLOR = BLACK;
     static void drawTriangle(double x1, double y1, double x2, double y2, double x3, double y3) { drawTriangle(x1, y1, x2, y2, x3, y3, DRAW_TRIANGLE_DEFAULT_COLOR); }
     static void drawTriangle(double x1, double y1, double x2, double y2, double x3, double y3, Color color) {
@@ -370,7 +370,7 @@ class Cow {
             _buffered_image_graphics.drawRect(arg1, arg2, arg3, arg4);
         }
     }
-    
+
     static void fill_triangle(double x1, double y1, double x2, double y2, double x3, double y3) { _draw_triangle(x1, y1, x2, y2, x3, y3, false); }
     static void outline_triangle(double x1, double y1, double x2, double y2, double x3, double y3) { _draw_triangle(x1, y1, x2, y2, x3, y3, true); }
     static void _draw_triangle(double x1, double y1, double x2, double y2, double x3, double y3, boolean outlined) {
@@ -470,7 +470,7 @@ class Cow {
                 if (mouseReleased) mouseHeld = false;
             }
             { // keyboard
-            	keyAnyPressed = false;
+                keyAnyPressed = false;
                 for (int i = 0; i < 256; ++i) {
                     _keyPressed[i]  = _jPanel_extender._keyPressed[i];
                     if (_keyPressed[i]) keyAnyPressed = true;
@@ -521,6 +521,34 @@ class Cow {
         _draw_set_color(color);
         _set_monospaced_font_character_width(1.0);
         _buffered_image_graphics.drawChars(buffer, 0, length, _xPIXELfromWORLD(0.0), _yPIXELfromWORLD(0.0));
+    }
+    static void HW04_drawTimeline(int numFrames, int currentFrameIndex) {
+
+        ASSERT(currentFrameIndex < numFrames);
+
+        int h = 16;
+
+        _draw_set_color(BLACK);
+        _buffered_image_graphics.setFont(new Font(Font.MONOSPACED, Font.PLAIN, h)); 
+
+        FontMetrics fontMetrics = _buffered_image_graphics.getFontMetrics(); 
+
+        double eps = 16.0;
+        double x = _canvas_left_World + eps;
+        double y = _canvas_top_World - eps;
+        String timeline = "";
+        double x2 = 0.0;
+        for (int i = 0; i < numFrames; ++i) {
+            if (i == currentFrameIndex) {
+                x2 = x + fontMetrics.stringWidth(timeline);
+                if (currentFrameIndex > 9) x2 += fontMetrics.charWidth('0') / 2;
+            }
+            timeline += i;
+            if (i != (numFrames - 1)) timeline += " ";
+        }
+        _buffered_image_graphics.drawString("|", _xPIXELfromWORLD(x2), _yPIXELfromWORLD(y));
+        _buffered_image_graphics.drawString("v", _xPIXELfromWORLD(x2), _yPIXELfromWORLD(y - h));
+        _buffered_image_graphics.drawString(timeline, _xPIXELfromWORLD(x), _yPIXELfromWORLD(y - 2 * h));
     }
 
     static void drawString(String string, double x, double y, Color color, int fontSize) {
