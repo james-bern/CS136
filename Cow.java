@@ -94,7 +94,7 @@ class Cow {
     static float MAX(double a, double b) { return (float) Math.max(a, b); }
     static int ABS(int a) { return Math.abs(a); }
     static float ABS(double a) { return (float) Math.abs(a); }
-    static int MODULOU(int a, int b) { return Math.floorMod(a, b); }
+    static int MODULO(int a, int b) { return Math.floorMod(a, b); }
     static float SQRT(double a) { return (float) Math.sqrt(a); }
     static boolean ARE_EQUAL(double a, double b) { return ABS(a - b) < 0.0001; }
     static int ROUND(double a) { return (int) Math.round(a); }
@@ -533,22 +533,21 @@ class Cow {
 
         FontMetrics fontMetrics = _buffered_image_graphics.getFontMetrics(); 
 
-        double eps = 16.0;
+        double eps = 8.0;
         double x = _canvas_left_World + eps;
         double y = _canvas_top_World - eps;
         String timeline = "";
         double x2 = 0.0;
         for (int i = 0; i < numFrames; ++i) {
             if (i == currentFrameIndex) {
-                x2 = x + fontMetrics.stringWidth(timeline);
-                if (currentFrameIndex > 9) x2 += fontMetrics.charWidth('0') / 2;
+                x2 = x + fontMetrics.stringWidth(timeline) / _LPIXELfromWORLD(1.0); // FORNOW: sloppy
+                if (currentFrameIndex > 9) x2 += fontMetrics.charWidth('0') / 2 / _LPIXELfromWORLD(1.0); // FORNOW: sloppy
             }
-            timeline += i;
-            if (i != (numFrames - 1)) timeline += " ";
+            timeline += i + " ";
         }
         _buffered_image_graphics.drawString("|", _xPIXELfromWORLD(x2), _yPIXELfromWORLD(y));
-        _buffered_image_graphics.drawString("v", _xPIXELfromWORLD(x2), _yPIXELfromWORLD(y - h));
-        _buffered_image_graphics.drawString(timeline, _xPIXELfromWORLD(x), _yPIXELfromWORLD(y - 2 * h));
+        _buffered_image_graphics.drawString("v", _xPIXELfromWORLD(x2), _yPIXELfromWORLD(y - h / 2));
+        _buffered_image_graphics.drawString(timeline, _xPIXELfromWORLD(x), _yPIXELfromWORLD(y - 2 * h / 2));
     }
 
     static void drawString(String string, double x, double y, Color color, int fontSize) {
