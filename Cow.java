@@ -193,6 +193,7 @@ class Cow {
     static boolean mouseReleased;
     static float mouseX;
     static float mouseY;
+    static float mouseScrollAmount;
 
     static boolean keyPressed (int i) { return _keyPressed[i];  }
     static boolean keyHeld    (int i) { return _keyHeld[i];     }
@@ -469,6 +470,10 @@ class Cow {
                 _jPanel_extender._mouseReleased = false;
                 if (mouseReleased) mouseHeld = false;
             }
+            { // mouseScrollAmount
+            	mouseScrollAmount = _jPanel_extender._mouseScrollAmount;
+            	_jPanel_extender._mouseScrollAmount = 0.0f;
+            }
             { // keyboard
                 keyAnyPressed = false;
                 for (int i = 0; i < 256; ++i) {
@@ -563,6 +568,7 @@ class CowJPanelExtender extends JPanel {
 
     boolean _mousePressed;
     boolean _mouseReleased;
+    float _mouseScrollAmount;
     boolean _keyPressed[]  = new boolean[256];
     boolean _keyReleased[] = new boolean[256];
 
@@ -573,9 +579,11 @@ class CowJPanelExtender extends JPanel {
                 new MouseAdapter() {
                     @Override public void mousePressed(MouseEvent e) { _mousePressed = true; }
                     @Override public void mouseReleased(MouseEvent e) { _mouseReleased = true; }
-                    }
-                );
-
+                });
+        this.addMouseWheelListener(
+        		new MouseWheelListener() {
+                    @Override public void mouseWheelMoved(MouseWheelEvent e) { _mouseScrollAmount += e.getPreciseWheelRotation(); }
+        		});
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(event -> {
             synchronized (Cow.class) {
                 int _key = event.getKeyCode();
