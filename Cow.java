@@ -652,49 +652,12 @@ class Cow {
         result.put(node, (end) ? 1 : n);
     }
 
-    static class V2 {
-        double x;
-        double y;
-        V2(double x, double y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        V2 plus(V2 other) {
-            return new V2(this.x + other.x, this.y + other.y);
-        }
-
-        V2 minus(V2 other) {
-            return new V2(this.x - other.x, this.y - other.y);
-        }
-
-        V2 times(double factor) {
-            return new V2(factor * this.x, factor * this.y);
-        }
-
-        V2 dividedBy(double den) {
-            return new V2(this.x / den, this.y / den);
-        }
-
-        double length() {
-            return SQRT(this.x * this.x + this.y * this.y);
-        }
-
-        V2 normalized() {
-            return this.dividedBy(this.length());
-        }
-
-        static V2 directionVectorFrom(V2 a, V2 b) {
-            return b.minus(a).normalized();
-        }
-    }
-
     static class _HW09_DrawData {
         char letter;
-        V2 parentPosition;
+        Vector2 parentPosition;
         _HW09_Hiden_Node curNode;
 
-        _HW09_DrawData(_HW09_Hiden_Node curNode, V2 parentPosition, char letter) {
+        _HW09_DrawData(_HW09_Hiden_Node curNode, Vector2 parentPosition, char letter) {
             this.curNode = curNode;
             this.parentPosition = parentPosition;
             this.letter = letter;
@@ -706,12 +669,12 @@ class Cow {
         HashMap<_HW09_Hiden_Node, Integer> leafs = calculateNumLeafDescendants(root);
 
         ArrayDeque<_HW09_DrawData> queue = new ArrayDeque<>();
-        queue.add(new _HW09_DrawData(root, new V2(width/2.0, height - 1), ' '));
+        queue.add(new _HW09_DrawData(root, new Vector2(width/2.0, height - 1), ' '));
 
         while(queue.size() > 0) {
             _HW09_DrawData curData = queue.remove();
             _HW09_Hiden_Node curNode = curData.curNode;
-            V2 parentPosition = curData.parentPosition;
+            Vector2 parentPosition = curData.parentPosition;
             double parentIndex = parentPosition.x - (leafs.get(curNode) / 2.0);
             for(int i = 0; i < curNode.children.length; i++) {
                 if(curNode.children[i] != null) {
@@ -720,12 +683,12 @@ class Cow {
                     double childPositionX = parentIndex + childNodes/2.0;
                     parentIndex += childNodes;
 
-                    V2 childPosition = new V2(childPositionX, parentPosition.y-1);
+                    Vector2 childPosition = new Vector2(childPositionX, parentPosition.y-1);
                     queue.add(new _HW09_DrawData(node, childPosition, (char)(i + 'a')));
 
-                    V2 nudge = V2.directionVectorFrom(parentPosition, childPosition).times(1.2 * .25);
-                    V2 a = parentPosition.plus(nudge);
-                    V2 b = childPosition.minus(nudge);
+                    Vector2 nudge = Vector2.directionVectorFrom(parentPosition, childPosition).times(1.2 * .25);
+                    Vector2 a = parentPosition.plus(nudge);
+                    Vector2 b = childPosition.minus(nudge);
                     drawLine(a.x, a.y, b.x, b.y, BLACK);
                 }
             }
