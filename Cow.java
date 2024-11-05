@@ -43,6 +43,39 @@ class ASSERT_Exception extends RuntimeException {
 
 class Cow {
 
+    static class Vector2 {
+        double x;
+        double y;
+        Vector2(double x, double y) {
+            this.x = x;
+            this.y = y;
+        }
+        Vector2 plus(Vector2 other) {
+            return new Vector2(this.x + other.x, this.y + other.y);
+        }
+        Vector2 minus(Vector2 other) {
+            return new Vector2(this.x - other.x, this.y - other.y);
+        }
+        Vector2 times(double fac) {
+            return new Vector2(fac * this.x, fac * this.y);
+        }
+        Vector2 dividedBy(double den) {
+            return this.times(1.0 / den);
+        }
+        double squaredLength() {
+            return this.x * this.x + this.y * this.y;
+        }
+        double length() {
+            return SQRT(this.squaredLength());
+        }
+        Vector2 normalized() {
+            return this.dividedBy(this.length());
+        }
+        static Vector2 directionVectorFrom(Vector2 a, Vector2 b) {
+            return (b.minus(a)).normalized();
+        }
+    }
+
     static class Color {
         float r;
         float g;
