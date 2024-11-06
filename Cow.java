@@ -34,6 +34,9 @@ import java.awt.event.*;
 import java.awt.image.*;
 import javax.swing.*;
 import java.lang.Math;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.io.*;
 
 class ASSERT_Exception extends RuntimeException {
@@ -597,6 +600,104 @@ class Cow {
         _buffered_image_graphics.setFont(new Font(Font.MONOSPACED, Font.PLAIN, fontSize)); 
         _buffered_image_graphics.drawString(string, _xPIXELfromWORLD(x), _yPIXELfromWORLD(y));
     }
+
+    private static class _HW09_Hiden_Node { 
+        _HW09_Hiden_Node[] children;
+        boolean isTerminal;
+
+        _HW09_Hiden_Node() {
+            this.children = new _HW09_Hiden_Node[26];
+            this.isTerminal = false;
+        }
+    }
+
+    // this function works (maybe???)
+    // NOTE: will cause exception if non node is passed but just dont do that
+    protected static _HW09_Hiden_Node convertToHiden(Object node) { 
+        if (node == null) return null;
+        try {
+            _HW09_Hiden_Node convertedNode = new _HW09_Hiden_Node();
+            java.lang.reflect.Field isTerminalField = node.getClass().getDeclaredField("isTerminal"); // hmmmmmmm yes very standard java
+            java.lang.reflect.Field childrenField = node.getClass().getDeclaredField("children");
+
+            convertedNode.isTerminal = isTerminalField.getBoolean(node);
+            Object[] unconvertedNodes = (Object[]) childrenField.get(node);
+
+            for (int i = 0; i < 26; i++) {
+                convertedNode.children[i] = convertToHiden(unconvertedNodes[i]);
+            }
+            return convertedNode;
+
+        } catch (Exception e) {
+            throw new ASSERT_Exception(e.getMessage()); // incredible error handling (#CatchAndRelease)
+        }
+    }
+
+    static HashMap<_HW09_Hiden_Node, Integer> calculateNumLeafDescendants(_HW09_Hiden_Node root) {
+        HashMap<_HW09_Hiden_Node, Integer> result = new HashMap<_HW09_Hiden_Node, Integer>();
+        _calculateNumLeafDescendants(root, result);
+        return result;
+    }
+
+    static void _calculateNumLeafDescendants(_HW09_Hiden_Node node, HashMap<_HW09_Hiden_Node, Integer> result) {
+        int n = 0;
+        boolean end = true;
+        for(int i = 0; i < node.children.length; i++) {
+            if (node.children[i] != null) {
+                _calculateNumLeafDescendants(node.children[i], result);
+                n += result.getOrDefault(node.children[i], 0); // TODO: is getOrDefault necessary?
+                end = false;
+            }
+        }
+        result.put(node, (end) ? 1 : n);
+    }
+
+    static class _HW09_DrawData {
+        char letter;
+        Vector2 parentPosition;
+        _HW09_Hiden_Node curNode;
+
+        _HW09_DrawData(_HW09_Hiden_Node curNode, Vector2 parentPosition, char letter) {
+            this.curNode = curNode;
+            this.parentPosition = parentPosition;
+            this.letter = letter;
+        }
+    }
+
+    static void _HW09_drawTrie(Object start_node, double width, double height) {
+        _HW09_Hiden_Node root = convertToHiden(start_node);
+        HashMap<_HW09_Hiden_Node, Integer> leafs = calculateNumLeafDescendants(root);
+
+        ArrayDeque<_HW09_DrawData> queue = new ArrayDeque<>();
+        queue.add(new _HW09_DrawData(root, new Vector2(width/2.0, height - 1), ' '));
+
+        while(queue.size() > 0) {
+            _HW09_DrawData curData = queue.remove();
+            _HW09_Hiden_Node curNode = curData.curNode;
+            Vector2 parentPosition = curData.parentPosition;
+            double parentIndex = parentPosition.x - (leafs.get(curNode) / 2.0);
+            for(int i = 0; i < curNode.children.length; i++) {
+                if(curNode.children[i] != null) {
+                    _HW09_Hiden_Node node = curNode.children[i];
+                    int childNodes = leafs.get(node);
+                    double childPositionX = parentIndex + childNodes/2.0;
+                    parentIndex += childNodes;
+
+                    Vector2 childPosition = new Vector2(childPositionX, parentPosition.y-1);
+                    queue.add(new _HW09_DrawData(node, childPosition, (char)(i + 'a')));
+
+                    Vector2 nudge = Vector2.directionVectorFrom(parentPosition, childPosition).times(1.2 * .25);
+                    Vector2 a = parentPosition.plus(nudge);
+                    Vector2 b = childPosition.minus(nudge);
+                    drawLine(a.x, a.y, b.x, b.y, BLACK);
+                }
+            }
+            drawCircle(parentPosition.x, parentPosition.y, .25, (!curNode.isTerminal) ? new Color(0.9, 0.9, 0.9) : CYAN);
+            drawString("" + curData.letter, parentPosition.x - 0.075, parentPosition.y - 0.08, BLACK, 16);
+        }
+    }
+
+
 }
 
 
