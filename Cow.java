@@ -601,22 +601,22 @@ class Cow {
         _buffered_image_graphics.drawString(string, _xPIXELfromWORLD(x), _yPIXELfromWORLD(y));
     }
 
-    private static class _HW09_Hiden_Node { 
-        _HW09_Hiden_Node[] children;
+    private static class _HW09_Hidden_Node { 
+        _HW09_Hidden_Node[] children;
         boolean isTerminal;
 
-        _HW09_Hiden_Node() {
-            this.children = new _HW09_Hiden_Node[26];
+        _HW09_Hidden_Node() {
+            this.children = new _HW09_Hidden_Node[26];
             this.isTerminal = false;
         }
     }
 
     // this function works (maybe???)
     // NOTE: will cause exception if non node is passed but just dont do that
-    protected static _HW09_Hiden_Node convertToHiden(Object node) { 
+    protected static _HW09_Hidden_Node convertToHidden(Object node) { 
         if (node == null) return null;
         try {
-            _HW09_Hiden_Node convertedNode = new _HW09_Hiden_Node();
+            _HW09_Hidden_Node convertedNode = new _HW09_Hidden_Node();
             java.lang.reflect.Field isTerminalField = node.getClass().getDeclaredField("isTerminal"); // hmmmmmmm yes very standard java
             java.lang.reflect.Field childrenField = node.getClass().getDeclaredField("children");
 
@@ -624,7 +624,7 @@ class Cow {
             Object[] unconvertedNodes = (Object[]) childrenField.get(node);
 
             for (int i = 0; i < 26; i++) {
-                convertedNode.children[i] = convertToHiden(unconvertedNodes[i]);
+                convertedNode.children[i] = convertToHidden(unconvertedNodes[i]);
             }
             return convertedNode;
 
@@ -633,13 +633,13 @@ class Cow {
         }
     }
 
-    static HashMap<_HW09_Hiden_Node, Integer> calculateNumLeafDescendants(_HW09_Hiden_Node root) {
-        HashMap<_HW09_Hiden_Node, Integer> result = new HashMap<_HW09_Hiden_Node, Integer>();
+    static HashMap<_HW09_Hidden_Node, Integer> calculateNumLeafDescendants(_HW09_Hidden_Node root) {
+        HashMap<_HW09_Hidden_Node, Integer> result = new HashMap<_HW09_Hidden_Node, Integer>();
         _calculateNumLeafDescendants(root, result);
         return result;
     }
 
-    static void _calculateNumLeafDescendants(_HW09_Hiden_Node node, HashMap<_HW09_Hiden_Node, Integer> result) {
+    static void _calculateNumLeafDescendants(_HW09_Hidden_Node node, HashMap<_HW09_Hidden_Node, Integer> result) {
         int n = 0;
         boolean end = true;
         for(int i = 0; i < node.children.length; i++) {
@@ -655,9 +655,9 @@ class Cow {
     static class _HW09_DrawData {
         char letter;
         Vector2 parentPosition;
-        _HW09_Hiden_Node curNode;
+        _HW09_Hidden_Node curNode;
 
-        _HW09_DrawData(_HW09_Hiden_Node curNode, Vector2 parentPosition, char letter) {
+        _HW09_DrawData(_HW09_Hidden_Node curNode, Vector2 parentPosition, char letter) {
             this.curNode = curNode;
             this.parentPosition = parentPosition;
             this.letter = letter;
@@ -665,20 +665,20 @@ class Cow {
     }
 
     static void _HW09_drawTrie(Object start_node, double width, double height) {
-        _HW09_Hiden_Node root = convertToHiden(start_node);
-        HashMap<_HW09_Hiden_Node, Integer> leafs = calculateNumLeafDescendants(root);
+        _HW09_Hidden_Node root = convertToHidden(start_node);
+        HashMap<_HW09_Hidden_Node, Integer> leafs = calculateNumLeafDescendants(root);
 
         ArrayDeque<_HW09_DrawData> queue = new ArrayDeque<>();
         queue.add(new _HW09_DrawData(root, new Vector2(width/2.0, height - 1), ' '));
 
         while(queue.size() > 0) {
             _HW09_DrawData curData = queue.remove();
-            _HW09_Hiden_Node curNode = curData.curNode;
+            _HW09_Hidden_Node curNode = curData.curNode;
             Vector2 parentPosition = curData.parentPosition;
             double parentIndex = parentPosition.x - (leafs.get(curNode) / 2.0);
             for(int i = 0; i < curNode.children.length; i++) {
                 if(curNode.children[i] != null) {
-                    _HW09_Hiden_Node node = curNode.children[i];
+                    _HW09_Hidden_Node node = curNode.children[i];
                     int childNodes = leafs.get(node);
                     double childPositionX = parentIndex + childNodes/2.0;
                     parentIndex += childNodes;
@@ -695,6 +695,183 @@ class Cow {
             drawCircle(parentPosition.x, parentPosition.y, .25, (!curNode.isTerminal) ? new Color(0.9, 0.9, 0.9) : CYAN);
             drawString("" + curData.letter, parentPosition.x - 0.075, parentPosition.y - 0.08, BLACK, 16);
         }
+    }
+
+
+
+
+    // 14            x            14
+    // 13           /1\           13
+    // 12          / 3 \          12
+    // 11         /  5  \         11
+    // 10        /   7   \        10
+    // 9        /    9    \        9
+    // 8       /     11    \       8
+    // 7      /      13     \      7
+    // 6     x       15      x     6
+    // 5    /1\      13     /1\    5
+    // 4   / 3 \     11    / 3 \   4
+    // 3  /  5  \    9    /  5  \  3
+    // 2 x   7   x   7   x   7   x 2
+    // 1/1\  5  /1\  5  /1\  5  /1\1
+    // x 3 x 3 x 3 x 3 x 3 x 3 x 3 x
+    //                              
+    //       0      
+    //      / \     
+    //     /   \    
+    //    /     \   
+    //   1       2  
+    //  /       / \ 
+    // 3       4   5
+    // root = new Node(0);
+    // root.leftChild = new Node(1);
+    // root.rightChild = new Node(2);
+    // root.leftChild.leftChild = new Node(3);
+    // root.rightChild.leftChild = new Node(4);
+    // root.rightChild.rightChild = new Node(5);
+
+    // root = new Node(0);
+    // root.leftChild = new Node(1);
+    // root.rightChild = new Node(2);
+    // root.leftChild.leftChild = new Node(3);
+    // root.leftChild.rightChild = new Node(4);
+    // root.rightChild.leftChild = new Node(5);
+    // root.rightChild.rightChild = new Node(6);
+    // root.leftChild.leftChild.leftChild = new Node(7);
+    // root.leftChild.leftChild.rightChild = new Node(8);
+    // root.leftChild.rightChild.leftChild = new Node(9);
+    // root.leftChild.rightChild.rightChild = new Node(10);
+    // root.rightChild.leftChild.leftChild = new Node(11);
+    // root.rightChild.leftChild.rightChild = new Node(12);
+    // root.rightChild.rightChild.leftChild = new Node(13);
+    // root.rightChild.rightChild.rightChild = new Node(14);
+
+    private static class _HW10_Hidden_Node { 
+        int value;
+        _HW10_Hidden_Node leftChild;
+        _HW10_Hidden_Node rightChild;
+    }
+    protected static _HW10_Hidden_Node _HW10_convertToHidden(Object node) { 
+        if (node == null) return null;
+        try {
+            _HW10_Hidden_Node convertedNode = new _HW10_Hidden_Node();
+            java.lang.reflect.Field valueField = node.getClass().getDeclaredField("value");
+            java.lang.reflect.Field leftChildField = node.getClass().getDeclaredField("leftChild");
+            java.lang.reflect.Field rightChildField = node.getClass().getDeclaredField("rightChild");
+            convertedNode.value = valueField.getInt(node);
+            convertedNode.leftChild = _HW10_convertToHidden(leftChildField.get(node));
+            convertedNode.rightChild = _HW10_convertToHidden(rightChildField.get(node));
+            return convertedNode;
+        } catch (Exception e) {
+            throw new ASSERT_Exception(e.getMessage());
+        }
+    }
+
+    static void HW10_printBinaryTree(Object _root) {
+        _HW10_Hidden_Node root = _HW10_convertToHidden(_root);
+        if (root == null) {
+            System.out.println("root is null");
+            return;
+        }
+        class MagicNode {
+            boolean isNull;
+            int value;
+            int depth;
+            _HW10_Hidden_Node leftChild;
+            _HW10_Hidden_Node rightChild;
+            MagicNode(_HW10_Hidden_Node node, int depth) {
+                if (node == null) {
+                    isNull = true;
+                } else {
+                    this.value = node.value;
+                    this.leftChild = node.leftChild;
+                    this.rightChild = node.rightChild;
+                }
+                this.depth = depth;
+            }
+        }
+
+        int maxDepth = _HW10_maxDepthHelper(root, 0);
+
+        System.out.println();
+
+        int[] numNodesAtDepth = new int[maxDepth + 1];
+        int depth = -1;
+        ArrayDeque<MagicNode> queue = new ArrayDeque<>();
+        queue.add(new MagicNode(root, 0));
+        while (!queue.isEmpty()) {
+            MagicNode curr = queue.remove();
+
+            boolean first = (curr.depth != depth);
+            if (first) depth = curr.depth;
+
+            int k = maxDepth - depth;
+            int pre   = (1 << (k + 1)) - 2;
+            int intra = (1 << (k + 2)) - 1;
+
+            if (first) {
+                System.out.println();
+                if (depth != 0) { // branches
+                                  // a b c b  a
+                    int a0 = (1 << (k + 2)) - 2; // FORNOW (pre(k + 1))
+                    int a = a0;
+                    int b = -1;
+                    int c = (1 << (k + 3)) - 1; // FORNOW (intra(k + 1))
+                    MagicNode[] _FORNOW = queue.toArray(new MagicNode[0]);
+                    ArrayList<MagicNode> FORNOW = new ArrayList<>();
+                    FORNOW.add(curr);
+                    for (MagicNode _fornow : _FORNOW) FORNOW.add(_fornow);
+                    while (b < a0 - 1) {
+                        --a;
+                        b += 2;
+                        c -= 2;
+                        _HW10_printSpaces(a);
+                        int i_FORNOW = 0;
+                        for (int rep = 0; rep < (1 << (depth - 1)); ++rep) {
+                            System.out.print((FORNOW.get(i_FORNOW++)).isNull ? ' ' : '/');
+                            _HW10_printSpaces(b);
+                            System.out.print((FORNOW.get(i_FORNOW++)).isNull ? ' ' : '\\');
+                            _HW10_printSpaces(c);
+                        }
+                        System.out.println();
+                    };
+                }
+                _HW10_printSpaces(pre); // pre
+            }
+
+            System.out.print((curr.isNull) ? " " : curr.value);
+            _HW10_printSpaces(intra - (_HW10_numDigits(curr.value) - 1)); // intra
+
+            if (curr.depth < maxDepth) {
+                queue.add(new MagicNode(curr.leftChild, curr.depth + 1));
+                queue.add(new MagicNode(curr.rightChild, curr.depth + 1));
+            }
+        }
+        System.out.println();
+    }
+    static int _HW10_maxDepthHelper(_HW10_Hidden_Node curr, int level) {
+        int left = (curr.leftChild != null) ? _HW10_maxDepthHelper(curr.leftChild, level + 1) : level;
+        int right = (curr.rightChild != null) ? _HW10_maxDepthHelper(curr.rightChild, level + 1) : level;
+        return Math.max(left, right);
+    }
+    static void _HW10_printSpaces(int numSpaces) {
+        String spaces = "";
+        for (int i = 0; i < numSpaces; ++i) spaces += " "; // FORNOW
+        System.out.print(spaces);
+    }
+    static int _HW10_numDigits(int n) {
+        if (n == 0) return 1;
+
+        int result = 0;
+        if (n < 0) {
+            ++result;
+            n = -n;
+        }
+        do {
+            ++result;
+            n /= 10;
+        } while (n != 0);
+        return result;
     }
 
 
