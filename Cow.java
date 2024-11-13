@@ -770,7 +770,7 @@ class Cow {
     static void HW10_printBinaryTree(Object _root) {
         _HW10_Hidden_Node root = _HW10_convertToHidden(_root);
         if (root == null) {
-            System.out.println("root is null");
+            System.out.println("[HW10_printBinaryTree] root is null");
             return;
         }
         class MagicNode {
