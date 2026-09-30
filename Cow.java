@@ -474,7 +474,7 @@ class Cow {
     static void _cow_safe_attempt_initialize() {
         if (!_cow_initialized) {
             _cow_initialized = true;
-            
+
             _random = new Random();
 
             _buffered_image = new BufferedImage(_canvas_get_width_Pixel(), _canvas_height_Pixel, BufferedImage.TYPE_INT_ARGB);
@@ -571,10 +571,27 @@ class Cow {
 
     // HW-Specific Functions
     static void HW02_drawText(char[] buffer, int length, Color color) {
-        _draw_set_color(color);
+        char[] buffer2 = new char[buffer.length];
+        for (int i = 0; i < buffer.length; ++i) {
+         buffer2[i] = (
+             buffer[i] == 0
+             ? '0'
+             : buffer[i]
+         );
+        }
         _set_monospaced_font_character_width(1.0);
-        _buffered_image_graphics.drawChars(buffer, 0, length, _xPIXELfromWORLD(0.0), _yPIXELfromWORLD(0.0));
+        for (int i = 0; i < .length; ++i) {
+             if (buffer[i] == 0) {
+                  _draw_set_color(RED);
+                 _buffered_image_graphics.drawChars(buffer2, i, 1, _xPIXELfromWORLD(i), _yPIXELfromWORLD(0.0));
+             } else {
+                  _draw_set_color(color);
+                 _buffered_image_graphics.drawChars(buffer2, i, 1, _xPIXELfromWORLD(i), _yPIXELfromWORLD(0.0));
+             }
+        }
+        _draw_set_color(color);
     }
+
     static void HW04_drawTimeline(int numFrames, int currentFrameIndex) {
 
         ASSERT(currentFrameIndex < numFrames);
