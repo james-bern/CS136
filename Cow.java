@@ -580,7 +580,7 @@ class Cow {
          );
         }
         _set_monospaced_font_character_width(1.0);
-        for (int i = 0; i < .length; ++i) {
+        for (int i = 0; i < length; ++i) {
              if (buffer[i] == 0) {
                   _draw_set_color(RED);
                  _buffered_image_graphics.drawChars(buffer2, i, 1, _xPIXELfromWORLD(i), _yPIXELfromWORLD(0.0));
