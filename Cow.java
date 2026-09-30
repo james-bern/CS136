@@ -38,6 +38,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.*;
+import java.util.Random;
 
 class ASSERT_Exception extends RuntimeException {
     public ASSERT_Exception(String message) { super(message); }
@@ -101,7 +102,7 @@ class Cow {
             PRINT(message);
             throw new ASSERT_Exception(message);
         }
-    }	
+    } 
 
     public static void main(String[] arguments) {
         PRINT((char)(0));
@@ -134,6 +135,9 @@ class Cow {
     static float SQRT(double a) { return (float) Math.sqrt(a); }
     static boolean ARE_EQUAL(double a, double b) { return ABS(a - b) < 0.0001; }
     static int ROUND(double a) { return (int) Math.round(a); }
+    static double RANDOM_DOUBLE(double a, double b) {
+        return a + _random.nextDouble() * (b - a);
+    }
 
     static void PRINT() { System.out.println(); }
     static void PRINT(String a) { System.out.println(a); }
@@ -327,6 +331,7 @@ class Cow {
         _draw_rectangle(x1, y1, x2, y2, false);
     }
 
+
     static Color DRAW_TRIANGLE_DEFAULT_COLOR = BLACK;
     static void drawTriangle(double x1, double y1, double x2, double y2, double x3, double y3) { drawTriangle(x1, y1, x2, y2, x3, y3, DRAW_TRIANGLE_DEFAULT_COLOR); }
     static void drawTriangle(double x1, double y1, double x2, double y2, double x3, double y3, Color color) {
@@ -459,6 +464,7 @@ class Cow {
     static CowJPanelExtender _jPanel_extender;
     static JFrame _jFrame;
     static boolean _cow_initialized;
+    static Random _random;
 
     static class NullOutputStream extends OutputStream {
         @Override
@@ -468,6 +474,8 @@ class Cow {
     static void _cow_safe_attempt_initialize() {
         if (!_cow_initialized) {
             _cow_initialized = true;
+            
+            _random = new Random();
 
             _buffered_image = new BufferedImage(_canvas_get_width_Pixel(), _canvas_height_Pixel, BufferedImage.TYPE_INT_ARGB);
             assert _buffered_image != null;
@@ -508,8 +516,8 @@ class Cow {
                 if (mouseReleased) mouseHeld = false;
             }
             { // mouseScrollAmount
-            	mouseScrollAmount = _jPanel_extender._mouseScrollAmount;
-            	_jPanel_extender._mouseScrollAmount = 0.0f;
+             mouseScrollAmount = _jPanel_extender._mouseScrollAmount;
+             _jPanel_extender._mouseScrollAmount = 0.0f;
             }
             { // keyboard
                 keyAnyPressed = false;
@@ -896,9 +904,9 @@ class CowJPanelExtender extends JPanel {
                     @Override public void mouseReleased(MouseEvent e) { _mouseReleased = true; }
                 });
         this.addMouseWheelListener(
-        		new MouseWheelListener() {
+          new MouseWheelListener() {
                     @Override public void mouseWheelMoved(MouseWheelEvent e) { _mouseScrollAmount += e.getPreciseWheelRotation(); }
-        		});
+          });
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(event -> {
             synchronized (Cow.class) {
                 int _key = event.getKeyCode();
@@ -926,3 +934,4 @@ class CowJPanelExtender extends JPanel {
         paintComponentGraphics.drawImage(Cow._buffered_image, 0, 0, null);
     }
 }
+
