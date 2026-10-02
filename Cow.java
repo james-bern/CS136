@@ -136,6 +136,9 @@ class Cow {
     static boolean ARE_EQUAL(double a, double b) { return ABS(a - b) < 0.0001; }
     static int ROUND(double a) { return (int) Math.round(a); }
     static double RANDOM_DOUBLE(double a, double b) {
+        if (_random == null) {
+            _random = new Random();
+        }
         return a + _random.nextDouble() * (b - a);
     }
 
@@ -475,7 +478,6 @@ class Cow {
         if (!_cow_initialized) {
             _cow_initialized = true;
 
-            _random = new Random();
 
             _buffered_image = new BufferedImage(_canvas_get_width_Pixel(), _canvas_height_Pixel, BufferedImage.TYPE_INT_ARGB);
             assert _buffered_image != null;
